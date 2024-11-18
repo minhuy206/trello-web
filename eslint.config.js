@@ -28,6 +28,8 @@ export default [
       ...react.configs.recommended.rules,
       ...react.configs['jsx-runtime'].rules,
       ...reactHooks.configs.recommended.rules,
+
+      //React
       'react/jsx-no-target-blank': 'off',
       'react-refresh/only-export-components': [
         'warn',
@@ -37,6 +39,16 @@ export default [
       'react-hooks/exhaustive-deps': 'warn',
       'react/prop-types': 0,
       'react/display-name': 0,
+
+      // MUI
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: ['@mui/*/*/*']
+        }
+      ],
+
+      // General
       'no-console': 1,
       'no-lonely-if': 1,
       'no-unused-vars': 1,
