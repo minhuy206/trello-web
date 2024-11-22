@@ -1,33 +1,34 @@
 import Box from '@mui/material/Box'
 import SvgIcon from '@mui/material/SvgIcon'
 import Typography from '@mui/material/Typography'
-import ModeSelect from '../ModeSelect'
-import AppsIcon from '@mui/icons-material/Apps'
-import TrelloIcon from '~/assets/trello.svg?react'
-import Workspaces from './Menu/workspaces'
-import Recent from './Menu/Recent'
-import Starred from './Menu/Starred'
-import Templates from './Menu/Templates'
 import Badge from '@mui/material/Badge'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
+import LibraryAddRoundedIcon from '@mui/icons-material/LibraryAddRounded'
+import AppsIcon from '@mui/icons-material/Apps'
+import Workspaces from './Menu/workspaces'
+import Recent from './Menu/Recent'
+import Starred from './Menu/Starred'
+import Templates from './Menu/Templates'
 import Profile from './Menu/Profile'
+import TrelloIcon from '~/assets/trello.svg?react'
+import ModeSelect from '../ModeSelect'
 
 function AppBar() {
   return (
     <Box
-      px={2}
       sx={{
-        backgroundColor: 'primary.light',
+        backgroundColor: '#ffffff',
         width: '100%',
         height: (theme) => theme.trello.appBarHeight,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         gap: 2,
+        paddingX: 2,
         overflowX: 'auto'
       }}
     >
@@ -77,7 +78,9 @@ function AppBar() {
           <Recent />
           <Starred />
           <Templates />
-          <Button variant="outlined">Create</Button>
+          <Button variant="outlined" startIcon={<LibraryAddRoundedIcon />}>
+            Create
+          </Button>
         </Box>
       </Box>
       <Box

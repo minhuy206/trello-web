@@ -3,7 +3,9 @@ import { createTheme } from '@mui/material/styles'
 
 // Create a theme instance.
 const theme = createTheme({
-  cssVariables: true,
+  cssVariables: {
+    colorSchemeSelector: 'class'
+  },
   trello: {
     appBarHeight: 48,
     boardBarHeight: 58
