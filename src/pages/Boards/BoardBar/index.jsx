@@ -12,13 +12,13 @@ import FilterListRoundedIcon from '@mui/icons-material/FilterListRounded'
 import PersonAddAlt1RoundedIcon from '@mui/icons-material/PersonAddAlt1Rounded'
 
 const MENU_STYLE = {
-  color: 'primary.main',
-  bgcolor: 'white',
+  color: 'white',
+  bgcolor: 'transparent',
   border: 'none',
   paddingX: 0.5,
   borderRadius: 0.5,
   '& .MuiSvgIcon-root': {
-    color: 'primary.main'
+    color: 'white'
   },
   '&:hover': {
     backgroundColor: 'primary.50'
@@ -29,7 +29,6 @@ function BoardBar() {
   return (
     <Box
       sx={{
-        backgroundColor: '#ffffff',
         width: '100%',
         height: (theme) => theme.trello.boardBarHeight,
         display: 'flex',
@@ -38,7 +37,9 @@ function BoardBar() {
         gap: 2,
         paddingX: 2,
         overflowX: 'auto',
-        borderTop: '1px solid #00bfa5'
+        borderBottom: '1px solid #ffffff',
+        bgcolor: (theme) =>
+          theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -74,7 +75,15 @@ function BoardBar() {
         />
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <Button startIcon={<PersonAddAlt1RoundedIcon />} variant="outlined">
+        <Button
+          startIcon={<PersonAddAlt1RoundedIcon />}
+          variant="outlined"
+          sx={{
+            color: 'white',
+            borderColor: 'white',
+            '&:hover': { borderColor: 'white' }
+          }}
+        >
           Invite
         </Button>
         <AvatarGroup
@@ -83,7 +92,8 @@ function BoardBar() {
             '& .MuiAvatar-root': {
               width: 32,
               height: 32,
-              fontSize: 16
+              fontSize: 16,
+              border: 'none'
             }
           }}
         >
