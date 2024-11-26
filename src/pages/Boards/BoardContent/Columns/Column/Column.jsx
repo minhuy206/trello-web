@@ -16,15 +16,18 @@ import Cloud from '@mui/icons-material/Cloud'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import AddCardIcon from '@mui/icons-material/AddCard'
 import DragHandleIcon from '@mui/icons-material/DragHandle'
-import ListCards from './ListCards/ListCards'
+import Cards from './Cards/Cards'
+import { mapOrder } from '~/utils/sort'
 
-function Column() {
+function Column({ column }) {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => setAnchorEl(event.currentTarget)
   const handleClose = () => {
     setAnchorEl(null)
   }
+
+  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
 
   return (
     <Box
@@ -55,7 +58,7 @@ function Column() {
           sx={{ cursor: 'pointer', fontSize: '1rem', fontWeight: 'bold' }}
           variant="h6"
         >
-          Column title
+          {column?.title}
         </Typography>
 
         {/* // Box for column dropdown */}
@@ -122,7 +125,7 @@ function Column() {
       </Box>
 
       {/* // List Cards */}
-      <ListCards />
+      <Cards cards={orderedCards} />
 
       {/* // Box for column footer */}
       <Box

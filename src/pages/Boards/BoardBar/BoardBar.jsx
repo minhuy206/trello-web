@@ -10,6 +10,7 @@ import AddToDriveRoundedIcon from '@mui/icons-material/AddToDriveRounded'
 import BoltRoundedIcon from '@mui/icons-material/BoltRounded'
 import FilterListRoundedIcon from '@mui/icons-material/FilterListRounded'
 import PersonAddAlt1RoundedIcon from '@mui/icons-material/PersonAddAlt1Rounded'
+import { capitalizeFirstLetter } from '~/utils/formatter'
 
 const MENU_STYLE = {
   color: 'white',
@@ -25,7 +26,7 @@ const MENU_STYLE = {
   }
 }
 
-function BoardBar() {
+function BoardBar({ board }) {
   return (
     <Box
       sx={{
@@ -46,13 +47,13 @@ function BoardBar() {
         <Chip
           sx={MENU_STYLE}
           icon={<DashboardIcon />}
-          label="minhuy206"
+          label={board?.title}
           clickable
         />
         <Chip
           sx={MENU_STYLE}
           icon={<VpnLockIcon />}
-          label="Public/Private Workspace"
+          label={capitalizeFirstLetter(board?.type)}
           clickable
         />
         <Chip
