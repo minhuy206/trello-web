@@ -19,7 +19,7 @@ import Starred from './Menu/Starred'
 import Templates from './Menu/Templates'
 import Profile from './Menu/Profile'
 import TrelloIcon from '~/assets/trello.svg?react'
-import ModeSelect from '../ModeSelect'
+import ModeSelect from '../ModeSelect/ModeSelect'
 
 function AppBar() {
   const [search, setSearch] = React.useState('')
@@ -36,7 +36,8 @@ function AppBar() {
         paddingX: 2,
         overflowX: 'auto',
         bgcolor: (theme) =>
-          theme.palette.mode === 'dark' ? '#2c3e50' : '#1565c0'
+          theme.palette.mode === 'dark' ? '#2c3e50' : '#1565c0',
+        '&::-webkit-scrollbar-track': { m: 2 }
       }}
     >
       <Box
@@ -46,12 +47,13 @@ function AppBar() {
           gap: 2
         }}
       >
-        <AppsIcon sx={{ color: 'white' }} />
+        <AppsIcon sx={{ color: 'white', cursor: 'pointer' }} />
         <Box
           sx={{
             display: 'flex',
             alignItems: 'center',
-            gap: 0.5
+            gap: 0.5,
+            cursor: 'pointer'
           }}
         >
           <SvgIcon

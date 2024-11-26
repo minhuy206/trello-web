@@ -32,7 +32,7 @@ function ModeSelect() {
           id="select-dark-light-mode"
           value={mode}
           label="Mode"
-          defaultValue={mode}
+          defaultValue={'system'}
           onChange={handleChange}
           sx={{
             color: 'white',
