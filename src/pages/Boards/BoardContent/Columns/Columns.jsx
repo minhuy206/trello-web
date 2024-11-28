@@ -2,48 +2,57 @@ import Box from '@mui/material/Box'
 import Column from './Column/Column'
 import Button from '@mui/material/Button'
 import Add from '@mui/icons-material/Add'
+import {
+  SortableContext,
+  horizontalListSortingStrategy
+} from '@dnd-kit/sortable'
 
 function Columns({ columns }) {
   return (
-    <Box
-      sx={{
-        bgcolor: 'inherit',
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        overflowX: 'auto',
-        overflowY: 'hidden',
-        '&::-webkit-scrollbar-track': { m: 2 }
-      }}
+    <SortableContext
+      items={columns?.map((column) => column._id)}
+      strategy={horizontalListSortingStrategy}
     >
-      {columns?.map((column) => (
-        <Column key={column?._id} column={column} />
-      ))}
-
-      {/* Add new column button */}
       <Box
         sx={{
-          minWidth: 'fit-content',
-          mx: 2,
-          borderRadius: 0.75,
-          height: 'fit-content',
-          bgcolor: '#ffffff3d'
+          bgcolor: 'inherit',
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          overflowX: 'auto',
+          overflowY: 'hidden',
+          '&::-webkit-scrollbar-track': { m: 2 }
         }}
       >
-        <Button
-          startIcon={<Add />}
+        {columns?.map((column) => (
+          <Column key={column?._id} column={column} />
+        ))}
+
+        {/* Add new column button */}
+        <Box
           sx={{
-            color: 'white',
-            width: '100%',
-            justifyContent: 'flex-start',
-            px: 2.5,
-            py: 1
+            minWidth: 'fit-content',
+            mx: 2,
+            borderRadius: 0.75,
+            height: 'fit-content',
+            bgcolor: '#ffffff3d'
           }}
         >
-          Add new column
-        </Button>
+          <Button
+            startIcon={<Add />}
+            sx={{
+              color: 'white',
+              width: '100%',
+              justifyContent: 'flex-start',
+              px: 2.5,
+              py: 1
+            }}
+          >
+            Add new column
+          </Button>
+        </Box>
       </Box>
-    </Box>
+    </SortableContext>
   )
 }
 
