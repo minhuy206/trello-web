@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
-import ListColumns from './Columns/Columns'
 import { mapOrder } from '~/utils/sort'
 import {
   DndContext,
@@ -10,12 +9,17 @@ import {
   useSensors,
   DragOverlay,
   defaultDropAnimationSideEffects,
-  closestCorners
+  closestCorners,
+  pointerWithin,
+  getFirstCollision,
+  closestCenter
 } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import Column from './Columns/Column/Column'
 import Card from './Columns/Column/Cards/Card/Card'
 import { cloneDeep } from 'lodash'
+import Columns from './Columns/Columns'
+import { generatePlaceholderCard } from '~/utils/formatter'
 
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
@@ -39,10 +43,10 @@ function BoardContent({ board }) {
   const sensors = useSensors(mouseSensor, touchSensor)
 
   const [orderedColumns, setOrderedColumns] = useState([])
-
   const [activeDragItemId, setActiveDragItemId] = useState(null)
   const [activeDragItemType, setActiveDragItemType] = useState(null)
   const [activeDragItemData, setActiveDragItemData] = useState(null)
+  const lastOverId = useRef(null)
 
   useEffect(() => {
     setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, '_id'))
@@ -58,6 +62,41 @@ function BoardContent({ board }) {
     })
   }
 
+  const collisionDetectionStrategy = useCallback(
+    (args) => {
+      if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) {
+        return closestCorners({ ...args })
+      }
+
+      const pointerIntersections = pointerWithin(args)
+      if (!pointerIntersections?.length) return
+
+      let overId = getFirstCollision(pointerIntersections, 'id')
+      if (overId) {
+        const overColumnId = orderedColumns.find(
+          (column) => column._id === overId
+        )
+
+        if (overColumnId) {
+          overId = closestCenter({
+            ...args,
+            droppableContainers: args.droppableContainers.filter(
+              (container) =>
+                container.id !== overId &&
+                overColumnId.cardOrderIds.includes(container.id)
+            )
+          })[0]?.id
+        }
+        lastOverId.current = overId
+
+        return [{ id: overId }]
+      }
+
+      return lastOverId.current ? [{ id: lastOverId.current }] : []
+    },
+    [activeDragItemType, orderedColumns]
+  )
+
   const findColumn = (cardId) => {
     return orderedColumns?.find((column) =>
       column?.cards?.map((card) => card._id).includes(cardId)
@@ -67,7 +106,7 @@ function BoardContent({ board }) {
   return (
     <DndContext
       sensors={sensors}
-      collisionDetection={closestCorners}
+      collisionDetection={collisionDetectionStrategy}
       onDragStart={({ active }) => {
         setActiveDragItemId(active?.id)
 
@@ -133,6 +172,12 @@ function BoardContent({ board }) {
                 (card) => card._id !== activeCardId
               )
 
+              if (nextActiveColumn.cards.length === 0) {
+                nextActiveColumn.cards = [
+                  generatePlaceholderCard(nextActiveColumn)
+                ]
+              }
+
               nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map(
                 (card) => card._id
               )
@@ -149,10 +194,15 @@ function BoardContent({ board }) {
                 { ...activeCardData, columnId: nextOverColumn._id }
               )
 
+              nextOverColumn.cards = nextOverColumn.cards.filter(
+                (card) => !card.FE_PlaceholderCard
+              )
+
               nextOverColumn.cardOrderIds = nextOverColumn.cards.map(
                 (card) => card._id
               )
             }
+
             return nextColumns
           })
         }
@@ -191,8 +241,11 @@ function BoardContent({ board }) {
                 column.cards = dndOrderedCards
                 column.cardOrderIds = dndOrderedCards.map((card) => card._id)
               }
+
               return column
             })
+
+            console.log(nextColumns)
 
             return nextColumns
           })
@@ -229,7 +282,7 @@ function BoardContent({ board }) {
           height: (theme) => theme.trello.boardContentHeight
         }}
       >
-        <ListColumns columns={orderedColumns} />
+        <Columns columns={orderedColumns} />
         <DragOverlay dropAnimation={dropAnimation}>
           {!activeDragItemType && null}
           {activeDragItemId &&
