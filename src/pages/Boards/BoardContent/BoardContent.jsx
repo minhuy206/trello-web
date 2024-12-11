@@ -245,8 +245,6 @@ function BoardContent({ board }) {
               return column
             })
 
-            console.log(nextColumns)
-
             return nextColumns
           })
         } else if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) {
