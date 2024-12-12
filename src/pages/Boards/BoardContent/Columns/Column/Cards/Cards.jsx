@@ -10,6 +10,7 @@ function Cards({ cards }) {
     >
       <Box
         sx={{
+          pb: 0.5,
           px: 0.5,
           mx: 0.5,
           display: 'flex',

@@ -44,12 +44,14 @@ function BoardBar({ board }) {
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <Chip
-          sx={MENU_STYLE}
-          icon={<DashboardIcon />}
-          label={board?.title}
-          clickable
-        />
+        <Tooltip title={board?.description}>
+          <Chip
+            sx={MENU_STYLE}
+            icon={<DashboardIcon />}
+            label={board?.title}
+            clickable
+          />
+        </Tooltip>
         <Chip
           sx={MENU_STYLE}
           icon={<VpnLockIcon />}
@@ -59,26 +61,26 @@ function BoardBar({ board }) {
         <Chip
           sx={MENU_STYLE}
           icon={<AddToDriveRoundedIcon />}
-          label="Add to Google Drive"
+          label='Add to Google Drive'
           clickable
         />
         <Chip
           sx={MENU_STYLE}
           icon={<BoltRoundedIcon />}
-          label="Automation"
+          label='Automation'
           clickable
         />
         <Chip
           sx={MENU_STYLE}
           icon={<FilterListRoundedIcon />}
-          label="Filter"
+          label='Filter'
           clickable
         />
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         <Button
           startIcon={<PersonAddAlt1RoundedIcon />}
-          variant="outlined"
+          variant='outlined'
           sx={{
             color: 'white',
             borderColor: 'white',
@@ -103,23 +105,23 @@ function BoardBar({ board }) {
             }
           }}
         >
-          <Tooltip title="minhuy">
-            <Avatar alt="minhuy" src="https://picsum.photos/200/300" />
+          <Tooltip title='minhuy'>
+            <Avatar alt='minhuy' src='https://picsum.photos/200/300' />
           </Tooltip>
-          <Tooltip title="minhuy">
-            <Avatar alt="minhuy" src="https://picsum.photos/id/237/200/300" />
+          <Tooltip title='minhuy'>
+            <Avatar alt='minhuy' src='https://picsum.photos/id/237/200/300' />
           </Tooltip>
-          <Tooltip title="minhuy">
+          <Tooltip title='minhuy'>
             <Avatar
-              alt="minhuy"
-              src="https://picsum.photos/seed/picsum/200/300"
+              alt='minhuy'
+              src='https://picsum.photos/seed/picsum/200/300'
             />
           </Tooltip>
-          <Tooltip title="minhuy">
-            <Avatar alt="minhuy" src="https://picsum.photos/200/300" />
+          <Tooltip title='minhuy'>
+            <Avatar alt='minhuy' src='https://picsum.photos/200/300' />
           </Tooltip>
-          <Tooltip title="minhuy">
-            <Avatar alt="minhuy" src="https://picsum.photos/200/300" />
+          <Tooltip title='minhuy'>
+            <Avatar alt='minhuy' src='https://picsum.photos/200/300' />
           </Tooltip>
         </AvatarGroup>
       </Box>
