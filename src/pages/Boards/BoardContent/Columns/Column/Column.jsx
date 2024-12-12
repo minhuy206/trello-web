@@ -202,6 +202,7 @@ function Column({ column }) {
                 size='small'
                 variant='outlined'
                 autoFocus
+                data-no-dnd='true'
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 sx={{
