@@ -3,8 +3,6 @@ import Box from '@mui/material/Box'
 import { mapOrder } from '~/utils/sort'
 import {
   DndContext,
-  MouseSensor,
-  TouchSensor,
   useSensor,
   useSensors,
   DragOverlay,
@@ -14,6 +12,7 @@ import {
   getFirstCollision,
   closestCenter
 } from '@dnd-kit/core'
+import { MouseSensor, TouchSensor } from '~/customLibs/DndKitSensors'
 import { arrayMove } from '@dnd-kit/sortable'
 import Column from './Columns/Column/Column'
 import Card from './Columns/Column/Cards/Card/Card'
