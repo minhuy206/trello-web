@@ -63,7 +63,7 @@ function Columns({ columns }) {
             <Button
               startIcon={<Add />}
               sx={{
-                color: 'white',
+                color: (theme) => theme.palette['text-color'],
                 width: '100%',
                 justifyContent: 'flex-start',
                 px: 2.5,
@@ -89,7 +89,7 @@ function Columns({ columns }) {
             <TextField
               label='Enter column title...'
               type='text'
-              size='small'
+              // size='small'
               variant='outlined'
               autoFocus
               data-no-dnd='true'
@@ -98,30 +98,38 @@ function Columns({ columns }) {
               sx={{
                 minWidth: '300px',
                 maxWidth: '300px',
-                '& label': { color: 'white' },
-                '& input': { color: 'white' },
-                '& label.Mui-focused': { color: 'white' },
+                '& label': {
+                  color: (theme) => theme.palette['button-text-color']
+                },
+                '& input': {
+                  color: (theme) => theme.palette['button-text-color']
+                },
+                '& label.Mui-focused': {
+                  color: (theme) => theme.palette['button-text-color']
+                },
                 '& .MuiOutlinedInput-root': {
                   '& fieldset': {
-                    borderColor: 'white'
+                    borderColor: (theme) => theme.palette['button-text-color']
                   },
                   '&:hover fieldset': {
-                    borderColor: 'white'
+                    borderColor: (theme) => theme.palette['button-text-color']
                   },
                   '&.Mui-focused fieldset': {
-                    borderColor: 'white'
+                    borderColor: (theme) => theme.palette['button-text-color']
                   }
+                },
+                '& .MuiOutlinedInput-input': {
+                  borderRadius: 1
                 }
               }}
             />
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <Button
                 variant='outlined'
-                size='small'
                 sx={{
                   boxShadow: 'none',
                   border: '0.5px solid',
-                  borderColor: (theme) => theme.palette.primary.main
+                  borderColor: (theme) => theme.palette['button-text-color']
                 }}
                 onClick={addNewColumn}
               >
@@ -130,7 +138,7 @@ function Columns({ columns }) {
               <CloseIcon
                 fontSize='small'
                 sx={{
-                  color: 'white',
+                  color: (theme) => theme.palette['text-color'],
                   cursor: 'pointer',
                   '&:hover': { color: (theme) => theme.palette.warning.light }
                 }}

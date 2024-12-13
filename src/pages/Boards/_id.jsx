@@ -22,7 +22,11 @@ function Board() {
     <Container
       disableGutters
       maxWidth={false}
-      sx={{ height: '100vh', backgroundColor: 'primary.main', width: '100%' }}
+      sx={{
+        height: '100vh',
+        backgroundColor: (theme) => theme.palette['bg-color'],
+        width: '100%'
+      }}
     >
       <AppBar />
       <BoardBar board={mockData.board} />

@@ -70,8 +70,7 @@ function Column({ column }) {
         sx={{
           minWidth: '300px',
           maxWidth: '300px',
-          bgcolor: (theme) =>
-            theme.palette.mode === 'dark' ? '#333643' : '#ebecf0',
+          bgcolor: (theme) => theme.palette['column-color'],
           ml: 2,
           borderRadius: 2,
           height: 'fit-content',
@@ -207,25 +206,24 @@ function Column({ column }) {
                 onChange={(e) => setTitle(e.target.value)}
                 sx={{
                   '& label': {
-                    color: (theme) => theme.palette.primary.main
+                    color: (theme) => theme.palette['button-text-color']
                   },
                   '& input': {
-                    color: (theme) => theme.palette.primary.main,
-                    bgcolor: (theme) =>
-                      theme.palette.mode === 'dark' ? '#333643' : 'white'
+                    color: (theme) => theme.palette['button-text-color'],
+                    bgcolor: (theme) => theme.palette['column-color']
                   },
                   '& label.Mui-focused': {
-                    color: (theme) => theme.palette.primary.main
+                    color: (theme) => theme.palette['button-text-color']
                   },
                   '& .MuiOutlinedInput-root': {
                     '& fieldset': {
-                      borderColor: (theme) => theme.palette.primary.main
+                      borderColor: (theme) => theme.palette['button-text-color']
                     },
                     '&:hover fieldset': {
-                      borderColor: (theme) => theme.palette.primary.main
+                      borderColor: (theme) => theme.palette['button-text-color']
                     },
                     '&.Mui-focused fieldset': {
-                      borderColor: (theme) => theme.palette.primary.main
+                      borderColor: (theme) => theme.palette['button-text-color']
                     }
                   },
                   '& .MuiOutlinedInput-input': {
@@ -240,7 +238,7 @@ function Column({ column }) {
                   sx={{
                     boxShadow: 'none',
                     border: '0.5px solid',
-                    borderColor: (theme) => theme.palette.primary.main
+                    borderColor: (theme) => theme.palette['button-text-color']
                   }}
                   onClick={addNewCard}
                 >

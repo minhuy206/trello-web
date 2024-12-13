@@ -18,7 +18,26 @@ const theme = createTheme({
     columnFooterHeight: COLUMN_FOOTER_HEIGHT
   },
   colorSchemes: {
-    dark: true
+    light: {
+      palette: {
+        'text-color': '#fff',
+        'bg-color': '#42a5f5',
+        'app-bar-color': '#0288d1',
+        'column-color': '#fff',
+        'card-color': '#ff',
+        'button-text-color': '#90caf9'
+      }
+    },
+    dark: {
+      palette: {
+        'text-color': '#fff',
+        'bg-color': '#242e49',
+        'app-bar-color': '#181a2f',
+        'column-color': '#37415c',
+        'card-color': '#37415c',
+        'button-text-color': '#90caf9'
+      }
+    }
   },
   components: {
     MuiCssBaseline: {

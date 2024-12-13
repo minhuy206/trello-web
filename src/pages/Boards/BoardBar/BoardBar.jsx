@@ -13,16 +13,16 @@ import PersonAddAlt1RoundedIcon from '@mui/icons-material/PersonAddAlt1Rounded'
 import { capitalizeFirstLetter } from '~/utils/formatter'
 
 const MENU_STYLE = {
-  color: 'white',
+  color: (theme) => theme.palette['text-color'],
   bgcolor: 'transparent',
   border: 'none',
   paddingX: 0.5,
   borderRadius: 0.5,
   '& .MuiSvgIcon-root': {
-    color: 'white'
+    color: (theme) => theme.palette['text-color']
   },
   '&:hover': {
-    backgroundColor: 'primary.50'
+    backgroundColor: 'rgba(255, 255, 255, 0.1)'
   }
 }
 
@@ -38,8 +38,7 @@ function BoardBar({ board }) {
         gap: 2,
         paddingX: 2,
         overflowX: 'auto',
-        bgcolor: (theme) =>
-          theme.palette.mode === 'dark' ? '#34495e' : '#1976d2',
+        bgcolor: (theme) => theme.palette['bg-color'],
         '&::-webkit-scrollbar-track': { m: 2 }
       }}
     >
@@ -82,9 +81,9 @@ function BoardBar({ board }) {
           startIcon={<PersonAddAlt1RoundedIcon />}
           variant='outlined'
           sx={{
-            color: 'white',
-            borderColor: 'white',
-            '&:hover': { borderColor: 'white' }
+            color: (theme) => theme.palette['text-color'],
+            borderColor: (theme) => theme.palette['text-color'],
+            '&:hover': { borderColor: (theme) => theme.palette['text-color'] }
           }}
         >
           Invite
@@ -97,7 +96,7 @@ function BoardBar({ board }) {
               height: 32,
               fontSize: 16,
               border: 'none',
-              color: 'white',
+              color: (theme) => theme.palette['text-color'],
               cursor: 'pointer',
               '&:first-of-type': {
                 bgcolor: '#a4b0be'
