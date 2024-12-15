@@ -22,6 +22,7 @@ import Cards from './Cards/Cards'
 import { mapOrder } from '~/utils/sort'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { toast } from 'react-toastify'
 
 function Column({ column }) {
   const {
@@ -58,7 +59,13 @@ function Column({ column }) {
   }
 
   const addNewCard = () => {
-    if (!title) return
+    if (!title) {
+      toast.error('Please enter a title for the card', {
+        position: 'bottom-left',
+        theme: 'colored'
+      })
+      return
+    }
 
     toggleOpened()
     setTitle('')
@@ -247,8 +254,11 @@ function Column({ column }) {
                 <CloseIcon
                   fontSize='small'
                   sx={{
-                    color: (theme) => theme.palette.warning.light,
-                    cursor: 'pointer'
+                    color: (theme) => theme.palette['text-color'],
+                    cursor: 'pointer',
+                    '&:hover': {
+                      color: (theme) => theme.palette['button-text-color']
+                    }
                   }}
                   onClick={toggleOpened}
                 />

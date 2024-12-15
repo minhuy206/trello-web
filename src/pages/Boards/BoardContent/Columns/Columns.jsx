@@ -9,6 +9,7 @@ import {
   SortableContext,
   horizontalListSortingStrategy
 } from '@dnd-kit/sortable'
+import { toast } from 'react-toastify'
 
 function Columns({ columns }) {
   const [opened, setOpened] = useState(false)
@@ -20,7 +21,13 @@ function Columns({ columns }) {
   }
 
   const addNewColumn = () => {
-    if (!title) return
+    if (!title) {
+      toast.error('Please enter a title for the column', {
+        position: 'bottom-left',
+        theme: 'colored'
+      })
+      return
+    }
 
     toggleOpened()
     setTitle('')
@@ -140,7 +147,9 @@ function Columns({ columns }) {
                 sx={{
                   color: (theme) => theme.palette['text-color'],
                   cursor: 'pointer',
-                  '&:hover': { color: (theme) => theme.palette.warning.light }
+                  '&:hover': {
+                    color: (theme) => theme.palette['button-text-color']
+                  }
                 }}
                 onClick={toggleOpened}
               />

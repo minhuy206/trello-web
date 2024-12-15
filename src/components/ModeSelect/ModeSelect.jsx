@@ -34,7 +34,7 @@ function ModeSelect() {
           id='select-dark-light-mode'
           value={mode}
           label='Mode'
-          defaultValue={'light'}
+          defaultValue={'dark'}
           onChange={handleChange}
           sx={{
             color: (theme) => theme.palette['text-color'],
