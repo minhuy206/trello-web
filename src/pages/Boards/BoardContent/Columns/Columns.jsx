@@ -10,7 +10,7 @@ import {
   horizontalListSortingStrategy
 } from '@dnd-kit/sortable'
 
-function Columns({ columns }) {
+function Columns({ columns, createNewColumn, createNewCard }) {
   const [opened, setOpened] = useState(false)
 
   const [title, setTitle] = useState('')
@@ -19,8 +19,10 @@ function Columns({ columns }) {
     setOpened(!opened)
   }
 
-  const addNewColumn = () => {
+  const addNewColumn = async () => {
     if (!title) return
+
+    await createNewColumn({ title })
 
     toggleOpened()
     setTitle('')
@@ -28,7 +30,7 @@ function Columns({ columns }) {
 
   return (
     <SortableContext
-      items={columns?.map((column) => column._id)}
+      items={columns?.map((column) => column?._id)}
       strategy={horizontalListSortingStrategy}
     >
       <Box
@@ -43,7 +45,11 @@ function Columns({ columns }) {
         }}
       >
         {columns?.map((column) => (
-          <Column key={column?._id} column={column} />
+          <Column
+            key={column?._id}
+            column={column}
+            createNewCard={createNewCard}
+          />
         ))}
 
         {/* Add new column button */}
