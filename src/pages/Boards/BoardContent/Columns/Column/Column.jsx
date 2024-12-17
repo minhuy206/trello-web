@@ -23,7 +23,7 @@ import { mapOrder } from '~/utils/sort'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
-function Column({ column }) {
+function Column({ column, createNewCard }) {
   const {
     attributes,
     listeners,
@@ -31,7 +31,7 @@ function Column({ column }) {
     transform,
     transition,
     isDragging
-  } = useSortable({ id: column._id, data: { ...column } })
+  } = useSortable({ id: column?._id, data: { ...column } })
 
   const dndKitColumnStyles = {
     transform: CSS.Translate.toString(transform),
@@ -57,8 +57,10 @@ function Column({ column }) {
     setOpened(!opened)
   }
 
-  const addNewCard = () => {
+  const addNewCard = async () => {
     if (!title) return
+
+    await createNewCard({ title, columnId: column._id })
 
     toggleOpened()
     setTitle('')
