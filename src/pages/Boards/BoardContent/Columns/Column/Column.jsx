@@ -19,7 +19,6 @@ import AddCardIcon from '@mui/icons-material/AddCard'
 import DragHandleIcon from '@mui/icons-material/DragHandle'
 import CloseIcon from '@mui/icons-material/Close'
 import Cards from './Cards/Cards'
-import { mapOrder } from '~/utils/sort'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
@@ -46,8 +45,6 @@ function Column({ column, createNewCard }) {
   const handleClose = () => {
     setAnchorEl(null)
   }
-
-  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
 
   const [opened, setOpened] = useState(false)
 
@@ -164,7 +161,7 @@ function Column({ column, createNewCard }) {
         </Box>
 
         {/* // List Cards */}
-        <Cards cards={orderedCards} />
+        <Cards cards={column.cards} />
 
         {/* // Box for column footer */}
         <Box

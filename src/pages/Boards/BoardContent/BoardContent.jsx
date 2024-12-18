@@ -1,6 +1,6 @@
+/* eslint-disable indent */
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
-import { mapOrder } from '~/utils/sort'
 import {
   DndContext,
   useSensor,
@@ -14,18 +14,24 @@ import {
 } from '@dnd-kit/core'
 import { MouseSensor, TouchSensor } from '~/customLibs/DndKitSensors'
 import { arrayMove } from '@dnd-kit/sortable'
+import { cloneDeep } from 'lodash'
+import { generatePlaceholderCard } from '~/utils/formatter'
+import Columns from './Columns/Columns'
 import Column from './Columns/Column/Column'
 import Card from './Columns/Column/Cards/Card/Card'
-import { cloneDeep } from 'lodash'
-import Columns from './Columns/Columns'
-import { generatePlaceholderCard } from '~/utils/formatter'
 
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
+function BoardContent({
+  board,
+  createNewColumn,
+  createNewCard,
+  moveColumn,
+  moveCard
+}) {
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 10
@@ -48,7 +54,7 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
   const lastOverId = useRef(null)
 
   useEffect(() => {
-    setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, '_id'))
+    setOrderedColumns(board.columns)
   }, [board])
 
   const dropAnimation = {
@@ -159,9 +165,11 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
                 : overColumn?.cards?.length + 1
 
             const nextColumns = cloneDeep(prevColumn)
+
             const nextActiveColumn = nextColumns.find(
               (column) => column._id === activeColumn._id
             )
+
             const nextOverColumn = nextColumns.find(
               (column) => column._id === overColumn._id
             )
@@ -176,7 +184,6 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
                   generatePlaceholderCard(nextActiveColumn)
                 ]
               }
-
               nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map(
                 (card) => card._id
               )
@@ -186,17 +193,15 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
               nextOverColumn.cards = nextOverColumn.cards.filter(
                 (card) => card._id !== activeCardId
               )
-
               nextOverColumn.cards = nextOverColumn.cards.toSpliced(
                 newCardIndex,
                 0,
-                { ...activeCardData, columnId: nextOverColumn._id }
+                // { ...activeCardData, columnId: nextOverColumn._id }
+                activeCardData
               )
-
               nextOverColumn.cards = nextOverColumn.cards.filter(
                 (card) => !card.FE_PlaceholderCard
               )
-
               nextOverColumn.cardOrderIds = nextOverColumn.cards.map(
                 (card) => card._id
               )
@@ -206,7 +211,7 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
           })
         }
       }}
-      onDragEnd={({ active, over }) => {
+      onDragEnd={async ({ active, over }) => {
         if (!active || !over) return
 
         if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) {
@@ -216,29 +221,41 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
 
           const activeColumn = findColumn(activeCardId)
 
-          const overColumn = findColumn(overCardId)
+          if (!activeColumn) return
 
-          if (!activeColumn || !overColumn) return
+          if (active.data.current.columnId !== activeColumn._id) {
+            const oldActiveColumn = orderedColumns.find(
+              (column) => column._id === active.data.current.columnId
+            )
 
-          const oldCardIndex = activeColumn.cardOrderIds.findIndex(
-            (cardId) => cardId === activeCardId
-          )
+            moveCard(
+              active.data.current.columnId,
+              activeCardId,
+              oldActiveColumn.cards,
+              oldActiveColumn.cardOrderIds
+            )
+          }
 
-          const newCardIndex = overColumn.cardOrderIds.findIndex(
-            (cardId) => cardId === overCardId
-          )
+          activeColumn.cards.find(
+            (card) => card._id === activeCardId
+          ).columnId = activeColumn._id
 
           const dndOrderedCards = arrayMove(
             activeColumn.cards,
-            oldCardIndex,
-            newCardIndex
+            activeColumn.cardOrderIds.findIndex(
+              (cardId) => cardId === activeCardId
+            ), //  old card index
+            activeColumn.cardOrderIds.findIndex(
+              (cardId) => cardId === overCardId
+            ) // new card index
           )
+          const dndOrderedCardOrderIds = dndOrderedCards.map((card) => card._id)
 
           setOrderedColumns((prevColumns) => {
             const nextColumns = cloneDeep(prevColumns).map((column) => {
               if (column._id === activeColumn._id) {
                 column.cards = dndOrderedCards
-                column.cardOrderIds = dndOrderedCards.map((card) => card._id)
+                column.cardOrderIds = dndOrderedCardOrderIds
               }
 
               return column
@@ -246,6 +263,13 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
 
             return nextColumns
           })
+
+          await moveCard(
+            activeColumn._id,
+            activeCardId,
+            dndOrderedCards,
+            dndOrderedCardOrderIds
+          )
         } else if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) {
           const dndOrderedColumns = arrayMove(
             orderedColumns,
