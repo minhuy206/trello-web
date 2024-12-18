@@ -4,7 +4,12 @@ import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 import Container from '@mui/material/Container'
 import { useEffect, useState } from 'react'
-import { createNewCardAPI, createNewColumnAPI, getBoardAPI } from '~/apis'
+import {
+  createNewCardAPI,
+  createNewColumnAPI,
+  getBoardAPI,
+  updateBoardAPI
+} from '~/apis'
 import { generatePlaceholderCard } from '~/utils/formatter'
 import { isEmpty } from 'lodash'
 
@@ -45,12 +50,21 @@ function Board() {
       boardId: board._id
     })
 
-    const newBoard = { ...board }
-    const column = newBoard.columns.find(
+    const column = { ...board }.columns.find(
       (column) => column._id === card.columnId
     )
     column.cards.push(createdCard)
     column.cardOrderIds.push(createdCard._id)
+  }
+
+  const moveColumn = async (dndOrderedColumns) => {
+    const dndOrderedColumnsIds = dndOrderedColumns.map((column) => column._id)
+    const newBoard = { ...board }
+    newBoard.columns = dndOrderedColumns
+    newBoard.columnOrderIds = dndOrderedColumnsIds
+    setBoard(newBoard)
+
+    await updateBoardAPI(board._id, { columnOrderIds: dndOrderedColumnsIds })
   }
 
   return (
@@ -65,6 +79,7 @@ function Board() {
         board={board}
         createNewColumn={createNewColumn}
         createNewCard={createNewCard}
+        moveColumn={moveColumn}
       />
     </Container>
   )
