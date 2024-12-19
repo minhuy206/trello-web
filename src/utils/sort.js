@@ -1,5 +1,10 @@
-// Sort column/card
-export const mapOrder = (array, order, key) => {
-  if (!array || !order || !key) return []
-  return order.map((id) => array.find((item) => item[key] === id))
+export const mapOrder = (originalArray, orderArray, key) => {
+  if (!originalArray || !orderArray || !key) return []
+
+  const clonedArray = [...originalArray]
+  const orderedArray = clonedArray.sort((a, b) => {
+    return orderArray.indexOf(a[key]) - orderArray.indexOf(b[key])
+  })
+
+  return orderedArray
 }

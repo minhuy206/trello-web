@@ -9,12 +9,14 @@ import {
   createNewColumnAPI,
   getBoardAPI,
   updateBoardAPI,
-  updateColumnAPI
+  updateColumnAPI,
+  deleteColumnAPI
 } from '~/apis'
 import { generatePlaceholderCard } from '~/utils/formatter'
 import { isEmpty } from 'lodash'
 import { mapOrder } from '~/utils/sort'
 import { Box, CircularProgress } from '@mui/material'
+import { toast } from 'react-toastify'
 
 function Board() {
   const [board, setBoard] = useState(null)
@@ -24,7 +26,8 @@ function Board() {
 
     getBoardAPI(boardId).then((board) => {
       board.columns = mapOrder(board.columns, board.columnOrderIds, '_id')
-      board?.columns.forEach((column) => {
+
+      board?.columns?.forEach((column) => {
         if (isEmpty(column.cards)) {
           column.cards = [generatePlaceholderCard(column)]
           column.cardOrderIds = [generatePlaceholderCard(column)._id]
@@ -32,7 +35,6 @@ function Board() {
           column.cards = mapOrder(column.cards, column.cardOrderIds, '_id')
         }
       })
-
       setBoard(board)
     })
   }, [])
@@ -60,14 +62,15 @@ function Board() {
     const columnToUpdate = newBoard.columns.find(
       (column) => column._id === card.columnId
     )
+
     if (columnToUpdate) {
       if (columnToUpdate.cards.some((card) => card.FE_PlaceholderCard)) {
         columnToUpdate.cards = [createdCard]
         columnToUpdate.cardOrderIds = [createdCard._id]
+      } else {
+        columnToUpdate.cards.push(createdCard)
+        columnToUpdate.cardOrderIds.push(createdCard._id)
       }
-    } else {
-      columnToUpdate.cards.push(createdCard)
-      columnToUpdate.cardOrderIds.push(createdCard._id)
     }
 
     setBoard(newBoard)
@@ -100,6 +103,24 @@ function Board() {
           (cardId) => cardId !== `${columnId}-placeholder-card`
         )
       }
+    })
+  }
+
+  const deleteColumn = (columnId) => {
+    const newBoard = { ...board }
+    newBoard.columns = newBoard.columns.filter(
+      (column) => column._id !== columnId
+    )
+    newBoard.columnOrderIds = newBoard.columnOrderIds.filter(
+      (columnId) => columnId !== columnId
+    )
+    setBoard(newBoard)
+    deleteColumnAPI(columnId).then((res) => {
+      toast.success(res?.result, {
+        position: 'top-right',
+        autoClose: 3000,
+        theme: 'colored'
+      })
     })
   }
 
@@ -138,6 +159,7 @@ function Board() {
         createNewCard={createNewCard}
         moveColumn={moveColumn}
         moveCard={moveCard}
+        deleteColumn={deleteColumn}
       />
     </Container>
   )

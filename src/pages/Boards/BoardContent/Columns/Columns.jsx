@@ -11,7 +11,7 @@ import {
 } from '@dnd-kit/sortable'
 import { toast } from 'react-toastify'
 
-function Columns({ columns, createNewColumn, createNewCard }) {
+function Columns({ columns, createNewColumn, createNewCard, deleteColumn }) {
   const [opened, setOpened] = useState(false)
 
   const [title, setTitle] = useState('')
@@ -57,6 +57,7 @@ function Columns({ columns, createNewColumn, createNewCard }) {
             key={column?._id}
             column={column}
             createNewCard={createNewCard}
+            deleteColumn={deleteColumn}
           />
         ))}
 
