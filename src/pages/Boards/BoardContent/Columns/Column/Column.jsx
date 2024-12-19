@@ -21,6 +21,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import Cards from './Cards/Cards'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { toast } from 'react-toastify'
 
 function Column({ column, createNewCard }) {
   const {
@@ -55,7 +56,14 @@ function Column({ column, createNewCard }) {
   }
 
   const addNewCard = async () => {
-    if (!title) return
+    if (!title) {
+      toast.error('Please enter a title!', {
+        position: 'top-right',
+        autoClose: 3000,
+        theme: 'colored'
+      })
+      return
+    }
 
     await createNewCard({ title, columnId: column._id })
 

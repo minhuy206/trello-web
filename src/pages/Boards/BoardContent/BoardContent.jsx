@@ -219,41 +219,30 @@ function BoardContent({
 
           const { id: activeCardId } = active
 
-          const activeColumn = findColumn(activeCardId)
+          const overColumn = findColumn(overCardId)
 
-          if (!activeColumn) return
+          const activeColumnId = active.data.current.columnId
 
-          if (active.data.current.columnId !== activeColumn._id) {
-            const oldActiveColumn = orderedColumns.find(
-              (column) => column._id === active.data.current.columnId
-            )
-
-            moveCard(
-              active.data.current.columnId,
-              activeCardId,
-              oldActiveColumn.cards,
-              oldActiveColumn.cardOrderIds
-            )
-          }
-
-          activeColumn.cards.find(
-            (card) => card._id === activeCardId
-          ).columnId = activeColumn._id
+          if (!overColumn) return
 
           const dndOrderedCards = arrayMove(
-            activeColumn.cards,
-            activeColumn.cardOrderIds.findIndex(
+            overColumn.cards.map((card) => {
+              if (card._id === activeCardId) {
+                card.columnId = overColumn._id
+              }
+              return card
+            }),
+            overColumn.cardOrderIds.findIndex(
               (cardId) => cardId === activeCardId
             ), //  old card index
-            activeColumn.cardOrderIds.findIndex(
-              (cardId) => cardId === overCardId
-            ) // new card index
+            overColumn.cardOrderIds.findIndex((cardId) => cardId === overCardId) // new card index
           )
+
           const dndOrderedCardOrderIds = dndOrderedCards.map((card) => card._id)
 
           setOrderedColumns((prevColumns) => {
             const nextColumns = cloneDeep(prevColumns).map((column) => {
-              if (column._id === activeColumn._id) {
+              if (column._id === overColumn._id) {
                 column.cards = dndOrderedCards
                 column.cardOrderIds = dndOrderedCardOrderIds
               }
@@ -264,8 +253,21 @@ function BoardContent({
             return nextColumns
           })
 
+          if (activeColumnId !== overColumn._id) {
+            const activeColumn = orderedColumns.find(
+              (column) => column._id === activeColumnId
+            )
+
+            await moveCard(
+              activeColumnId,
+              activeCardId,
+              activeColumn.cards,
+              activeColumn.cardOrderIds
+            )
+          }
+
           await moveCard(
-            activeColumn._id,
+            overColumn._id,
             activeCardId,
             dndOrderedCards,
             dndOrderedCardOrderIds
