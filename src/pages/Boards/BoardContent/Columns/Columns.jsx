@@ -9,6 +9,7 @@ import {
   SortableContext,
   horizontalListSortingStrategy
 } from '@dnd-kit/sortable'
+import { toast } from 'react-toastify'
 
 function Columns({ columns, createNewColumn, createNewCard }) {
   const [opened, setOpened] = useState(false)
@@ -20,7 +21,14 @@ function Columns({ columns, createNewColumn, createNewCard }) {
   }
 
   const addNewColumn = async () => {
-    if (!title) return
+    if (!title) {
+      toast.error('Please enter a title!', {
+        position: 'top-right',
+        autoClose: 3000,
+        theme: 'colored'
+      })
+      return
+    }
 
     await createNewColumn({ title })
 

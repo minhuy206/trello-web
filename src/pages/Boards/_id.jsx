@@ -92,9 +92,7 @@ function Board() {
       columnToUpdate.cards = dndOrderedCards
       columnToUpdate.cardOrderIds = dndOrderedCardIds
     }
-
     setBoard(newBoard)
-
     updateColumnAPI(columnId, {
       cardId,
       column: {
