@@ -10,11 +10,20 @@ import {
   horizontalListSortingStrategy
 } from '@dnd-kit/sortable'
 import { toast } from 'react-toastify'
+import { generatePlaceholderCard } from '~/utils/formatter'
+import { cloneDeep } from 'lodash'
+import { createNewColumnAPI } from '~/apis'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  selectCurrentActiveBoard,
+  updateCurrentActiveBoard
+} from '~/redux/activeBoard/activeBoardSlice'
 
-function Columns({ columns, createNewColumn, createNewCard, deleteColumn }) {
+function Columns({ columns }) {
   const [opened, setOpened] = useState(false)
-
   const [title, setTitle] = useState('')
+  const board = useSelector(selectCurrentActiveBoard)
+  const dispatch = useDispatch()
 
   const toggleOpened = () => {
     setOpened(!opened)
@@ -30,7 +39,18 @@ function Columns({ columns, createNewColumn, createNewCard, deleteColumn }) {
       return
     }
 
-    await createNewColumn({ title })
+    const createdColumn = await createNewColumnAPI({
+      ...{ title },
+      boardId: board?._id
+    })
+
+    createdColumn.cards = [generatePlaceholderCard(createdColumn)]
+    createdColumn.cardOrderIds = [generatePlaceholderCard(createdColumn)._id]
+
+    const newBoard = cloneDeep(board)
+    newBoard.columns.push(createdColumn)
+    newBoard.columnOrderIds.push(createdColumn._id)
+    dispatch(updateCurrentActiveBoard(newBoard))
 
     toggleOpened()
     setTitle('')
@@ -53,12 +73,7 @@ function Columns({ columns, createNewColumn, createNewCard, deleteColumn }) {
         }}
       >
         {columns?.map((column) => (
-          <Column
-            key={column?._id}
-            column={column}
-            createNewCard={createNewCard}
-            deleteColumn={deleteColumn}
-          />
+          <Column key={column?._id} column={column} />
         ))}
 
         {/* Add new column button */}
