@@ -1,15 +1,21 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+
 import CssBaseline from '@mui/material/CssBaseline'
 import { ThemeProvider } from '@mui/material/styles'
+
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+
 import { ConfirmProvider } from 'material-ui-confirm'
+
+import { Provider } from 'react-redux'
+import { store } from './redux/store'
+
 import theme from '~/theme'
 import App from './App'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  <Provider store={store}>
     <ThemeProvider theme={theme}>
       <ConfirmProvider
         defaultOptions={{
@@ -24,5 +30,5 @@ createRoot(document.getElementById('root')).render(
         <ToastContainer />
       </ConfirmProvider>
     </ThemeProvider>
-  </StrictMode>
+  </Provider>
 )

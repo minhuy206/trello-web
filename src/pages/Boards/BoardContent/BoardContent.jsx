@@ -19,20 +19,16 @@ import { generatePlaceholderCard } from '~/utils/formatter'
 import Columns from './Columns/Columns'
 import Column from './Columns/Column/Column'
 import Card from './Columns/Column/Cards/Card/Card'
+import { updateBoardAPI, updateColumnAPI } from '~/apis'
+import { updateCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
+import { useDispatch } from 'react-redux'
 
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-function BoardContent({
-  board,
-  createNewColumn,
-  createNewCard,
-  moveColumn,
-  moveCard,
-  deleteColumn
-}) {
+function BoardContent({ board }) {
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 10
@@ -53,6 +49,7 @@ function BoardContent({
   const [activeDragItemType, setActiveDragItemType] = useState(null)
   const [activeDragItemData, setActiveDragItemData] = useState(null)
   const lastOverId = useRef(null)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     setOrderedColumns(board.columns)
@@ -104,9 +101,50 @@ function BoardContent({
   )
 
   const findColumn = (cardId) => {
-    return orderedColumns?.find((column) =>
+    return cloneDeep(orderedColumns)?.find((column) =>
       column?.cards?.map((card) => card._id).includes(cardId)
     )
+  }
+
+  const moveColumn = (dndOrderedColumns) => {
+    const dndOrderedColumnsIds = dndOrderedColumns.map((column) => column._id)
+    const newBoard = cloneDeep(board)
+    newBoard.columns = dndOrderedColumns
+    newBoard.columnOrderIds = dndOrderedColumnsIds
+
+    dispatch(updateCurrentActiveBoard(newBoard))
+
+    updateBoardAPI(board._id, { columnOrderIds: dndOrderedColumnsIds })
+  }
+
+  const moveCard = (
+    board,
+    columnId,
+    cardId,
+    dndOrderedCards,
+    dndOrderedCardIds
+  ) => {
+    const newBoard = cloneDeep(board)
+    const columnToUpdate = newBoard.columns.find(
+      (column) => column._id === columnId
+    )
+    if (columnToUpdate) {
+      columnToUpdate.cards = dndOrderedCards
+      columnToUpdate.cardOrderIds = dndOrderedCardIds
+    }
+
+    dispatch(updateCurrentActiveBoard(newBoard))
+
+    updateColumnAPI(columnId, {
+      cardId,
+      column: {
+        cardOrderIds: dndOrderedCardIds.filter(
+          (cardId) => cardId !== `${columnId}-placeholder-card`
+        )
+      }
+    })
+
+    return newBoard
   }
 
   return (
@@ -197,7 +235,6 @@ function BoardContent({
               nextOverColumn.cards = nextOverColumn.cards.toSpliced(
                 newCardIndex,
                 0,
-                // { ...activeCardData, columnId: nextOverColumn._id }
                 activeCardData
               )
               nextOverColumn.cards = nextOverColumn.cards.filter(
@@ -260,19 +297,27 @@ function BoardContent({
             )
 
             await moveCard(
-              activeColumnId,
+              await moveCard(
+                board,
+                activeColumnId,
+                activeCardId,
+                activeColumn.cards,
+                activeColumn.cardOrderIds
+              ),
+              overColumn._id,
               activeCardId,
-              activeColumn.cards,
-              activeColumn.cardOrderIds
+              dndOrderedCards,
+              dndOrderedCardOrderIds
+            )
+          } else {
+            await moveCard(
+              board,
+              overColumn._id,
+              activeCardId,
+              dndOrderedCards,
+              dndOrderedCardOrderIds
             )
           }
-
-          await moveCard(
-            overColumn._id,
-            activeCardId,
-            dndOrderedCards,
-            dndOrderedCardOrderIds
-          )
         } else if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) {
           const dndOrderedColumns = arrayMove(
             orderedColumns,
@@ -300,12 +345,7 @@ function BoardContent({
           height: (theme) => theme.trello.boardContentHeight
         }}
       >
-        <Columns
-          columns={orderedColumns}
-          createNewColumn={createNewColumn}
-          createNewCard={createNewCard}
-          deleteColumn={deleteColumn}
-        />
+        <Columns columns={orderedColumns} />
         <DragOverlay dropAnimation={dropAnimation}>
           {!activeDragItemType && null}
           {activeDragItemId &&

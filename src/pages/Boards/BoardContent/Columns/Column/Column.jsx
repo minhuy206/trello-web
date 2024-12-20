@@ -23,8 +23,16 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { toast } from 'react-toastify'
 import { useConfirm } from 'material-ui-confirm'
+import { cloneDeep } from 'lodash'
+import { createNewCardAPI, deleteColumnAPI } from '~/apis'
 
-function Column({ column, createNewCard, deleteColumn }) {
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  selectCurrentActiveBoard,
+  updateCurrentActiveBoard
+} from '~/redux/activeBoard/activeBoardSlice'
+
+function Column({ column }) {
   const {
     attributes,
     listeners,
@@ -33,7 +41,6 @@ function Column({ column, createNewCard, deleteColumn }) {
     transition,
     isDragging
   } = useSortable({ id: column?._id, data: { ...column } })
-
   const dndKitColumnStyles = {
     transform: CSS.Translate.toString(transform),
     transition,
@@ -41,17 +48,22 @@ function Column({ column, createNewCard, deleteColumn }) {
     opacity: isDragging ? 0.5 : undefined
   }
 
+  const dispatch = useDispatch()
+  const board = useSelector(selectCurrentActiveBoard)
+
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
-
   const [opened, setOpened] = useState(false)
   const [title, setTitle] = useState('')
+
   const confirmDeleteColumn = useConfirm()
 
   const handleClick = (event) => setAnchorEl(event.currentTarget)
+
   const handleClose = () => {
     setAnchorEl(null)
   }
+
   const toggleOpened = () => {
     setOpened(!opened)
   }
@@ -66,24 +78,59 @@ function Column({ column, createNewCard, deleteColumn }) {
       return
     }
 
-    await createNewCard({ title, columnId: column._id })
+    const createdCard = await createNewCardAPI({
+      ...{ title, columnId: column._id },
+      boardId: board._id
+    })
+
+    const newBoard = cloneDeep(board)
+    const columnToUpdate = newBoard.columns.find(
+      (column) => column._id === createdCard.columnId
+    )
+
+    if (columnToUpdate) {
+      if (columnToUpdate.cards.some((card) => card.FE_PlaceholderCard)) {
+        columnToUpdate.cards = [createdCard]
+        columnToUpdate.cardOrderIds = [createdCard._id]
+      } else {
+        columnToUpdate.cards.push(createdCard)
+        columnToUpdate.cardOrderIds.push(createdCard._id)
+      }
+    }
+
+    dispatch(updateCurrentActiveBoard(newBoard))
 
     toggleOpened()
     setTitle('')
   }
 
-  const handleDeleteColumn = () => {
+  const handleDeleteColumn = (columnId) => {
     confirmDeleteColumn({
       description:
         'This action will permanently delete your column and its cards!',
       title: 'Delete column',
       confirmationText: 'Confirm',
       cancellationText: 'Cancel'
-    })
-      .then(() => {
-        deleteColumn(column._id)
+    }).then(() => {
+      const newBoard = cloneDeep(board)
+
+      newBoard.columns = newBoard.columns.filter(
+        (column) => column._id !== columnId
+      )
+      newBoard.columnOrderIds = newBoard.columnOrderIds.filter(
+        (_id) => _id !== columnId
+      )
+
+      dispatch(updateCurrentActiveBoard(newBoard))
+
+      deleteColumnAPI(column._id).then((res) => {
+        toast.success(res?.result, {
+          position: 'top-right',
+          autoClose: 3000,
+          theme: 'colored'
+        })
       })
-      .catch(() => {})
+    })
   }
 
   return (
@@ -179,7 +226,7 @@ function Column({ column, createNewCard, deleteColumn }) {
               </MenuItem>
               <Divider />
               <MenuItem
-                onClick={handleDeleteColumn}
+                onClick={() => handleDeleteColumn(column._id)}
                 sx={{
                   '&:hover': {
                     color: 'warning.dark',
