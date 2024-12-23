@@ -1,7 +1,5 @@
-import AppBar from '~/components/AppBar/AppBar'
-import BoardBar from './BoardBar/BoardBar'
-import BoardContent from './BoardContent/BoardContent'
 import Container from '@mui/material/Container'
+import { Box, CircularProgress } from '@mui/material'
 import { useEffect } from 'react'
 import {
   fetchBoardAPI,
@@ -9,16 +7,19 @@ import {
 } from '~/redux/activeBoard/activeBoardSlice'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Box, CircularProgress } from '@mui/material'
+import AppBar from '~/components/AppBar/AppBar'
+import BoardBar from './BoardBar/BoardBar'
+import BoardContent from './BoardContent/BoardContent'
+import { useParams } from 'react-router-dom'
 
 function Board() {
   const dispatch = useDispatch()
   const board = useSelector(selectCurrentActiveBoard)
+  const { _id } = useParams()
 
   useEffect(() => {
-    const boardId = '675ab2cfefdc5b3edb4a19a4'
-    dispatch(fetchBoardAPI(boardId))
-  }, [dispatch])
+    dispatch(fetchBoardAPI(_id))
+  }, [dispatch, _id])
 
   if (!board)
     return (
