@@ -1,16 +1,17 @@
 import Container from '@mui/material/Container'
-import { Box, CircularProgress } from '@mui/material'
+import Box from '@mui/material/Box'
 import { useEffect } from 'react'
 import {
   fetchBoardAPI,
   selectCurrentActiveBoard
 } from '~/redux/activeBoard/activeBoardSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
 
 import AppBar from '~/components/AppBar/AppBar'
 import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
-import { useParams } from 'react-router-dom'
+import PageLoadingSpinner from '~/components/Loading/PageLoadingSpinner'
 
 function Board() {
   const dispatch = useDispatch()
@@ -37,7 +38,7 @@ function Board() {
             height: '100vh'
           }}
         >
-          <CircularProgress />
+          <PageLoadingSpinner caption='Loading board...' />
         </Box>
       </Container>
     )
