@@ -266,7 +266,6 @@ function NotFound() {
       }}
     >
       <ParticlesBackground id='particles-background-404' options={options} />
-
       <Box
         sx={{
           display: 'flex',

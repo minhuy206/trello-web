@@ -1,5 +1,4 @@
-// TrungQuanDev: https://youtube.com/@trungquandev
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Avatar from '@mui/material/Avatar'
@@ -19,6 +18,8 @@ import {
   PASSWORD_RULE_MESSAGE
 } from '~/utils/validators'
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
+import { toast } from 'react-toastify'
+import { registerUserAPI } from '~/apis'
 
 function RegisterForm() {
   const {
@@ -27,8 +28,19 @@ function RegisterForm() {
     watch,
     formState: { errors }
   } = useForm()
+  const navigate = useNavigate()
 
-  const submitRegister = (data) => {}
+  const submitRegister = (account) => {
+    const { email, password } = account
+    toast
+      .promise(registerUserAPI({ email, password }), {
+        pending: 'Registering...'
+      })
+      .then((account) => {
+        navigate(`/login?registeredEmail=${account.email}`)
+      })
+  }
+
   return (
     <form onSubmit={handleSubmit(submitRegister)}>
       <Zoom in={true} style={{ transitionDelay: '200ms' }}>
@@ -116,6 +128,7 @@ function RegisterForm() {
           </Box>
           <CardActions sx={{ padding: '0 1em 1em 1em' }}>
             <Button
+              className='interceptor-loading'
               type='submit'
               variant='contained'
               color='primary'
