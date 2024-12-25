@@ -3,7 +3,7 @@ import { Route, Routes, Navigate } from 'react-router-dom'
 import Board from './pages/Boards/_id'
 import NotFound from './pages/404/NotFound'
 import Auth from './pages/Auth/Auth'
-import AccountVerìication from './pages/Auth/AccountVerification'
+import AccountVerification from './pages/Auth/AccountVerification'
 
 function App() {
   return (
@@ -22,7 +22,7 @@ function App() {
 
       <Route
         path='/account/verification'
-        element={<AccountVerìication />}
+        element={<AccountVerification />}
       ></Route>
 
       <Route path='*' element={<NotFound />} />
