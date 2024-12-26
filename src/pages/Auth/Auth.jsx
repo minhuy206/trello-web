@@ -1,19 +1,17 @@
 import { useLocation } from 'react-router-dom'
 import Box from '@mui/material/Box'
-import LoginForm from './LoginForm'
-import RegisterForm from './RegisterForm'
 import { useMemo } from 'react'
 import ParticlesBackground from '~/components/Particles/Particles'
+import LoginnRegister from './LoginnRegister'
 
 function Auth() {
   const location = useLocation()
   const isLogin = location.pathname === '/login'
-  const isRegister = location.pathname === '/register'
   const options = useMemo(
     () => ({
       autoPlay: true,
       background: {
-        color: { value: '#d5d9e4' },
+        color: { value: '#000000' },
         image: '',
         position: '',
         repeat: '',
@@ -22,7 +20,7 @@ function Auth() {
       },
       backgroundMask: {
         composite: 'destination-out',
-        cover: { opacity: 1 },
+        cover: { opacity: 0 },
         enable: false
       },
       clear: true,
@@ -273,14 +271,12 @@ function Auth() {
         flexDirection: 'column',
         minHeight: '100vh',
         alignItems: 'center',
-        justifyContent: 'flex-start'
-        // backgroundColor: '#eff3f4'
+        justifyContent: 'center'
       }}
     >
       <ParticlesBackground id='particles-background-auth' options={options} />
 
-      {isLogin && <LoginForm />}
-      {isRegister && <RegisterForm />}
+      {isLogin && <LoginnRegister />}
     </Box>
   )
 }

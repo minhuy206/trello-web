@@ -1,4 +1,7 @@
 export const FIELD_REQUIRED_MESSAGE = 'This field is required.'
+export const USERNAME_RULE =
+  /^(?=[a-zA-Z0-9._]{6,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/
+export const USERNAME_RULE_MESSAGE = 'Username is invalid.'
 export const EMAIL_RULE = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 export const EMAIL_RULE_MESSAGE = 'Email is invalid.'
 export const PASSWORD_RULE = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d\W]{8,256}$/

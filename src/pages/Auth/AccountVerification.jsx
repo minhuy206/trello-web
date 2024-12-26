@@ -6,12 +6,9 @@ import PageLoadingSpinner from '~/components/Loading/PageLoadingSpinner'
 function AccountVerification() {
   let [searchParams] = useSearchParams()
 
-  // const email = searchParams.get('email')
-  // const token = searchParams.get('token')
-
   const { email, token } = Object.fromEntries([...searchParams])
 
-  const [verified, setVerified] = useState(false)
+  const [verified, setVerified] = useState(true)
 
   useEffect(() => {
     if (email && token) {

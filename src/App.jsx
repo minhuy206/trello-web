@@ -18,8 +18,6 @@ function App() {
 
       <Route path='/login' element={<Auth />}></Route>
 
-      <Route path='/register' element={<Auth />}></Route>
-
       <Route
         path='/account/verification'
         element={<AccountVerification />}
