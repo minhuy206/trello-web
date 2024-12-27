@@ -1,15 +1,23 @@
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
-import { Alert, keyframes } from '@mui/material'
+import Alert from '@mui/material/Alert'
+import TextField from '@mui/material/TextField'
+import Zoom from '@mui/material/Zoom'
+import Tooltip from '@mui/material/Tooltip'
 import FacebookIcon from '@mui/icons-material/Facebook'
 import GoogleIcon from '@mui/icons-material/Google'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import LinkedInIcon from '@mui/icons-material/LinkedIn'
-import TextField from '@mui/material/TextField'
-import Zoom from '@mui/material/Zoom'
+import { keyframes } from '@emotion/react'
+
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
+import { loginAPI } from '~/redux/user/userSlice'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
+
 import {
   EMAIL_RULE,
   PASSWORD_RULE,
@@ -19,13 +27,13 @@ import {
   USERNAME_RULE,
   USERNAME_RULE_MESSAGE
 } from '~/utils/validators'
-import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
-import { toast } from 'react-toastify'
 import { registerUserAPI } from '~/apis'
-import { useState } from 'react'
-import Tooltip from '@mui/material/Tooltip'
+import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
 
 function LoginnRegister() {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
   const {
     register,
     handleSubmit,
@@ -63,7 +71,20 @@ function LoginnRegister() {
       })
   }
 
-  const submitLogIn = (data) => {}
+  const submitLogIn = ({
+    loginUsername: username,
+    loginPassword: password
+  }) => {
+    toast
+      .promise(dispatch(loginAPI({ username, password })), {
+        pending: 'Logging in...'
+      })
+      .then((res) => {
+        if (!res.error) {
+          navigate('/')
+        }
+      })
+  }
 
   return (
     <Zoom in={true} style={{ transitionDelay: '200ms' }}>

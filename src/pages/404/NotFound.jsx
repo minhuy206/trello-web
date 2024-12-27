@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import HomeIcon from '@mui/icons-material/Home'
 import { Link } from 'react-router-dom'
+
 import amongus_blue from '~/assets/404/amongus_blue.png'
 import amongus_cyan from '~/assets/404/amongus_cyan.png'
 import amongus_green from '~/assets/404/amongus_green.png'

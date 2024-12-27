@@ -1,12 +1,14 @@
 import Container from '@mui/material/Container'
 import Box from '@mui/material/Box'
+
 import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
+
 import {
   fetchBoardAPI,
   selectCurrentActiveBoard
 } from '~/redux/activeBoard/activeBoardSlice'
-import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
 
 import AppBar from '~/components/AppBar/AppBar'
 import BoardBar from './BoardBar/BoardBar'

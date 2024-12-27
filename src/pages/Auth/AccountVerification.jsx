@@ -8,11 +8,13 @@ function AccountVerification() {
 
   const { email, token } = Object.fromEntries([...searchParams])
 
-  const [verified, setVerified] = useState(true)
+  const [verified, setVerified] = useState('pending')
 
   useEffect(() => {
     if (email && token) {
-      verifyUserAPI(email, token).then(() => setVerified(true))
+      verifyUserAPI(email, token)
+        .then(() => setVerified('resolved'))
+        .catch(() => setVerified('rejected'))
     }
   }, [email, token])
 
@@ -20,11 +22,13 @@ function AccountVerification() {
     return <Navigate to='/404' />
   }
 
-  if (!verified) {
+  if (verified === 'pending') {
     return <PageLoadingSpinner caption='Verifying account...' />
+  } else if (verified === 'resolved') {
+    return <Navigate to={`/login?verifiedEmail=${email}`} />
+  } else {
+    return <Navigate to='/login' />
   }
-
-  return <Navigate to={`/login?verifiedEmail=${email}`} />
 }
 
 export default AccountVerification

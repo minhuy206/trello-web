@@ -39,16 +39,20 @@ authorizeAxiosInstance.interceptors.response.use(
 
     // Kỹ thuật chặn spam click
     interceptorLoadingElements(false)
-
     let errorMessage = error?.message
     if (error?.response?.data?.message) {
       errorMessage = error.response.data.message
     }
+
     // Dùng toastify để hiển thị mã lỗi lên màn hình - Ngoại trừ mã 410 - GONE phục vụ cho việc tự động refresh token
     if (error?.response?.status !== 410) {
-      errorMessage = error.response.data.error
+      errorMessage = error.response.data.message.replace(
+        'ValidationError: ',
+        ''
+      )
     }
-    toast.error(errorMessage)
+
+    toast.error(errorMessage, { theme: 'colored' })
     return Promise.reject(error)
   }
 )
