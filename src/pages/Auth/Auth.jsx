@@ -1,12 +1,18 @@
-import { useLocation } from 'react-router-dom'
 import Box from '@mui/material/Box'
+
 import { useMemo } from 'react'
+
+import { Navigate, useLocation } from 'react-router-dom'
+
+import { useSelector } from 'react-redux'
+import { selectCurrentUser } from '~/redux/user/userSlice'
+
 import ParticlesBackground from '~/components/Particles/Particles'
 import LoginnRegister from './LoginnRegister'
 
 function Auth() {
   const location = useLocation()
-  const isLogin = location.pathname === '/login'
+  const currentUser = useSelector(selectCurrentUser)
   const options = useMemo(
     () => ({
       autoPlay: true,
@@ -264,6 +270,11 @@ function Auth() {
     }),
     []
   )
+  if (currentUser) {
+    return <Navigate to='/' replace={true} />
+  }
+  const isLogin = location.pathname === '/login'
+
   return (
     <Box
       sx={{

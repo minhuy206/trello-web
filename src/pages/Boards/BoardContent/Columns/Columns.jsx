@@ -1,23 +1,28 @@
-import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Column from './Column/Column'
 import Button from '@mui/material/Button'
 import Add from '@mui/icons-material/Add'
 import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
+
 import {
   SortableContext,
   horizontalListSortingStrategy
 } from '@dnd-kit/sortable'
-import { toast } from 'react-toastify'
-import { generatePlaceholderCard } from '~/utils/formatter'
-import { cloneDeep } from 'lodash'
-import { createNewColumnAPI } from '~/apis'
+
+import { useState } from 'react'
+
 import { useDispatch, useSelector } from 'react-redux'
 import {
   selectCurrentActiveBoard,
   updateCurrentActiveBoard
 } from '~/redux/activeBoard/activeBoardSlice'
+
+import { toast } from 'react-toastify'
+import { cloneDeep } from 'lodash'
+
+import { generatePlaceholderCard } from '~/utils/formatter'
+import { createNewColumnAPI } from '~/apis'
 
 function Columns({ columns }) {
   const [opened, setOpened] = useState(false)

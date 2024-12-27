@@ -1,6 +1,10 @@
 /* eslint-disable indent */
-import { useCallback, useEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
+
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { updateCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
+
 import {
   DndContext,
   useSensor,
@@ -12,16 +16,16 @@ import {
   getFirstCollision,
   closestCenter
 } from '@dnd-kit/core'
-import { MouseSensor, TouchSensor } from '~/customLibs/DndKitSensors'
 import { arrayMove } from '@dnd-kit/sortable'
+import { MouseSensor, TouchSensor } from '~/customLibs/DndKitSensors'
+
 import { cloneDeep } from 'lodash'
-import { useDispatch } from 'react-redux'
-import { updateCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
+
+import { updateBoardAPI, updateColumnAPI } from '~/apis'
+import { generatePlaceholderCard } from '~/utils/formatter'
 import Columns from './Columns/Columns'
 import Column from './Columns/Column/Column'
 import Card from './Columns/Column/Cards/Card/Card'
-import { updateBoardAPI, updateColumnAPI } from '~/apis'
-import { generatePlaceholderCard } from '~/utils/formatter'
 
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',

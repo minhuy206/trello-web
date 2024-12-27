@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import Box from '@mui/material/Box'
@@ -18,19 +17,23 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import AddCardIcon from '@mui/icons-material/AddCard'
 import DragHandleIcon from '@mui/icons-material/DragHandle'
 import CloseIcon from '@mui/icons-material/Close'
-import Cards from './Cards/Cards'
-import { useSortable } from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
-import { toast } from 'react-toastify'
-import { useConfirm } from 'material-ui-confirm'
-import { cloneDeep } from 'lodash'
-import { createNewCardAPI, deleteColumnAPI } from '~/apis'
 
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   selectCurrentActiveBoard,
   updateCurrentActiveBoard
 } from '~/redux/activeBoard/activeBoardSlice'
+
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+
+import { toast } from 'react-toastify'
+import { useConfirm } from 'material-ui-confirm'
+import { cloneDeep } from 'lodash'
+
+import { createNewCardAPI, deleteColumnAPI } from '~/apis'
+import Cards from './Cards/Cards'
 
 function Column({ column }) {
   const {
