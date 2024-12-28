@@ -15,7 +15,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import { loginAPI } from '~/redux/user/userSlice'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 import {
@@ -32,8 +32,6 @@ import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
 
 function LoginnRegister() {
   const dispatch = useDispatch()
-  const navigate = useNavigate()
-
   const {
     register,
     handleSubmit,
@@ -75,15 +73,7 @@ function LoginnRegister() {
     loginUsername: username,
     loginPassword: password
   }) => {
-    toast
-      .promise(dispatch(loginAPI({ username, password })), {
-        pending: 'Logging in...'
-      })
-      .then((res) => {
-        if (!res.error) {
-          navigate('/')
-        }
-      })
+    dispatch(loginAPI({ username, password }))
   }
 
   return (
