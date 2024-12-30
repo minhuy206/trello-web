@@ -20,6 +20,7 @@ import Templates from './Menu/Templates'
 import Profile from './Menu/Profile'
 import TrelloIcon from '~/assets/trello.svg?react'
 import ModeSelect from '../ModeSelect/ModeSelect'
+import { Link } from 'react-router-dom'
 
 function AppBar() {
   const [search, setSearch] = useState('')
@@ -48,31 +49,33 @@ function AppBar() {
         }}
       >
         <AppsIcon sx={{ color: 'white', cursor: 'pointer' }} />
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 0.5,
-            cursor: 'pointer'
-          }}
-        >
-          <SvgIcon
-            component={TrelloIcon}
-            inheritViewBox
-            fontSize='small'
-            sx={{ color: 'white' }}
-          />
-          <Typography
-            variant='span'
+        <Link to='/' style={{ color: 'inherit' }}>
+          <Box
             sx={{
-              fontSize: '1.2rem',
-              fontWeight: 'bold',
-              color: 'white'
+              display: 'flex',
+              alignItems: 'center',
+              gap: 0.5,
+              cursor: 'pointer'
             }}
           >
-            Trello
-          </Typography>
-        </Box>
+            <SvgIcon
+              component={TrelloIcon}
+              inheritViewBox
+              fontSize='small'
+              sx={{ color: 'white' }}
+            />
+            <Typography
+              variant='span'
+              sx={{
+                fontSize: '1.2rem',
+                fontWeight: 'bold',
+                color: 'white'
+              }}
+            >
+              Trello
+            </Typography>
+          </Box>
+        </Link>
 
         <Box
           sx={{

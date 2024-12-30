@@ -507,11 +507,7 @@ function LoginnRegister() {
                     variant='outlined'
                     error={errors.loginPassword}
                     {...register('loginPassword', {
-                      required: FIELD_REQUIRED_MESSAGE,
-                      pattern: {
-                        value: PASSWORD_RULE,
-                        message: PASSWORD_RULE_MESSAGE
-                      }
+                      required: FIELD_REQUIRED_MESSAGE
                     })}
                   />
                   <FieldErrorAlert errors={errors} fieldName='loginPassword' />

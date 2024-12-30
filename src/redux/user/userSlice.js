@@ -16,6 +16,15 @@ export const logoutAPI = createAsyncThunk('user/logoutAPI', async () => {
   return await authorizeAxiosInstance.delete(`${API_ROOT}/v1/users/logout`).data
 })
 
+export const updateUserAPI = createAsyncThunk(
+  'user/updateUserAPI',
+  async (account) => {
+    return (
+      await authorizeAxiosInstance.put(`${API_ROOT}/v1/users/update`, account)
+    ).data
+  }
+)
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -26,6 +35,9 @@ export const userSlice = createSlice({
     })
     builder.addCase(logoutAPI.fulfilled, (state) => {
       state.currentUser = null
+    })
+    builder.addCase(updateUserAPI.fulfilled, (state, action) => {
+      state.currentUser = action.payload
     })
   }
 })
