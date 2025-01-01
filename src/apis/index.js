@@ -2,6 +2,12 @@ import { toast } from 'react-toastify'
 import authorizeAxiosInstance from '~/utils/authorizeAxios'
 import { API_ROOT } from '~/utils/constants'
 
+export const fetchBoardsAPI = async (searchPath) => {
+  return (
+    await authorizeAxiosInstance.get(`${API_ROOT}/v1/boards${searchPath}`)
+  ).data
+}
+
 export const updateBoardAPI = async (boardId, board) => {
   return (
     await authorizeAxiosInstance.put(`${API_ROOT}/v1/boards/${boardId}`, board)
