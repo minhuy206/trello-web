@@ -2,6 +2,11 @@ import { toast } from 'react-toastify'
 import authorizeAxiosInstance from '~/utils/authorizeAxios'
 import { API_ROOT } from '~/utils/constants'
 
+export const createNewBoardAPI = async (board) => {
+  return (await authorizeAxiosInstance.post(`${API_ROOT}/v1/boards`, board))
+    .data
+}
+
 export const fetchBoardsAPI = async (searchPath) => {
   return (
     await authorizeAxiosInstance.get(`${API_ROOT}/v1/boards${searchPath}`)
@@ -19,9 +24,12 @@ export const createNewColumnAPI = async (column) => {
     .data
 }
 
-export const updateColumnAPI = async (columnId, data) => {
+export const updateColumnAPI = async (columnId, column) => {
   return (
-    await authorizeAxiosInstance.put(`${API_ROOT}/v1/columns/${columnId}`, data)
+    await authorizeAxiosInstance.put(
+      `${API_ROOT}/v1/columns/${columnId}`,
+      column
+    )
   ).data
 }
 
@@ -33,6 +41,12 @@ export const deleteColumnAPI = async (columnId) => {
 
 export const createNewCardAPI = async (card) => {
   return (await authorizeAxiosInstance.post(`${API_ROOT}/v1/cards`, card)).data
+}
+
+export const updateCardAPI = async (cardId, card) => {
+  return (
+    await authorizeAxiosInstance.put(`${API_ROOT}/v1/cards/${cardId}`, card)
+  ).data
 }
 
 export const registerUserAPI = async (account) => {

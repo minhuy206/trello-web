@@ -6,7 +6,6 @@ import MenuItem from '@mui/material/MenuItem'
 import Divider from '@mui/material/Divider'
 import ListItemText from '@mui/material/ListItemText'
 import ListItemIcon from '@mui/material/ListItemIcon'
-import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
 import ContentCut from '@mui/icons-material/ContentCut'
 import ContentCopy from '@mui/icons-material/ContentCopy'
@@ -32,8 +31,9 @@ import { toast } from 'react-toastify'
 import { useConfirm } from 'material-ui-confirm'
 import { cloneDeep } from 'lodash'
 
-import { createNewCardAPI, deleteColumnAPI } from '~/apis'
+import { createNewCardAPI, deleteColumnAPI, updateColumnAPI } from '~/apis'
 import Cards from './Cards/Cards'
+import ToggleFocusInput from '~/components/Form/ToggleFocusInput'
 
 function Column({ column }) {
   const {
@@ -136,6 +136,18 @@ function Column({ column }) {
     })
   }
 
+  const handleUpdateColumnTitle = (newTitle) => {
+    updateColumnAPI(column._id, { title: newTitle }).then((res) => {
+      const newBoard = cloneDeep(board)
+      const columnToUpdate = newBoard.columns.find(
+        (column) => column._id === res._id
+      )
+      if (columnToUpdate) columnToUpdate.title = res.title
+
+      dispatch(updateCurrentActiveBoard(newBoard))
+    })
+  }
+
   return (
     <div ref={setNodeRef} style={dndKitColumnStyles} {...attributes}>
       <Box
@@ -163,13 +175,11 @@ function Column({ column }) {
             justifyContent: 'space-between'
           }}
         >
-          <Typography
-            sx={{ cursor: 'pointer', fontSize: '1rem', fontWeight: 'bold' }}
-            variant='h6'
-          >
-            {column?.title}
-          </Typography>
-
+          <ToggleFocusInput
+            value={column?.title}
+            onChangedValue={handleUpdateColumnTitle}
+            data-no-dnd='true'
+          />
           {/* // Box for column dropdown */}
           <Box>
             <Tooltip title='More option'>
