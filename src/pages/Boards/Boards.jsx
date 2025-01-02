@@ -56,20 +56,22 @@ function Boards() {
    * https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/URLSearchParams
    */
   const query = new URLSearchParams(location.search)
-  /**
-   * Lấy giá trị page từ query, default sẽ là 1 nếu không tồn tại page từ url.
-   * Nhắc lại kiến thức cơ bản hàm parseInt cần tham số thứ 2 là Hệ thập phân (hệ đếm cơ số 10) để đảm bảo chuẩn số cho phân trang
-   */
+
   const page = parseInt(query.get('page') || '1', 10)
 
+  const updateBoardsState = (newBoards) => {
+    setBoards(newBoards.boards || [])
+    setTotalBoards(newBoards.totalBoards || 0)
+  }
+
   useEffect(() => {
-    fetchBoardsAPI(location.search).then((res) => {
-      setBoards(res.boards || [])
-      setTotalBoards(res.totalBoards || 0)
-    })
+    fetchBoardsAPI(location.search).then(updateBoardsState)
   }, [location.search])
 
-  // Lúc chưa tồn tại boards > đang chờ gọi api thì hiện loading
+  const afterCreateNewBoard = () => {
+    fetchBoardsAPI(location.search).then(updateBoardsState)
+  }
+
   if (!boards) {
     return <PageLoadingSpinner caption='Loading Boards...' />
   }
@@ -104,7 +106,9 @@ function Boards() {
             </Stack>
             <Divider sx={{ my: 1 }} />
             <Stack direction='column' spacing={1}>
-              <SidebarCreateBoardModal />
+              <SidebarCreateBoardModal
+                afterCreateNewBoard={afterCreateNewBoard}
+              />
             </Stack>
           </Grid>
 
@@ -124,19 +128,28 @@ function Boards() {
             {boards?.length > 0 && (
               <Grid container spacing={2}>
                 {boards.map((board) => (
-                  <Grid size={{ xs: 2, sm: 4, md: 4 }} key={board._id}>
-                    <Card>
+                  <Grid size={{ xs: 12, sm: 4, lg: 3 }} key={board._id}>
+                    <Card component={Link} to={`/boards/${board._id}`}>
                       {/* Ý tưởng mở rộng về sau làm ảnh Cover cho board nhé */}
                       {/* <CardMedia component="img" height="100" image="https://picsum.photos/100" /> */}
                       <Box
                         sx={{
-                          height: lgDown ? '8vh' : '10vh',
+                          height: lgDown ? '6vh' : '8vh',
+                          maxHeight: '120px',
                           backgroundColor: randomColor()
                         }}
                       ></Box>
 
-                      <CardContent sx={{ p: 1.5, '&:last-child': { p: 1.5 } }}>
-                        <Typography gutterBottom variant='h6' component='div'>
+                      <CardContent
+                        sx={{
+                          p: 1.5,
+                          display: 'flex',
+                          gap: 0.75,
+                          flexDirection: 'column',
+                          '&:last-child': { p: 1.5 }
+                        }}
+                      >
+                        <Typography variant='h6' component='div'>
                           {board?.title}
                         </Typography>
                         <Typography
@@ -150,11 +163,10 @@ function Boards() {
                         >
                           {board?.description}
                         </Typography>
-                        <Box
-                          component={Link}
-                          to={`/boards/${board._id}`}
+                        {/* <Box
+                          // component={Link}
+                          // to={`/boards/${board._id}`}
                           sx={{
-                            mt: 1,
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'flex-end',
@@ -163,7 +175,7 @@ function Boards() {
                           }}
                         >
                           Go to board <ArrowRightIcon fontSize='small' />
-                        </Box>
+                        </Box> */}
                       </CardContent>
                     </Card>
                   </Grid>

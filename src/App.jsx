@@ -1,13 +1,13 @@
 import { Route, Routes, Navigate, Outlet } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { selectCurrentUser } from './redux/user/userSlice'
 
-import Board from './pages/Boards/_id'
 import NotFound from './pages/404/NotFound'
 import Auth from './pages/Auth/Auth'
 import AccountVerification from './pages/Auth/AccountVerification'
-import { useSelector } from 'react-redux'
-import { selectCurrentUser } from './redux/user/userSlice'
 import AccountSetting from './pages/AccountSetting/AccountSetting'
-import Boards from './pages/Boards'
+import Board from './pages/Boards/_id'
+import Boards from './pages/Boards/Boards'
 
 const ProtectedRoute = ({ user }) => {
   if (!user) {

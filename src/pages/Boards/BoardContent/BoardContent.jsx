@@ -21,7 +21,7 @@ import { MouseSensor, TouchSensor } from '~/customLibs/DndKitSensors'
 
 import { cloneDeep } from 'lodash'
 
-import { updateBoardAPI, updateColumnAPI } from '~/apis'
+import { updateBoardAPI, updateCardAPI, updateColumnAPI } from '~/apis'
 import { generatePlaceholderCard } from '~/utils/formatter'
 import Columns from './Columns/Columns'
 import Column from './Columns/Column/Column'
@@ -139,13 +139,11 @@ function BoardContent({ board }) {
 
     dispatch(updateCurrentActiveBoard(newBoard))
 
+    updateCardAPI(cardId, { columnId })
     updateColumnAPI(columnId, {
-      cardId,
-      column: {
-        cardOrderIds: dndOrderedCardIds.filter(
-          (cardId) => cardId !== `${columnId}-placeholder-card`
-        )
-      }
+      cardOrderIds: dndOrderedCardIds.filter(
+        (cardId) => cardId !== `${columnId}-placeholder-card`
+      )
     })
 
     return newBoard

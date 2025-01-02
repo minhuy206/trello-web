@@ -89,7 +89,7 @@ function AccountSetting() {
         pending: 'Updating...'
       })
       .then((res) => {
-        if (!res.success) {
+        if (res.success) {
           toast.success('Update successfully!')
         }
       })

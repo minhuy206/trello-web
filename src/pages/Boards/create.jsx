@@ -17,6 +17,8 @@ import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 
 import { styled } from '@mui/material/styles'
+import { createNewBoardAPI } from '~/apis'
+import { toast } from 'react-toastify'
 const SidebarItem = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -35,7 +37,6 @@ const SidebarItem = styled(Box)(({ theme }) => ({
   }
 }))
 
-// BOARD_TYPES tương tự bên model phía Back-end (nếu cần dùng nhiều nơi thì hãy đưa ra file constants, không thì cứ để ở đây)
 const BOARD_TYPES = {
   PUBLIC: 'public',
   PRIVATE: 'private'
@@ -45,7 +46,7 @@ const BOARD_TYPES = {
  * Bản chất của cái component SidebarCreateBoardModal này chúng ta sẽ trả về một cái SidebarItem để hiển thị ở màn Board List cho phù hợp giao diện bên đó, đồng thời nó cũng chứa thêm một cái Modal để xử lý riêng form create board nhé.
  * Note: Modal là một low-component mà bọn MUI sử dụng bên trong những thứ như Dialog, Drawer, Menu, Popover. Ở đây dĩ nhiên chúng ta có thể sử dụng Dialog cũng không thành vấn đề gì, nhưng sẽ sử dụng Modal để dễ linh hoạt tùy biến giao diện từ con số 0 cho phù hợp với mọi nhu cầu nhé.
  */
-function SidebarCreateBoardModal() {
+function SidebarCreateBoardModal({ afterCreateNewBoard }) {
   const {
     control,
     register,
@@ -64,12 +65,22 @@ function SidebarCreateBoardModal() {
 
   const submitCreateNewBoard = (data) => {
     const { title, description, type } = data
-    console.log('Board title: ', title)
-    console.log('Board description: ', description)
-    console.log('Board type: ', type)
+
+    toast
+      .promise(createNewBoardAPI({ title, description, type }), {
+        pending: 'Creating...'
+      })
+      .then((res) => {
+        if (res) {
+          toast.success('Create board successfully!', {
+            theme: 'colored'
+          })
+        }
+        handleCloseModal()
+        afterCreateNewBoard()
+      })
   }
 
-  // <>...</> nhắc lại cho bạn anof chưa biết hoặc quên nhé: nó là React Fragment, dùng để bọc các phần tử lại mà không cần chỉ định DOM Node cụ thể nào cả.
   return (
     <>
       <SidebarItem onClick={handleOpenModal}>
@@ -79,7 +90,7 @@ function SidebarCreateBoardModal() {
 
       <Modal
         open={isOpen}
-        // onClose={handleCloseModal} // chỉ sử dụng onClose trong trường hợp muốn đóng Modal bằng nút ESC hoặc click ra ngoài Modal
+        onClose={handleCloseModal}
         aria-labelledby='modal-modal-title'
         aria-describedby='modal-modal-description'
       >
@@ -120,7 +131,6 @@ function SidebarCreateBoardModal() {
           >
             <LibraryAddIcon />
             <Typography variant='h6' component='h2'>
-              {' '}
               Create a new board
             </Typography>
           </Box>
@@ -143,8 +153,8 @@ function SidebarCreateBoardModal() {
                     {...register('title', {
                       required: FIELD_REQUIRED_MESSAGE,
                       minLength: {
-                        value: 3,
-                        message: 'Min Length is 3 characters'
+                        value: 1,
+                        message: 'Min Length is 1 characters'
                       },
                       maxLength: {
                         value: 50,
@@ -173,8 +183,8 @@ function SidebarCreateBoardModal() {
                     {...register('description', {
                       required: FIELD_REQUIRED_MESSAGE,
                       minLength: {
-                        value: 3,
-                        message: 'Min Length is 3 characters'
+                        value: 1,
+                        message: 'Min Length is 1 characters'
                       },
                       maxLength: {
                         value: 255,
