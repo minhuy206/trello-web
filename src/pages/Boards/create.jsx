@@ -68,14 +68,10 @@ function SidebarCreateBoardModal({ afterCreateNewBoard }) {
 
     toast
       .promise(createNewBoardAPI({ title, description, type }), {
-        pending: 'Creating...'
+        pending: 'Creating...',
+        success: 'Create board successfully'
       })
-      .then((res) => {
-        if (res) {
-          toast.success('Create board successfully!', {
-            theme: 'colored'
-          })
-        }
+      .then(() => {
         handleCloseModal()
         afterCreateNewBoard()
       })

@@ -10,8 +10,15 @@ import AttachmentIcon from '@mui/icons-material/Attachment'
 
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { useDispatch } from 'react-redux'
+import {
+  setCurrentActiveCard,
+  showActiveCardModal
+} from '~/redux/activeCard/activeCardSlice'
 
 function Card({ card }) {
+  const dispatch = useDispatch()
+
   const {
     attributes,
     listeners,
@@ -27,8 +34,14 @@ function Card({ card }) {
     opacity: isDragging ? 0.5 : 1
   }
 
+  const setActiveCard = () => {
+    dispatch(setCurrentActiveCard(card))
+    dispatch(showActiveCardModal())
+  }
+
   return (
     <MuiCard
+      onClick={setActiveCard}
       style={dndKitCardStyles}
       ref={setNodeRef}
       {...attributes}

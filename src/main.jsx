@@ -26,9 +26,9 @@ import { injectStore } from './utils/authorizeAxios'
 injectStore(store)
 
 createRoot(document.getElementById('root')).render(
-  <BrowserRouter basename='/'>
-    <Provider store={store}>
-      <PersistGate persistor={persistor}>
+  <Provider store={store}>
+    <PersistGate persistor={persistor}>
+      <BrowserRouter basename='/'>
         <ThemeProvider theme={theme}>
           <ConfirmProvider
             defaultOptions={{
@@ -44,7 +44,7 @@ createRoot(document.getElementById('root')).render(
             <ToastContainer />
           </ConfirmProvider>
         </ThemeProvider>
-      </PersistGate>
-    </Provider>
-  </BrowserRouter>
+      </BrowserRouter>
+    </PersistGate>
+  </Provider>
 )

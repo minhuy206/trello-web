@@ -1,13 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import SvgIcon from '@mui/material/SvgIcon'
 import Typography from '@mui/material/Typography'
-import Badge from '@mui/material/Badge'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
 import InputAdornment from '@mui/material/InputAdornment'
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import LibraryAddRoundedIcon from '@mui/icons-material/LibraryAddRounded'
 import AppsIcon from '@mui/icons-material/Apps'
@@ -21,6 +19,7 @@ import Profile from './Menu/Profile'
 import TrelloIcon from '~/assets/trello.svg?react'
 import ModeSelect from '../ModeSelect/ModeSelect'
 import { Link } from 'react-router-dom'
+import Notifications from './Notifications/Notifications'
 
 function AppBar() {
   const [search, setSearch] = useState('')
@@ -160,11 +159,7 @@ function AppBar() {
           }}
         />
         <ModeSelect />
-        <Tooltip title='Notification'>
-          <Badge color='warning' variant='dot' sx={{ cursor: 'pointer' }}>
-            <NotificationsNoneIcon sx={{ color: 'white', cursor: 'pointer' }} />
-          </Badge>
-        </Tooltip>
+        <Notifications />
         <Tooltip title='Help'>
           <HelpOutlineIcon sx={{ cursor: 'pointer', color: 'white' }} />
         </Tooltip>

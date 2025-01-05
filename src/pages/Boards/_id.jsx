@@ -14,6 +14,7 @@ import AppBar from '~/components/AppBar/AppBar'
 import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 import PageLoadingSpinner from '~/components/Loading/PageLoadingSpinner'
+import ActiveCard from '~/components/Modal/ActiveCard/ActiveCard'
 
 function Board() {
   const dispatch = useDispatch()
@@ -31,7 +32,7 @@ function Board() {
         maxWidth={false}
         sx={{ height: '100vh', backgroundColor: 'primary.main', width: '100%' }}
       >
-        <AppBar />
+        {/* <AppBar /> */}
         <Box
           sx={{
             display: 'flex',
@@ -46,12 +47,10 @@ function Board() {
     )
 
   return (
-    <Container
-      disableGutters
-      maxWidth={false}
-      sx={{ height: '100vh', backgroundColor: 'primary.main', width: '100%' }}
-    >
+    <Container disableGutters maxWidth={false}>
       <AppBar />
+
+      <ActiveCard />
       <BoardBar board={board} />
       <BoardContent board={board} />
     </Container>
