@@ -80,3 +80,12 @@ export const refreshTokenAPI = async () => {
     await authorizeAxiosInstance.get(`${API_ROOT}/v1/users/refresh-token`)
   ).data
 }
+
+export const inviteUserToBoardAPI = async (boardId, inviteeEmail) => {
+  return (
+    await authorizeAxiosInstance.post(
+      `${API_ROOT}/v1/invitations/boards/${boardId}`,
+      { inviteeEmail }
+    )
+  ).data
+}

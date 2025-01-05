@@ -29,15 +29,7 @@ import {
 import { useMediaQuery } from '@mui/material'
 
 const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
-  height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  whiteSpace: 'nowrap',
-  width: 1
+  display: 'none'
 })
 
 function AccountSetting() {
@@ -84,15 +76,10 @@ function AccountSetting() {
     reqData.append('newPassword', newPassword)
     reqData.append('avatar', avatar)
 
-    toast
-      .promise(dispatch(updateUserAPI(reqData)), {
-        pending: 'Updating...'
-      })
-      .then((res) => {
-        if (res.success) {
-          toast.success('Update successfully!')
-        }
-      })
+    toast.promise(dispatch(updateUserAPI(reqData)), {
+      pending: 'Updating...',
+      success: 'Updated successfully!'
+    })
   }
 
   const uploadAvatar = (e) => {
@@ -195,7 +182,6 @@ function AccountSetting() {
                       anchorEl={anchorEl}
                       open={open}
                       onClose={handleClose}
-                      // onClick={handleClose}
                       MenuListProps={{
                         'aria-labelledby': 'basic-button-edit-avatar"'
                       }}

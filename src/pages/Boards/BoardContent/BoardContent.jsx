@@ -3,7 +3,7 @@ import Box from '@mui/material/Box'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { updateCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
+import { setCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
 
 import {
   DndContext,
@@ -116,7 +116,7 @@ function BoardContent({ board }) {
     newBoard.columns = dndOrderedColumns
     newBoard.columnOrderIds = dndOrderedColumnsIds
 
-    dispatch(updateCurrentActiveBoard(newBoard))
+    dispatch(setCurrentActiveBoard(newBoard))
 
     updateBoardAPI(board._id, { columnOrderIds: dndOrderedColumnsIds })
   }
@@ -137,7 +137,7 @@ function BoardContent({ board }) {
       columnToUpdate.cardOrderIds = dndOrderedCardIds
     }
 
-    dispatch(updateCurrentActiveBoard(newBoard))
+    dispatch(setCurrentActiveBoard(newBoard))
 
     updateCardAPI(cardId, { columnId })
     updateColumnAPI(columnId, {

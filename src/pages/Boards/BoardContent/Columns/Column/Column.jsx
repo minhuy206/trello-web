@@ -21,7 +21,7 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   selectCurrentActiveBoard,
-  updateCurrentActiveBoard
+  setCurrentActiveBoard
 } from '~/redux/activeBoard/activeBoardSlice'
 
 import { useSortable } from '@dnd-kit/sortable'
@@ -101,7 +101,7 @@ function Column({ column }) {
       }
     }
 
-    dispatch(updateCurrentActiveBoard(newBoard))
+    dispatch(setCurrentActiveBoard(newBoard))
 
     toggleOpened()
     setTitle('')
@@ -124,7 +124,7 @@ function Column({ column }) {
         (_id) => _id !== columnId
       )
 
-      dispatch(updateCurrentActiveBoard(newBoard))
+      dispatch(setCurrentActiveBoard(newBoard))
 
       deleteColumnAPI(column._id).then((res) => {
         toast.success(res?.result, {
@@ -144,7 +144,7 @@ function Column({ column }) {
       )
       if (columnToUpdate) columnToUpdate.title = res.title
 
-      dispatch(updateCurrentActiveBoard(newBoard))
+      dispatch(setCurrentActiveBoard(newBoard))
     })
   }
 
@@ -169,7 +169,7 @@ function Column({ column }) {
         <Box
           sx={{
             height: (theme) => theme.trello.columnHeaderHeight,
-            p: 2,
+            p: 1.25,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between'

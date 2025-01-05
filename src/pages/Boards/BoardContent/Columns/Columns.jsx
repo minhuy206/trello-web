@@ -15,7 +15,7 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   selectCurrentActiveBoard,
-  updateCurrentActiveBoard
+  setCurrentActiveBoard
 } from '~/redux/activeBoard/activeBoardSlice'
 
 import { toast } from 'react-toastify'
@@ -55,7 +55,7 @@ function Columns({ columns }) {
     const newBoard = cloneDeep(board)
     newBoard.columns.push(createdColumn)
     newBoard.columnOrderIds.push(createdColumn._id)
-    dispatch(updateCurrentActiveBoard(newBoard))
+    dispatch(setCurrentActiveBoard(newBoard))
 
     toggleOpened()
     setTitle('')

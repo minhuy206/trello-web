@@ -22,6 +22,7 @@ function ToggleFocusInput({
 
   return (
     <TextField
+      autoComplete='off'
       id='toggle-focus-input-controlled'
       fullWidth
       variant='outlined'
@@ -47,7 +48,7 @@ function ToggleFocusInput({
           '& fieldset': { borderColor: 'primary.main' }
         },
         '& .MuiOutlinedInput-input': {
-          px: 0.25,
+          px: 1,
           overflow: 'hidden',
           whiteSpace: 'nowrap',
           textOverflow: 'ellipsis'
