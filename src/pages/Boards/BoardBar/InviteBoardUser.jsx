@@ -14,6 +14,7 @@ import {
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
 import { inviteUserToBoardAPI } from '~/apis'
 import { toast } from 'react-toastify'
+import { socket } from '~/socket'
 
 function InviteBoardUser({ boardId }) {
   const [anchorPopoverElement, setAnchorPopoverElement] = useState(null)
@@ -31,10 +32,11 @@ function InviteBoardUser({ boardId }) {
     formState: { errors }
   } = useForm()
   const submitInviteUserToBoard = ({ inviteeEmail }) => {
-    inviteUserToBoardAPI(boardId, inviteeEmail).then(() => {
+    inviteUserToBoardAPI(boardId, inviteeEmail).then((invitation) => {
       setValue('inviteeEmail', null)
       setAnchorPopoverElement(null)
       toast.success('Invitation sent!', { theme: 'colored' })
+      socket.emit('FE_INVITED_USER_TO_BOARD', invitation)
     })
   }
 
