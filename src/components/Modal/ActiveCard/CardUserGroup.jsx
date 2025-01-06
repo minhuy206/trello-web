@@ -6,25 +6,36 @@ import Popover from '@mui/material/Popover'
 import AddIcon from '@mui/icons-material/Add'
 import Badge from '@mui/material/Badge'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import { useSelector } from 'react-redux'
+import { selectCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
+import { CARD_MEMBER_ACTION } from '~/utils/constants'
+import { Typography } from '@mui/material'
 
-function CardUserGroup({ cardMemberIds = [] }) {
+function CardUserGroup({
+  currentUserId,
+  cardMemberIds = [],
+  handleUpdateCardMember
+}) {
   const [anchorPopoverElement, setAnchorPopoverElement] = useState(null)
   const isOpenPopover = Boolean(anchorPopoverElement)
   const popoverId = isOpenPopover ? 'card-all-users-popover' : undefined
-
   const handleTogglePopover = (event) => {
     if (!anchorPopoverElement) setAnchorPopoverElement(event.currentTarget)
     else setAnchorPopoverElement(null)
   }
 
+  const board = useSelector(selectCurrentActiveBoard)
+  const members = [...board.members, ...board.owners].filter((member) =>
+    cardMemberIds.includes(member._id)
+  )
   return (
     <Box sx={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
-      {[...Array(8)].map((_, index) => (
-        <Tooltip title='trungquandev' key={index}>
+      {members.map((member) => (
+        <Tooltip title={member.displayName} key={member._id}>
           <Avatar
             sx={{ width: 34, height: 34, cursor: 'pointer' }}
-            alt='trungquandev'
-            src='https://trungquandev.com/wp-content/uploads/2019/06/trungquandev-cat-avatar.png'
+            alt={member.username}
+            src={member.avatar}
           />
         </Tooltip>
       ))}
@@ -78,24 +89,47 @@ function CardUserGroup({ cardMemberIds = [] }) {
             gap: 1.5
           }}
         >
-          {[...Array(16)].map((_, index) => (
-            <Tooltip title='trungquandev' key={index}>
-              <Badge
-                sx={{ cursor: 'pointer' }}
-                overlap='rectangular'
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                badgeContent={
-                  <CheckCircleIcon fontSize='small' sx={{ color: '#27ae60' }} />
-                }
-              >
-                <Avatar
-                  sx={{ width: 34, height: 34 }}
-                  alt='trungquandev'
-                  src='https://trungquandev.com/wp-content/uploads/2019/06/trungquandev-cat-avatar.png'
-                />
-              </Badge>
-            </Tooltip>
-          ))}
+          {[...board.members, ...board.owners].length === 1 ? (
+            <Typography variant='body2' color='text.secondary'>
+              No more members to add
+            </Typography>
+          ) : (
+            [...board.members, ...board.owners].map((member) => {
+              if (member._id !== currentUserId) {
+                return (
+                  <Tooltip title={member.displayName} key={member._id}>
+                    <Badge
+                      sx={{ cursor: 'pointer' }}
+                      overlap='rectangular'
+                      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                      badgeContent={
+                        cardMemberIds.includes(member._id) && (
+                          <CheckCircleIcon
+                            fontSize='small'
+                            sx={{ color: '#27ae60' }}
+                          />
+                        )
+                      }
+                      onClick={() =>
+                        handleUpdateCardMember({
+                          memberId: member._id,
+                          action: cardMemberIds.includes(member._id)
+                            ? CARD_MEMBER_ACTION.REMOVE
+                            : CARD_MEMBER_ACTION.ADD
+                        })
+                      }
+                    >
+                      <Avatar
+                        sx={{ width: 34, height: 34 }}
+                        alt={member.username}
+                        src={member.avatar}
+                      />
+                    </Badge>
+                  </Tooltip>
+                )
+              }
+            })
+          )}
         </Box>
       </Popover>
     </Box>

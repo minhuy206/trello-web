@@ -17,10 +17,15 @@ import NotInterestedIcon from '@mui/icons-material/NotInterested'
 
 import { useDispatch, useSelector } from 'react-redux'
 import {
+  addNotification,
   fetchInvitationAPI,
   selectCurrentNotifications,
   updateBoardInvitationAPI
 } from '~/redux/notifications/notificationsSlice'
+import { selectCurrentUser } from '~/redux/user/userSlice'
+
+import { socket } from '~/socket'
+import { useNavigate } from 'react-router-dom'
 
 const INVITATION_STATUS = {
   PENDING: 'pending',
@@ -38,25 +43,47 @@ function Notifications() {
     setAnchorEl(null)
   }
 
+  const [newNotifications, setNewNotifications] = useState(null)
+
+  const navigate = useNavigate()
   const updateBoardInvitation = (invitationId, status) => {
-    dispatch(updateBoardInvitationAPI({ invitationId, status })).then(
-      (res) => {}
-    )
+    dispatch(updateBoardInvitationAPI({ invitationId, status })).then((res) => {
+      if (res.payload.boardInvitation.status === INVITATION_STATUS.ACCEPTED) {
+        navigate(`/boards/${res.payload.boardInvitation.boardId}`)
+      }
+    })
   }
 
   const dispatch = useDispatch()
   const notifications = useSelector(selectCurrentNotifications)
+  const currentUser = useSelector(selectCurrentUser)
+
   useEffect(() => {
     dispatch(fetchInvitationAPI())
-  }, [dispatch])
+
+    // Hàm này sẽ được gọi mỗi khi có một sự kiện realtime từ server gửi về
+    const onReceiveInvitation = (invitation) => {
+      if (invitation.inviteeId === currentUser?._id) {
+        dispatch(addNotification(invitation))
+        setNewNotifications(true)
+      }
+    }
+
+    // Lắng nghe sự kiện realtime từ server gửi về có tên là BE_INVITED_USER_TO_BOARD
+    socket.on('BE_INVITED_USER_TO_BOARD', onReceiveInvitation)
+
+    // Hàm cleanup khi component bị unmount
+    return () => {
+      socket.off('BE_INVITED_USER_TO_BOARD', onReceiveInvitation)
+    }
+  }, [dispatch, currentUser])
 
   return (
     <Box>
       <Tooltip title='Notifications'>
         <Badge
           color='warning'
-          // variant="none"
-          variant='dot'
+          variant={newNotifications ? 'dot' : 'none'}
           sx={{ cursor: 'pointer' }}
           id='basic-button-open-notification'
           aria-controls={open ? 'basic-notification-drop-down' : undefined}
@@ -66,8 +93,7 @@ function Notifications() {
         >
           <NotificationsNoneIcon
             sx={{
-              // color: 'white'
-              color: 'yellow'
+              color: newNotifications ? 'yellow' : 'white'
             }}
           />
         </Badge>

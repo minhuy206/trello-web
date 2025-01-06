@@ -1,16 +1,11 @@
-import { useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import SvgIcon from '@mui/material/SvgIcon'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
-import InputAdornment from '@mui/material/InputAdornment'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import LibraryAddRoundedIcon from '@mui/icons-material/LibraryAddRounded'
 import AppsIcon from '@mui/icons-material/Apps'
-import SearchIcon from '@mui/icons-material/Search'
-import CloseIcon from '@mui/icons-material/Close'
 import Workspaces from './Menu/workspaces'
 import Recent from './Menu/Recent'
 import Starred from './Menu/Starred'
@@ -20,10 +15,9 @@ import TrelloIcon from '~/assets/trello.svg?react'
 import ModeSelect from '../ModeSelect/ModeSelect'
 import { Link } from 'react-router-dom'
 import Notifications from './Notifications/Notifications'
+import AutoCompleteSearchBoard from './SearchBoards/AutoCompleteSearchBoard'
 
 function AppBar() {
-  const [search, setSearch] = useState('')
-
   return (
     <Box
       sx={{
@@ -111,53 +105,7 @@ function AppBar() {
           gap: 2
         }}
       >
-        <TextField
-          id='outlined-search'
-          label='Search'
-          type='text'
-          size='small'
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          slotProps={{
-            input: {
-              startAdornment: (
-                <InputAdornment position='start'>
-                  <SearchIcon sx={{ color: 'white' }} />
-                </InputAdornment>
-              ),
-              endAdornment: (
-                <InputAdornment position='end'>
-                  <CloseIcon
-                    fontSize='small'
-                    sx={{
-                      color: search ? 'white' : 'transparent',
-                      cursor: 'pointer'
-                    }}
-                    onClick={() => setSearch('')}
-                  />
-                </InputAdornment>
-              )
-            }
-          }}
-          sx={{
-            minWidth: '120px',
-            maxWidth: '180px',
-            '& label': { color: 'white' },
-            '& input': { color: 'white' },
-            '& label.Mui-focused': { color: 'white' },
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': {
-                borderColor: 'white'
-              },
-              '&:hover fieldset': {
-                borderColor: 'white'
-              },
-              '&.Mui-focused fieldset': {
-                borderColor: 'white'
-              }
-            }
-          }}
-        />
+        <AutoCompleteSearchBoard />
         <ModeSelect />
         <Notifications />
         <Tooltip title='Help'>
