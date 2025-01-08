@@ -21,10 +21,13 @@ function Templates() {
   return (
     <Box>
       <Button
-        sx={{ color: 'white' }}
-        id="basic-button-templates"
+        sx={{
+          color: (theme) =>
+            theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F'
+        }}
+        id='basic-button-templates'
         aria-controls={open ? 'basic-menu-templates' : undefined}
-        aria-haspopup="true"
+        aria-haspopup='true'
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
         endIcon={<ExpandMoreIcon />}
@@ -32,7 +35,7 @@ function Templates() {
         Templates
       </Button>
       <Menu
-        id="basic-menu-templates"
+        id='basic-menu-templates'
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}

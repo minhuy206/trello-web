@@ -8,6 +8,8 @@ import AccountVerification from './pages/Auth/AccountVerification'
 import AccountSetting from './pages/AccountSetting/AccountSetting'
 import Board from './pages/Boards/_id'
 import Boards from './pages/Boards/Boards'
+import AppBar from './components/AppBar/AppBar'
+import { Container } from '@mui/material'
 
 const ProtectedRoute = ({ user }) => {
   if (!user) {
@@ -23,7 +25,6 @@ function App() {
   return (
     <Routes>
       <Route path='/' element={<Navigate to='/boards' replace={true} />} />
-
       <Route element={<ProtectedRoute user={currentUser} />}>
         <Route path='/boards/:_id' element={<Board />} />
         <Route path='/settings/account' element={<AccountSetting />} />

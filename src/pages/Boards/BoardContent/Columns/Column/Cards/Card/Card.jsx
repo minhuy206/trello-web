@@ -48,14 +48,22 @@ function Card({ card }) {
       {...listeners}
       sx={{
         boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
-        overflow: 'unset',
-        display: card?.FE_PlaceholderCard && 'none'
+        overflow: 'hidden',
+        display: card?.FE_PlaceholderCard && 'none',
+        bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#22272c' : '#fff')
       }}
     >
       {card?.cover && <CardMedia sx={{ height: 140 }} image={card?.cover} />}
 
-      <CardContent sx={{ p: 1.5, '&:last-child': { p: 1.5 } }}>
-        <Typography>{card?.title}</Typography>
+      <CardContent
+        sx={{
+          p: 1.5,
+          color: (theme) =>
+            theme.palette.mode === 'dark' ? '#b6c3cf' : '#182a4d',
+          '&:last-child': { p: 1.5 }
+        }}
+      >
+        <Typography fontWeight={500}>{card?.title}</Typography>
       </CardContent>
       {(!!card?.memberIds?.length ||
         !!card?.comments?.length ||

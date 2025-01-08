@@ -48,9 +48,11 @@ function InviteBoardUser({ boardId }) {
         variant='outlined'
         startIcon={<PersonAddIcon />}
         sx={{
-          color: 'white',
-          borderColor: 'white',
-          '&:hover': { borderColor: 'white' }
+          color: '#fff',
+          borderColor: '#fff',
+          '&:hover': {
+            borderColor: '#fff'
+          }
         }}
       >
         Invite

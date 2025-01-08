@@ -152,10 +152,9 @@ function Column({ column }) {
     <div ref={setNodeRef} style={dndKitColumnStyles} {...attributes}>
       <Box
         sx={{
-          minWidth: '300px',
-          maxWidth: '300px',
+          width: '300px',
           bgcolor: (theme) =>
-            theme.palette.mode === 'dark' ? '#333643' : '#ebecf0',
+            theme.palette.mode === 'dark' ? '#101204' : '#f1f2f5',
           ml: 2,
           borderRadius: 2,
           height: 'fit-content',
@@ -288,7 +287,13 @@ function Column({ column }) {
                 Add new card
               </Button>
               <Tooltip title='Drag to move'>
-                <DragHandleIcon sx={{ cursor: 'pointer' }} />
+                <DragHandleIcon
+                  sx={{
+                    cursor: 'pointer',
+                    color: (theme) =>
+                      theme.palette.mode === 'dark' ? '#b6c3cf' : '#000'
+                  }}
+                />
               </Tooltip>
             </Box>
           ) : (

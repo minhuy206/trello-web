@@ -9,23 +9,24 @@ import FilterListRoundedIcon from '@mui/icons-material/FilterListRounded'
 import { capitalizeFirstLetter } from '~/utils/formatter'
 import BoardUserGroup from './BoardUserGroup'
 import InviteBoardUser from './InviteBoardUser'
+import { Skeleton } from '@mui/material'
 
 const MENU_STYLE = {
-  color: 'white',
+  color: '#fff',
   bgcolor: 'transparent',
   border: 'none',
   paddingX: 0.5,
   borderRadius: 0.5,
   '& .MuiSvgIcon-root': {
-    color: 'white'
+    color: '#fff'
   },
   '&:hover': {
-    backgroundColor: 'primary.50'
+    backgroundColor: '#ffffff33'
   }
 }
 
 function BoardBar({ board }) {
-  return (
+  return board ? (
     <Box
       sx={{
         width: '100%',
@@ -36,8 +37,7 @@ function BoardBar({ board }) {
         gap: 2,
         paddingX: 2,
         overflowX: 'auto',
-        bgcolor: (theme) =>
-          theme.palette.mode === 'dark' ? '#34495e' : '#1976d2',
+        bgcolor: '#0000003d',
         '&::-webkit-scrollbar-track': { m: 2 }
       }}
     >
@@ -75,11 +75,26 @@ function BoardBar({ board }) {
           clickable
         />
       </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
         <InviteBoardUser boardId={board?._id} />
-
-        <BoardUserGroup boardUsers={board.owners.concat(board.members)} />
+        <BoardUserGroup boardUsers={board?.owners.concat(board?.members)} />
       </Box>
+    </Box>
+  ) : (
+    <Box
+      sx={{
+        width: '100%',
+        height: (theme) => theme.trello.boardBarHeight,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: 2,
+        paddingX: 2,
+        overflowX: 'auto',
+        bgcolor: '#0000003d'
+      }}
+    >
+      <Skeleton variant='rectangular' animation='wave' />
     </Box>
   )
 }

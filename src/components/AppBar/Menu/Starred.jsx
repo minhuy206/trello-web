@@ -21,10 +21,13 @@ function Starred() {
   return (
     <Box>
       <Button
-        sx={{ color: 'white' }}
-        id="basic-button-starred"
+        sx={{
+          color: (theme) =>
+            theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F'
+        }}
+        id='basic-button-starred'
         aria-controls={open ? 'basic-menu-starred' : undefined}
-        aria-haspopup="true"
+        aria-haspopup='true'
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
         endIcon={<ExpandMoreIcon />}
@@ -32,7 +35,7 @@ function Starred() {
         Starred
       </Button>
       <Menu
-        id="basic-menu-starred"
+        id='basic-menu-starred'
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
