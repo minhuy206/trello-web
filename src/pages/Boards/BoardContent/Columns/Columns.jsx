@@ -23,13 +23,13 @@ import { cloneDeep } from 'lodash'
 
 import { generatePlaceholderCard } from '~/utils/formatter'
 import { createNewColumnAPI } from '~/apis'
+import { Skeleton } from '@mui/material'
 
 function Columns({ columns }) {
   const [opened, setOpened] = useState(false)
   const [title, setTitle] = useState('')
   const board = useSelector(selectCurrentActiveBoard)
   const dispatch = useDispatch()
-
   const toggleOpened = () => {
     setOpened(!opened)
   }
@@ -61,7 +61,7 @@ function Columns({ columns }) {
     setTitle('')
   }
 
-  return (
+  return columns ? (
     <SortableContext
       items={columns?.map((column) => column?._id)}
       strategy={horizontalListSortingStrategy}
@@ -81,28 +81,28 @@ function Columns({ columns }) {
           <Column key={column?._id} column={column} />
         ))}
 
-        {/* Add new column button */}
         {!opened ? (
           <Box
             sx={{
               minWidth: '300px',
               maxWidth: '300px',
-              // minWidth: 'fit-content',
               mx: 2,
-              borderRadius: 0.75,
+              borderRadius: 1.5,
               height: 'fit-content',
               bgcolor: '#ffffff3d'
             }}
             onClick={toggleOpened}
           >
             <Button
-              startIcon={<Add />}
+              startIcon={<Add color='#fff' />}
               sx={{
-                color: 'white',
+                color: '#fff',
+                bgcolor: '#ffffff3d',
                 width: '100%',
                 justifyContent: 'flex-start',
                 px: 2.5,
-                py: 1
+                py: 1,
+                '&:hover': { bgcolor: '#ffffff33' }
               }}
             >
               Add a new column
@@ -115,7 +115,6 @@ function Columns({ columns }) {
               p: 1,
               borderRadius: 0.75,
               height: 'fit-content',
-              // bgcolor: '#ffffff3d',
               display: 'flex',
               flexDirection: 'column',
               gap: 1
@@ -124,7 +123,6 @@ function Columns({ columns }) {
             <TextField
               label='Enter column title...'
               type='text'
-              size='small'
               variant='outlined'
               autoFocus
               data-no-dnd='true'
@@ -133,18 +131,24 @@ function Columns({ columns }) {
               sx={{
                 minWidth: '300px',
                 maxWidth: '300px',
-                '& label': { color: 'white' },
-                '& input': { color: 'white' },
-                '& label.Mui-focused': { color: 'white' },
+                '& label': {
+                  color: '#fff'
+                },
+                '& input': {
+                  color: '#fff'
+                },
+                '& label.Mui-focused': {
+                  color: '#fff'
+                },
                 '& .MuiOutlinedInput-root': {
                   '& fieldset': {
-                    borderColor: 'white'
+                    borderColor: '#fff'
                   },
                   '&:hover fieldset': {
-                    borderColor: 'white'
+                    borderColor: '#fff'
                   },
                   '&.Mui-focused fieldset': {
-                    borderColor: 'white'
+                    borderColor: '#fff'
                   }
                 }
               }}
@@ -153,11 +157,11 @@ function Columns({ columns }) {
               <Button
                 className='interceptor-loading'
                 variant='outlined'
-                size='small'
                 sx={{
                   boxShadow: 'none',
                   border: '0.5px solid',
-                  borderColor: (theme) => theme.palette.primary.main
+                  borderColor: '#fff',
+                  color: '#fff'
                 }}
                 onClick={addNewColumn}
               >
@@ -166,9 +170,10 @@ function Columns({ columns }) {
               <CloseIcon
                 fontSize='small'
                 sx={{
-                  color: 'white',
+                  color: '#fff',
                   cursor: 'pointer',
-                  '&:hover': { color: (theme) => theme.palette.warning.light }
+                  transition: 'color 0.3s',
+                  '&:hover': { color: '#ffffff33' }
                 }}
                 onClick={toggleOpened}
               />
@@ -177,6 +182,24 @@ function Columns({ columns }) {
         )}
       </Box>
     </SortableContext>
+  ) : (
+    <Box
+      sx={{
+        bgcolor: 'inherit',
+        width: '100%',
+        height: '100%',
+        display: 'flex'
+      }}
+    >
+      {[...Array(3)].map((_, index) => (
+        <Skeleton
+          variant='rectangular'
+          key={index}
+          sx={{ ml: 2, width: '300px', height: `${600 / (index + 1)}px` }}
+          animation='wave'
+        />
+      ))}
+    </Box>
   )
 }
 

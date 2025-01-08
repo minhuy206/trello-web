@@ -93,7 +93,10 @@ function Notifications() {
         >
           <NotificationsNoneIcon
             sx={{
-              color: newNotifications ? 'yellow' : 'white'
+              color: newNotifications
+                ? 'yellow'
+                : (theme) =>
+                    theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F'
             }}
           />
         </Badge>

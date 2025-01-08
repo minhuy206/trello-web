@@ -29,8 +29,11 @@ function AppBar() {
         gap: 2,
         paddingX: 2,
         overflowX: 'auto',
+        borderBottom: '1px solid ',
+        borderColor: (theme) =>
+          theme.palette.mode === 'dark' ? '#ffffff29' : '#172b4d29',
         bgcolor: (theme) =>
-          theme.palette.mode === 'dark' ? '#2c3e50' : '#1565c0',
+          theme.palette.mode === 'dark' ? '#1e2125' : '#fff',
         '&::-webkit-scrollbar-track': { m: 2 }
       }}
     >
@@ -45,14 +48,21 @@ function AppBar() {
           <Link to={'/boards'} style={{ color: 'inherit' }}>
             <AppsIcon
               sx={{
-                color: 'white',
+                color: (theme) =>
+                  theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F',
                 cursor: 'pointer',
                 verticalAlign: 'middle'
               }}
             />
           </Link>
         </Tooltip>
-        <Link to='/' style={{ color: 'inherit' }}>
+        <Link
+          to='/'
+          style={{
+            color: (theme) =>
+              theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F'
+          }}
+        >
           <Box
             sx={{
               display: 'flex',
@@ -65,14 +75,15 @@ function AppBar() {
               component={TrelloIcon}
               inheritViewBox
               fontSize='small'
-              sx={{ color: 'white' }}
+              sx={{ color: '#415672' }}
             />
             <Typography
               variant='span'
               sx={{
                 fontSize: '1.2rem',
-                fontWeight: 'bold',
-                color: 'white'
+                fontWeight: '700',
+                color: (theme) =>
+                  theme.palette.mode === 'dark' ? '#9fadbc' : '#415672'
               }}
             >
               Trello
@@ -93,7 +104,13 @@ function AppBar() {
           <Recent />
           <Starred />
           <Templates />
-          <Button sx={{ color: 'white' }} startIcon={<LibraryAddRoundedIcon />}>
+          <Button
+            sx={{
+              color: (theme) =>
+                theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F'
+            }}
+            startIcon={<LibraryAddRoundedIcon />}
+          >
             Create
           </Button>
         </Box>
@@ -109,7 +126,13 @@ function AppBar() {
         <ModeSelect />
         <Notifications />
         <Tooltip title='Help'>
-          <HelpOutlineIcon sx={{ cursor: 'pointer', color: 'white' }} />
+          <HelpOutlineIcon
+            sx={{
+              cursor: 'pointer',
+              color: (theme) =>
+                theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F'
+            }}
+          />
         </Tooltip>
         <Profile />
       </Box>

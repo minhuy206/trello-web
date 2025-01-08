@@ -131,7 +131,8 @@ function ActiveCard() {
           position: 'relative',
           width: 900,
           maxWidth: 900,
-          bgcolor: 'white',
+          bgcolor: (theme) =>
+            theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F',
           boxShadow: 24,
           borderRadius: '8px',
           border: 'none',

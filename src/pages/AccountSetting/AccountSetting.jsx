@@ -99,23 +99,28 @@ function AccountSetting() {
   }
 
   return (
-    <Container disableGutters maxWidth={false}>
+    <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
       <AppBar />
       <Box
         sx={{
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center',
           width: '100%',
           height: '100%',
           px: lgDown ? 2 : 4,
+          bgcolor: (theme) =>
+            theme.palette.mode === 'dark' ? '#1e2125' : '#fff',
           py: 4
         }}
       >
         <Grid
           container
           spacing={{ xs: 2, md: 4, lg: 6 }}
-          sx={{ width: '100%', maxWidth: '1200px' }}
+          sx={{
+            height: 'fit-content',
+            width: '100%',
+            maxWidth: '1200px'
+          }}
         >
           <Grid
             size={{ xs: 12, md: 3, lg: 2 }}
@@ -161,7 +166,8 @@ function AccountSetting() {
                   <Box>
                     <Button
                       sx={{
-                        color: 'white',
+                        color: (theme) =>
+                          theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F',
                         backgroundColor: '#2f2f2f',
                         border: '1px solid #3d444d'
                       }}
@@ -198,7 +204,14 @@ function AccountSetting() {
                         <Button
                           component='label'
                           size='small'
-                          sx={{ color: 'white', width: '100%', padding: 1 }}
+                          sx={{
+                            color: (theme) =>
+                              theme.palette.mode === 'dark'
+                                ? '#9fadbc'
+                                : '#44556F',
+                            width: '100%',
+                            padding: 1
+                          }}
                           startIcon={<CloudUploadIcon />}
                         >
                           Upload a photo...
@@ -210,7 +223,14 @@ function AccountSetting() {
                       </MenuItem>
                       <MenuItem>
                         <Button
-                          sx={{ color: 'white', width: '100%', padding: 1 }}
+                          sx={{
+                            color: (theme) =>
+                              theme.palette.mode === 'dark'
+                                ? '#9fadbc'
+                                : '#44556F',
+                            width: '100%',
+                            padding: 1
+                          }}
                           size='small'
                           startIcon={<DeleteIcon />}
                           onClick={handleDeleteAvatar}
@@ -281,7 +301,6 @@ function AccountSetting() {
                       </Box>
                       <Box>
                         <TextField
-                          size='small'
                           fullWidth
                           label='Your Display Name'
                           type='text'

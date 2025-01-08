@@ -21,10 +21,13 @@ function Recent() {
   return (
     <Box>
       <Button
-        sx={{ color: 'white' }}
-        id="basic-button-recent"
+        sx={{
+          color: (theme) =>
+            theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F'
+        }}
+        id='basic-button-recent'
         aria-controls={open ? 'basic-menu-recent' : undefined}
-        aria-haspopup="true"
+        aria-haspopup='true'
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
         endIcon={<ExpandMoreIcon />}
@@ -32,7 +35,7 @@ function Recent() {
         Recent
       </Button>
       <Menu
-        id="basic-menu-recent"
+        id='basic-menu-recent'
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}

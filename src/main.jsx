@@ -28,7 +28,7 @@ createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <PersistGate persistor={persistor}>
       <BrowserRouter basename='/'>
-        <ThemeProvider theme={theme}>
+        <ThemeProvider defaultMode='light' theme={theme}>
           <ConfirmProvider
             defaultOptions={{
               dialogProps: { maxWidth: 'xs' },

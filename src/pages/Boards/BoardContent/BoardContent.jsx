@@ -32,7 +32,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-function BoardContent({ board }) {
+function BoardContent({ board = {} }) {
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 10
@@ -56,7 +56,7 @@ function BoardContent({ board }) {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    setOrderedColumns(board.columns)
+    setOrderedColumns(board?.columns)
   }, [board])
 
   const dropAnimation = {
@@ -149,7 +149,7 @@ function BoardContent({ board }) {
     return newBoard
   }
 
-  return (
+  return board ? (
     <DndContext
       sensors={sensors}
       collisionDetection={collisionDetectionStrategy}
@@ -343,7 +343,7 @@ function BoardContent({ board }) {
           overflowY: 'hidden',
           py: 1.25,
           bgcolor: (theme) =>
-            theme.palette.mode === 'dark' ? '#34495e' : '#1976d2',
+            theme.palette.mode === 'dark' ? '#5C6366' : '#838C91',
           height: (theme) => theme.trello.boardContentHeight
         }}
       >
@@ -359,6 +359,20 @@ function BoardContent({ board }) {
         </DragOverlay>
       </Box>
     </DndContext>
+  ) : (
+    <Box
+      sx={{
+        width: '100%',
+        overflowX: 'auto',
+        overflowY: 'hidden',
+        py: 1.25,
+        bgcolor: (theme) =>
+          theme.palette.mode === 'dark' ? '#5C6366' : '#838C91',
+        height: (theme) => theme.trello.boardContentHeight
+      }}
+    >
+      <Columns columns={orderedColumns} />
+    </Box>
   )
 }
 

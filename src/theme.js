@@ -18,7 +18,12 @@ const theme = createTheme({
     columnFooterHeight: COLUMN_FOOTER_HEIGHT
   },
   colorSchemes: {
-    dark: true
+    light: {
+      palette: {}
+    },
+    dark: {
+      palette: {}
+    }
   },
   components: {
     MuiCssBaseline: {
@@ -33,7 +38,8 @@ const theme = createTheme({
             borderRadius: '8px'
           },
           '*::-webkit-scrollbar-thumb:hover': {
-            backgroundColor: 'white'
+            backgroundcolor: (theme) =>
+              theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F'
           }
         }
       }
