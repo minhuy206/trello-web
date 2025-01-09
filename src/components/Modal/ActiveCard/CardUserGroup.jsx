@@ -40,7 +40,6 @@ function CardUserGroup({
         </Tooltip>
       ))}
 
-      {/* Nút này để mở popover thêm member */}
       <Tooltip title='Add new member'>
         <Box
           aria-describedby={popoverId}

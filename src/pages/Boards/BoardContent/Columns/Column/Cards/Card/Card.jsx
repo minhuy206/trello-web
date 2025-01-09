@@ -48,12 +48,17 @@ function Card({ card }) {
       {...listeners}
       sx={{
         boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
-        overflow: 'hidden',
+        overflow: 'unset',
         display: card?.FE_PlaceholderCard && 'none',
         bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#22272c' : '#fff')
       }}
     >
-      {card?.cover && <CardMedia sx={{ height: 140 }} image={card?.cover} />}
+      {card?.cover && (
+        <CardMedia
+          sx={{ height: 140, borderRadius: '4px 4px 0 0' }}
+          image={card?.cover}
+        />
+      )}
 
       <CardContent
         sx={{

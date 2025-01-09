@@ -4,7 +4,6 @@ import Typography from '@mui/material/Typography'
 import Alert from '@mui/material/Alert'
 import TextField from '@mui/material/TextField'
 import Zoom from '@mui/material/Zoom'
-import Tooltip from '@mui/material/Tooltip'
 import FacebookIcon from '@mui/icons-material/Facebook'
 import GoogleIcon from '@mui/icons-material/Google'
 import GitHubIcon from '@mui/icons-material/GitHub'
@@ -29,6 +28,7 @@ import {
 } from '~/utils/validators'
 import { registerUserAPI } from '~/apis'
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
+import theme from '~/theme'
 
 function LoginnRegister() {
   const dispatch = useDispatch()
@@ -117,63 +117,79 @@ function LoginnRegister() {
             <Typography variant='h4' fontWeight={700}>
               Create Account
             </Typography>
-            <Box sx={{ my: 2.5 }}>
-              <Tooltip title='This action is on development. Please use your email for registeration'>
-                <Link>
-                  <GoogleIcon
-                    sx={{
-                      color: '#fff',
-                      mx: 1,
-                      '&:hover': {
-                        color: '#ccc'
-                      }
-                    }}
-                  />
-                </Link>
-              </Tooltip>
-              <Tooltip title='This action is on development. Please use your email for registeration'>
-                <Link>
-                  <FacebookIcon
-                    sx={{
-                      color: '#fff',
-                      mx: 1,
-                      '&:hover': {
-                        color: '#ccc'
-                      }
-                    }}
-                  />
-                </Link>
-              </Tooltip>
-              <Tooltip title='This action is on development. Please use your email for registeration'>
-                <Link>
-                  <GitHubIcon
-                    sx={{
-                      color: '#fff',
-                      mx: 1,
-                      '&:hover': {
-                        color: '#ccc'
-                      }
-                    }}
-                  />
-                </Link>
-              </Tooltip>
-              <Tooltip title='This action is on development. Please use your email for registeration'>
-                <Link>
-                  <LinkedInIcon
-                    sx={{
-                      color: '#fff',
-                      mx: 1,
-                      '&:hover': {
-                        color: '#ccc'
-                      }
-                    }}
-                  />
-                </Link>
-              </Tooltip>
+            <Box sx={{ my: 2 }}>
+              <Link>
+                <GoogleIcon
+                  sx={{
+                    color: (theme) =>
+                      theme.palette.mode === 'dark' ? '#fff' : '#000',
+                    mx: 1,
+                    transition: 'all 0.2s',
+                    '&:hover': {
+                      color: (theme) =>
+                        theme.palette.mode === 'dark'
+                          ? 'rgba(255,255,255,0.7)'
+                          : 'rgba(0,0,0,0.7)'
+                    }
+                  }}
+                />
+              </Link>
+              <Link>
+                <FacebookIcon
+                  sx={{
+                    color: (theme) =>
+                      theme.palette.mode === 'dark' ? '#fff' : '#000',
+                    mx: 1,
+                    transition: 'all 0.2s',
+                    '&:hover': {
+                      color: (theme) =>
+                        theme.palette.mode === 'dark'
+                          ? 'rgba(255,255,255,0.7)'
+                          : 'rgba(0,0,0,0.7)'
+                    }
+                  }}
+                />
+              </Link>
+              <Link>
+                <GitHubIcon
+                  sx={{
+                    color: (theme) =>
+                      theme.palette.mode === 'dark' ? '#fff' : '#000',
+                    mx: 1,
+                    transition: 'all 0.2s',
+
+                    '&:hover': {
+                      color: (theme) =>
+                        theme.palette.mode === 'dark'
+                          ? 'rgba(255,255,255,0.7)'
+                          : 'rgba(0,0,0,0.7)'
+                    }
+                  }}
+                />
+              </Link>
+              <Link>
+                <LinkedInIcon
+                  sx={{
+                    color: (theme) =>
+                      theme.palette.mode === 'dark' ? '#fff' : '#000',
+                    mx: 1,
+                    transition: 'all 0.2s',
+                    '&:hover': {
+                      color: (theme) =>
+                        theme.palette.mode === 'dark'
+                          ? 'rgba(255,255,255,0.7)'
+                          : 'rgba(0,0,0,0.7)'
+                    }
+                  }}
+                />
+              </Link>
             </Box>
             <Typography
               sx={{
-                color: '#ccc',
+                color: (theme) =>
+                  theme.palette.mode === 'dark'
+                    ? 'rgba(255,255,255,0.7)'
+                    : 'rgba(0,0,0,0.7)',
                 fontSize: '12px',
                 textDecoration: 'none'
               }}
@@ -352,63 +368,80 @@ function LoginnRegister() {
             <Typography variant='h4' fontWeight={700}>
               Sign in
             </Typography>
-            <Box sx={{ my: 2.5 }}>
-              <Tooltip title='This action is on development. Please use your email for registeration'>
-                <Link>
-                  <GoogleIcon
-                    sx={{
-                      color: '#fff',
-                      mx: 1,
-                      '&:hover': {
-                        color: '#ccc'
-                      }
-                    }}
-                  />
-                </Link>
-              </Tooltip>
-              <Tooltip title='This action is on development. Please use your email for registeration'>
-                <Link>
-                  <FacebookIcon
-                    sx={{
-                      color: '#fff',
-                      mx: 1,
-                      '&:hover': {
-                        color: '#ccc'
-                      }
-                    }}
-                  />
-                </Link>
-              </Tooltip>
-              <Tooltip title='This action is on development. Please use your email for registeration'>
-                <Link>
-                  <GitHubIcon
-                    sx={{
-                      color: '#fff',
-                      mx: 1,
-                      '&:hover': {
-                        color: '#ccc'
-                      }
-                    }}
-                  />
-                </Link>
-              </Tooltip>
-              <Tooltip title='This action is on development. Please use your email for registeration'>
-                <Link>
-                  <LinkedInIcon
-                    sx={{
-                      color: '#fff',
-                      mx: 1,
-                      '&:hover': {
-                        color: '#ccc'
-                      }
-                    }}
-                  />
-                </Link>
-              </Tooltip>
+            <Box sx={{ my: 2 }}>
+              <Link>
+                <GoogleIcon
+                  sx={{
+                    color: (theme) =>
+                      theme.palette.mode === 'dark' ? '#fff' : '#000',
+                    mx: 1,
+                    transition: 'all 0.2s',
+                    '&:hover': {
+                      color: (theme) =>
+                        theme.palette.mode === 'dark'
+                          ? 'rgba(255,255,255,0.7)'
+                          : 'rgba(0,0,0,0.7)'
+                    }
+                  }}
+                />
+              </Link>
+              <Link>
+                <FacebookIcon
+                  sx={{
+                    color: (theme) =>
+                      theme.palette.mode === 'dark' ? '#fff' : '#000',
+                    mx: 1,
+                    transition: 'all 0.2s',
+                    '&:hover': {
+                      color: (theme) =>
+                        theme.palette.mode === 'dark'
+                          ? 'rgba(255,255,255,0.7)'
+                          : 'rgba(0,0,0,0.7)'
+                    }
+                  }}
+                />
+              </Link>
+              <Link>
+                <GitHubIcon
+                  sx={{
+                    color: (theme) =>
+                      theme.palette.mode === 'dark' ? '#fff' : '#000',
+                    mx: 1,
+                    transition: 'all 0.2s',
+
+                    '&:hover': {
+                      color: (theme) =>
+                        theme.palette.mode === 'dark'
+                          ? 'rgba(255,255,255,0.7)'
+                          : 'rgba(0,0,0,0.7)'
+                    }
+                  }}
+                />
+              </Link>
+
+              <Link>
+                <LinkedInIcon
+                  sx={{
+                    color: (theme) =>
+                      theme.palette.mode === 'dark' ? '#fff' : '#000',
+                    mx: 1,
+                    transition: 'all 0.2s',
+                    '&:hover': {
+                      color: (theme) =>
+                        theme.palette.mode === 'dark'
+                          ? 'rgba(255,255,255,0.7)'
+                          : 'rgba(0,0,0,0.7)'
+                    }
+                  }}
+                />
+              </Link>
             </Box>
             <Typography
               sx={{
-                color: '#ccc',
+                color: (theme) =>
+                  theme.palette.mode === 'dark'
+                    ? 'rgba(255,255,255,0.7)'
+                    : 'rgba(0,0,0,0.7)',
                 fontSize: '12px',
                 textDecoration: 'none'
               }}
@@ -518,11 +551,15 @@ function LoginnRegister() {
             <Typography
               variant='body2'
               sx={{
-                color: '#ccc',
+                color: (theme) =>
+                  theme.palette.mode === 'dark'
+                    ? 'rgba(255,255,255,0.7)'
+                    : 'rgba(0,0,0,0.7)',
                 fontSize: '12px',
                 textDecoration: 'none',
                 margin: '15px 0 10px',
                 cursor: 'pointer',
+                transition: 'all 0.2s',
                 '&:hover': { color: '#512da8' }
               }}
             >

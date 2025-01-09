@@ -84,8 +84,7 @@ function Columns({ columns }) {
         {!opened ? (
           <Box
             sx={{
-              minWidth: '300px',
-              maxWidth: '300px',
+              width: '270px',
               mx: 2,
               borderRadius: 1.5,
               height: 'fit-content',
@@ -111,6 +110,7 @@ function Columns({ columns }) {
         ) : (
           <Box
             sx={{
+              width: '270px',
               mx: 2,
               p: 1,
               borderRadius: 0.75,
@@ -129,8 +129,7 @@ function Columns({ columns }) {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               sx={{
-                minWidth: '300px',
-                maxWidth: '300px',
+                width: '270px',
                 '& label': {
                   color: '#fff'
                 },

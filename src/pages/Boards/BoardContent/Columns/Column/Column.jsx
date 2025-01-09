@@ -34,6 +34,7 @@ import { cloneDeep } from 'lodash'
 import { createNewCardAPI, deleteColumnAPI, updateColumnAPI } from '~/apis'
 import Cards from './Cards/Cards'
 import ToggleFocusInput from '~/components/Form/ToggleFocusInput'
+import { Typography } from '@mui/material'
 
 function Column({ column }) {
   const {
@@ -53,7 +54,7 @@ function Column({ column }) {
 
   const dispatch = useDispatch()
   const board = useSelector(selectCurrentActiveBoard)
-
+  const [openInput, setOpenInput] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const [opened, setOpened] = useState(false)
@@ -152,7 +153,7 @@ function Column({ column }) {
     <div ref={setNodeRef} style={dndKitColumnStyles} {...attributes}>
       <Box
         sx={{
-          width: '300px',
+          width: '270px',
           bgcolor: (theme) =>
             theme.palette.mode === 'dark' ? '#101204' : '#f1f2f5',
           ml: 2,
@@ -173,12 +174,33 @@ function Column({ column }) {
             alignItems: 'center',
             justifyContent: 'space-between'
           }}
+          onClick={() => setOpenInput(true)}
         >
-          <ToggleFocusInput
-            value={column?.title}
-            onChangedValue={handleUpdateColumnTitle}
-            data-no-dnd='true'
-          />
+          {openInput ? (
+            <ToggleFocusInput
+              value={column?.title}
+              onChangedValue={handleUpdateColumnTitle}
+              setOpenInput={setOpenInput}
+            />
+          ) : (
+            <Typography
+              sx={{
+                height: '40px',
+                lineHeight: '40px',
+                cursor: 'pointer',
+                fontSize: '1rem',
+                fontWeight: 'bold',
+                px: 1,
+                flexGrow: 1,
+                color: (theme) =>
+                  theme.palette.mode === 'dark' ? '#b6c3cf' : '#182a4d'
+              }}
+              variant='h6'
+            >
+              {column?.title}
+            </Typography>
+          )}
+
           {/* // Box for column dropdown */}
           <Box>
             <Tooltip title='More option'>
@@ -188,7 +210,11 @@ function Column({ column }) {
                 aria-haspopup='true'
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
-                sx={{ color: 'text.primary', cursor: 'pointer' }}
+                sx={{
+                  color: (theme) =>
+                    theme.palette.mode === 'dark' ? '#b6c3cf' : '#182a4d',
+                  cursor: 'pointer'
+                }}
               />
             </Tooltip>
 
@@ -291,7 +317,7 @@ function Column({ column }) {
                   sx={{
                     cursor: 'pointer',
                     color: (theme) =>
-                      theme.palette.mode === 'dark' ? '#b6c3cf' : '#000'
+                      theme.palette.mode === 'dark' ? '#b6c3cf' : '#182a4d'
                   }}
                 />
               </Tooltip>
@@ -321,7 +347,7 @@ function Column({ column }) {
                   '& input': {
                     color: (theme) => theme.palette.primary.main,
                     bgcolor: (theme) =>
-                      theme.palette.mode === 'dark' ? '#333643' : 'white'
+                      theme.palette.mode === 'dark' ? '#22272c' : '#f1f2f5'
                   },
                   '& label.Mui-focused': {
                     color: (theme) => theme.palette.primary.main

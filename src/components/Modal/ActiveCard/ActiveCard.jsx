@@ -131,8 +131,6 @@ function ActiveCard() {
           position: 'relative',
           width: 900,
           maxWidth: 900,
-          bgcolor: (theme) =>
-            theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F',
           boxShadow: 24,
           borderRadius: '8px',
           border: 'none',
@@ -140,7 +138,7 @@ function ActiveCard() {
           padding: '40px 20px 20px',
           margin: '50px auto',
           backgroundColor: (theme) =>
-            theme.palette.mode === 'dark' ? '#1A2027' : '#fff'
+            theme.palette.mode === 'dark' ? '#323940' : '#f1f2f5'
         }}
       >
         <Box
