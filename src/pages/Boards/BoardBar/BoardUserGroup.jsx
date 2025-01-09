@@ -62,10 +62,9 @@ function BoardUserGroup({ boardUsers = [], limit = 4 }) {
               fontSize: '14px',
               fontWeight: '500',
               borderRadius: '50%',
-              color: (theme) =>
-                theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F',
               backgroundColor: '#a4b0be',
-              ml: -2
+              ml: -2,
+              color: '#fff'
             }}
           >
             +{boardUsers.length - limit}

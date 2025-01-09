@@ -22,7 +22,6 @@ import { fetchBoardsAPI } from '~/apis'
 
 import { styled } from '@mui/material/styles'
 import { DEFAULT_ITEMS_PER_PAGE, DEFAULT_PAGE } from '~/utils/constants'
-// Styles của mấy cái Sidebar item menu, anh gom lại ra đây cho gọn.
 const SidebarItem = styled(Box)(({ theme }) => ({
   color: theme.palette.mode === 'dark' ? '#9fadbc' : '#172B4D',
   fontWeight: '500',
@@ -140,7 +139,9 @@ function Boards() {
                           boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
                           textDecoration: 'none',
                           overflow: 'hidden',
-                          height: '12vh'
+                          height: '12vh',
+                          bgcolor: (theme) =>
+                            theme.palette.mode === 'dark' ? '#091e420f' : '#fff'
                         }}
                       >
                         <Card component={Link} to={`/boards/${board._id}`}>
@@ -160,13 +161,14 @@ function Boards() {
                               display: 'flex',
                               gap: 0.75,
                               flexDirection: 'column',
+
                               '&:last-child': { p: 1.5 }
                             }}
                           >
                             <Typography
                               variant='h6'
                               component='div'
-                              color={(theme) =>
+                              sx={(theme) =>
                                 theme.palette.mode === 'dark'
                                   ? '#9fadbc'
                                   : '#172B4D'
@@ -176,15 +178,14 @@ function Boards() {
                             </Typography>
                             <Typography
                               variant='body2'
-                              color={(theme) =>
-                                theme.palette.mode === 'dark'
-                                  ? '#9fadbc'
-                                  : '#44556F'
-                              }
                               sx={{
                                 overflow: 'hidden',
                                 whiteSpace: 'nowrap',
-                                textOverflow: 'ellipsis'
+                                textOverflow: 'ellipsis',
+                                color: (theme) =>
+                                  theme.palette.mode === 'dark'
+                                    ? '#9fadbc'
+                                    : '#44556F'
                               }}
                             >
                               {board?.description}

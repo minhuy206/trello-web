@@ -49,7 +49,7 @@ export const notificationsSlice = createSlice({
 
       .addCase(updateBoardInvitationAPI.fulfilled, (state, action) => {
         const invitation = state.currentNotifications.find(
-          (invitation) => invitation.id === action.payload.id
+          (invitation) => invitation._id === action.payload._id
         )
         invitation.boardInvitation = action.payload.boardInvitation
       })

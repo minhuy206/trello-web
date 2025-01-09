@@ -46,6 +46,10 @@ function Notifications() {
   const [newNotifications, setNewNotifications] = useState(null)
 
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const notifications = useSelector(selectCurrentNotifications)
+  const currentUser = useSelector(selectCurrentUser)
+
   const updateBoardInvitation = (invitationId, status) => {
     dispatch(updateBoardInvitationAPI({ invitationId, status })).then((res) => {
       if (res.payload.boardInvitation.status === INVITATION_STATUS.ACCEPTED) {
@@ -53,10 +57,6 @@ function Notifications() {
       }
     })
   }
-
-  const dispatch = useDispatch()
-  const notifications = useSelector(selectCurrentNotifications)
-  const currentUser = useSelector(selectCurrentUser)
 
   useEffect(() => {
     dispatch(fetchInvitationAPI())
@@ -103,7 +103,22 @@ function Notifications() {
       </Tooltip>
 
       <Menu
-        sx={{ mt: 2 }}
+        sx={{
+          mt: 2,
+          '& .MuiList-root': {
+            p: 0,
+            bgcolor: (theme) =>
+              theme.palette.mode === 'dark' ? '#282f32' : '#fff',
+            color: (theme) =>
+              theme.palette.mode === 'dark' ? '#b6c3cf' : '#182a4d'
+          },
+          '& .MuiDivider-root': {
+            m: '0 !important'
+          },
+          '& .MuiMenuItem-root': {
+            padding: '12px 16px'
+          }
+        }}
         id='basic-notification-drop-down'
         anchorEl={anchorEl}
         open={open}
@@ -134,7 +149,6 @@ function Notifications() {
                   gap: 1
                 }}
               >
-                {/* Nội dung của thông báo */}
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <Box>
                     <GroupAddIcon fontSize='small' />
@@ -146,7 +160,6 @@ function Notifications() {
                   </Box>
                 </Box>
 
-                {/* Khi Status của thông báo này là PENDING thì sẽ hiện 2 Button */}
                 {notification?.boardInvitation.status ===
                 INVITATION_STATUS.PENDING ? (
                   <Box
@@ -215,9 +228,6 @@ function Notifications() {
                   </Box>
                 )}
 
-                {/* Khi Status của thông báo này là ACCEPTED hoặc REJECTED thì sẽ hiện thông tin đó lên */}
-
-                {/* Thời gian của thông báo */}
                 <Box sx={{ textAlign: 'right' }}>
                   <Typography variant='span' sx={{ fontSize: '13px' }}>
                     {moment(notification?.createdAt).format('llll')}
@@ -225,7 +235,6 @@ function Notifications() {
                 </Box>
               </Box>
             </MenuItem>
-            {/* Cái đường kẻ Divider sẽ không cho hiện nếu là phần tử cuối */}
             {index !== notifications.length - 1 && <Divider />}
           </Box>
         ))}

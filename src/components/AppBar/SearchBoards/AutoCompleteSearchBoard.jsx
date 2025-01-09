@@ -43,7 +43,28 @@ function AutoCompleteSearchBoard() {
 
   return (
     <Autocomplete
-      sx={{ width: 220 }}
+      className='search-board'
+      sx={{
+        width: 220,
+        // '& div': {
+        //   display: 'none'
+        // },
+        '& .MuiAutocomplete-paper': {
+          backgroundColor: (theme) =>
+            theme.palette.mode === 'dark' ? '#282f32 !important' : '#fff',
+          display: 'none'
+        },
+        '& .MuiAutocomplete-noOptions': {
+          color: (theme) =>
+            theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F'
+        },
+        '& .MuiAutocomplete-listbox': {
+          backgroundColor: (theme) =>
+            theme.palette.mode === 'dark' ? '#282f32' : '#fff',
+          color: (theme) =>
+            theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F'
+        }
+      }}
       id='asynchronous-search-board'
       noOptionsText={!boards ? 'Type to search board...' : 'No board found!'}
       open={open}
