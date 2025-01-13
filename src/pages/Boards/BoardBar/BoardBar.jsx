@@ -37,7 +37,7 @@ function BoardBar({ board }) {
         gap: 2,
         paddingX: 2,
         overflowX: 'auto',
-        bgcolor: '#0000003d',
+        bgcolor: (theme) => theme.palette.background.secondary,
         '&::-webkit-scrollbar-track': { m: 2 }
       }}
     >
@@ -91,7 +91,7 @@ function BoardBar({ board }) {
         gap: 2,
         paddingX: 2,
         overflowX: 'auto',
-        bgcolor: '#0000003d'
+        bgcolor: (theme) => theme.palette.background.secondary
       }}
     >
       <Skeleton variant='rectangular' animation='wave' />

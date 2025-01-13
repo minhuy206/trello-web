@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
+import Box from '@mui/material/Box'
+import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 import InputAdornment from '@mui/material/InputAdornment'
 import SearchIcon from '@mui/icons-material/Search'
@@ -10,7 +12,6 @@ import { useDebounceFn } from '~/customHooks/useDebounceFn'
 
 function AutoCompleteSearchBoard() {
   const navigate = useNavigate()
-
   const [open, setOpen] = useState(false)
   const [boards, setBoards] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -45,34 +46,24 @@ function AutoCompleteSearchBoard() {
     <Autocomplete
       className='search-board'
       sx={{
-        width: 220,
-        // '& div': {
-        //   display: 'none'
-        // },
-        '& .MuiAutocomplete-paper': {
-          backgroundColor: (theme) =>
-            theme.palette.mode === 'dark' ? '#282f32 !important' : '#fff',
-          display: 'none'
-        },
-        '& .MuiAutocomplete-noOptions': {
-          color: (theme) =>
-            theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F'
-        },
-        '& .MuiAutocomplete-listbox': {
-          backgroundColor: (theme) =>
-            theme.palette.mode === 'dark' ? '#282f32' : '#fff',
-          color: (theme) =>
-            theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F'
-        }
+        width: 200
       }}
+      list='asynchronous-search-board'
       id='asynchronous-search-board'
-      noOptionsText={!boards ? 'Type to search board...' : 'No board found!'}
+      noOptionsText={!boards ? 'Type to search...' : 'No board found!'}
       open={open}
       onOpen={() => {
         setOpen(true)
       }}
       onClose={() => {
         setOpen(false)
+      }}
+      renderOption={(props, option) => {
+        return (
+          <li {...props} key={option._id}>
+            {option.title}
+          </li>
+        )
       }}
       getOptionLabel={(board) => board.title}
       options={boards || []}
@@ -148,6 +139,30 @@ function AutoCompleteSearchBoard() {
           }}
         />
       )}
+      slots={{
+        paper: (props) => {
+          return (
+            <Paper
+              sx={{
+                width: 200,
+                bgcolor: (theme) => theme.palette.background.default,
+                '& .MuiAutocomplete-noOptions': {
+                  bgcolor: (theme) => theme.palette.background.default,
+                  color: (theme) =>
+                    theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F'
+                },
+                '& .MuiAutocomplete-listbox': {
+                  bgcolor: (theme) => theme.palette.background.default,
+                  color: (theme) =>
+                    theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F'
+                }
+              }}
+            >
+              {props.children}
+            </Paper>
+          )
+        }
+      }}
     />
   )
 }

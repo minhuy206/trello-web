@@ -65,6 +65,14 @@ function InviteBoardUser({ boardId }) {
         onClose={handleTogglePopover}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        slotProps={{
+          paper: {
+            sx: {
+              bgcolor: (theme) => theme.palette.background.secondary,
+              backgroundImage: 'none'
+            }
+          }
+        }}
       >
         <form
           onSubmit={handleSubmit(submitInviteUserToBoard)}
@@ -80,17 +88,40 @@ function InviteBoardUser({ boardId }) {
           >
             <Typography
               variant='span'
-              sx={{ fontWeight: 'bold', fontSize: '16px' }}
+              sx={{ fontWeight: 'bold', fontSize: '16px', color: '#fff' }}
             >
               Invite User To This Board!
             </Typography>
             <Box>
               <TextField
+                autoComplete='off'
                 autoFocus
                 fullWidth
                 label='Enter email to invite...'
                 type='text'
                 variant='outlined'
+                sx={{
+                  '& label': {
+                    color: '#fff'
+                  },
+                  '& input': {
+                    color: '#fff'
+                  },
+                  '& label.Mui-focused': {
+                    color: '#fff'
+                  },
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: '#fff'
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#fff'
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#fff'
+                    }
+                  }
+                }}
                 {...register('inviteeEmail', {
                   required: FIELD_REQUIRED_MESSAGE,
                   pattern: { value: EMAIL_RULE, message: EMAIL_RULE_MESSAGE }

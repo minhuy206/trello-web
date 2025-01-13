@@ -11,13 +11,17 @@ import Recent from './Menu/Recent'
 import Starred from './Menu/Starred'
 import Templates from './Menu/Templates'
 import Profile from './Menu/Profile'
-import TrelloIcon from '~/assets/trello.svg?react'
 import ModeSelect from '../ModeSelect/ModeSelect'
-import { Link } from 'react-router-dom'
+import TrelloIcon from '~/assets/trello.svg?react'
 import Notifications from './Notifications/Notifications'
 import AutoCompleteSearchBoard from './SearchBoards/AutoCompleteSearchBoard'
+import CreateBoardModal from '../Modal/CreateBoard/CreateBoardModal'
+import { Link } from 'react-router-dom'
+import { useState } from 'react'
 
 function AppBar() {
+  const [open, setOpen] = useState(false)
+
   return (
     <Box
       sx={{
@@ -29,11 +33,10 @@ function AppBar() {
         gap: 2,
         paddingX: 2,
         overflowX: 'auto',
-        borderBottom: '1px solid ',
+        borderBottom: '1px solid',
         borderColor: (theme) =>
           theme.palette.mode === 'dark' ? '#ffffff29' : '#172b4d29',
-        bgcolor: (theme) =>
-          theme.palette.mode === 'dark' ? '#1e2125' : '#fff',
+        bgcolor: (theme) => theme.palette.background.default,
         '&::-webkit-scrollbar-track': { m: 2 }
       }}
     >
@@ -75,7 +78,10 @@ function AppBar() {
               component={TrelloIcon}
               inheritViewBox
               fontSize='small'
-              sx={{ color: '#415672' }}
+              sx={{
+                color: (theme) =>
+                  theme.palette.mode === 'dark' ? '#9fadbc' : '#415672'
+              }}
             />
             <Typography
               variant='span'
@@ -109,10 +115,12 @@ function AppBar() {
               color: (theme) =>
                 theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F'
             }}
+            onClick={() => setOpen(true)}
             startIcon={<LibraryAddRoundedIcon />}
           >
             Create
           </Button>
+          <CreateBoardModal open={open} setOpen={() => setOpen()} />
         </Box>
       </Box>
       <Box

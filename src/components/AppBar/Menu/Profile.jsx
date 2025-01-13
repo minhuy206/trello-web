@@ -52,40 +52,58 @@ function Profile() {
         MenuListProps={{
           'aria-labelledby': 'basic-button-profile"'
         }}
+        sx={{
+          '& .MuiList-root': {
+            bgcolor: (theme) => theme.palette.background.default,
+            color: (theme) =>
+              theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F'
+          }
+        }}
       >
         <Link to='/settings/account' style={{ color: 'inherit' }}>
-          <MenuItem sx={{ '&:hover': { color: 'success.light' } }}>
+          <MenuItem>
             <Avatar
               sx={{ width: 24, height: 24, mr: 1.5 }}
               src={currentUser?.avatar}
-            />{' '}
+            />
             {currentUser?.displayName}
           </MenuItem>
         </Link>
         <Divider />
         <MenuItem>
           <ListItemIcon>
-            <PersonAdd fontSize='small' />
+            <PersonAdd
+              sx={{
+                color: (theme) =>
+                  theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F'
+              }}
+              fontSize='small'
+            />
           </ListItemIcon>
           Add another account
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
-            <Settings fontSize='small' />
+            <Settings
+              sx={{
+                color: (theme) =>
+                  theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F'
+              }}
+              fontSize='small'
+            />
           </ListItemIcon>
           Settings
         </MenuItem>
-        <MenuItem
-          sx={{
-            '&:hover': {
-              color: 'warning.dark',
-              '& .logout-icon': { color: 'warning.dark' }
-            }
-          }}
-          onClick={handleLogout}
-        >
+        <MenuItem onClick={handleLogout}>
           <ListItemIcon>
-            <Logout className='logout-icon' fontSize='small' />
+            <Logout
+              sx={{
+                color: (theme) =>
+                  theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F'
+              }}
+              className='logout-icon'
+              fontSize='small'
+            />
           </ListItemIcon>
           Logout
         </MenuItem>

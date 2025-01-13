@@ -78,6 +78,14 @@ function BoardUserGroup({ boardUsers = [], limit = 4 }) {
         anchorEl={anchorPopoverElement}
         onClose={handleTogglePopover}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        slotProps={{
+          paper: {
+            sx: {
+              bgcolor: (theme) => theme.palette.background.secondary,
+              backgroundImage: 'none'
+            }
+          }
+        }}
       >
         <Box
           sx={{

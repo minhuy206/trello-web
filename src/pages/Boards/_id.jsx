@@ -10,7 +10,7 @@ import {
 
 import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
-import ActiveCard from '~/components/Modal/ActiveCard/ActiveCard'
+import ActiveCard from '~/components/Modal/ActiveCard/ActiveCardModal'
 import Container from '@mui/material/Container'
 import AppBar from '~/components/AppBar/AppBar'
 
@@ -28,15 +28,7 @@ function Board() {
   }, [dispatch, _id])
 
   return (
-    <Container
-      disableGutters
-      maxWidth={false}
-      sx={{
-        height: '100vh',
-        bgcolor: (theme) =>
-          theme.palette.mode === 'dark' ? '#5C6366' : '#838C91'
-      }}
-    >
+    <Container disableGutters maxWidth={false}>
       <AppBar />
       <ActiveCard />
       <BoardBar board={board} />

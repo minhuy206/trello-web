@@ -181,6 +181,7 @@ function Column({ column }) {
               value={column?.title}
               onChangedValue={handleUpdateColumnTitle}
               setOpenInput={setOpenInput}
+              autoFocus={true}
             />
           ) : (
             <Typography

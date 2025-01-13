@@ -5,13 +5,14 @@ function ToggleFocusInput({
   value,
   onChangedValue,
   inputFontSize = '16px',
-  setOpenInput
+  setOpenInput,
+  autoFocus = false
 }) {
   const [inputValue, setInputValue] = useState(value)
 
   const triggerBlur = () => {
     setInputValue(inputValue.trim())
-    setOpenInput(false)
+    autoFocus && setOpenInput(false)
 
     if (!inputValue || inputValue.trim() === value) {
       setInputValue(value)
@@ -23,7 +24,7 @@ function ToggleFocusInput({
   return (
     <TextField
       data-no-dnd='true'
-      autoFocus
+      autoFocus={autoFocus}
       autoComplete='off'
       id='toggle-focus-input-controlled'
       fullWidth
@@ -42,10 +43,18 @@ function ToggleFocusInput({
           color: (theme) =>
             theme.palette.mode === 'dark' ? '#b6c3cf' : '#182a4d'
         },
+        '& .MuiOutlinedInput-root': {
+          backgroundColor: 'transparent',
+          '& fieldset': { borderColor: 'transparent' }
+        },
+        '& .MuiOutlinedInput-root:hover': {
+          borderColor: 'transparent',
+          '& fieldset': { borderColor: 'transparent' }
+        },
         '& .MuiOutlinedInput-root.Mui-focused': {
           '& fieldset': {
             borderColor: (theme) =>
-              theme.palette.mode === 'dark' ? '#b6c3cf' : '#000'
+              theme.palette.mode === 'dark' ? '#b6c3cf' : '#182a4d'
           }
         },
         '& .MuiOutlinedInput-input': {

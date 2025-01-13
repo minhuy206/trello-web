@@ -17,6 +17,14 @@ function ModeSelect() {
       size='small'
       defaultValue={mode}
       onChange={(event) => setMode(event.target.value)}
+      MenuProps={{
+        PaperProps: {
+          sx: {
+            bgcolor: (theme) => theme.palette.background.default,
+            backgroundImage: 'none'
+          }
+        }
+      }}
       sx={{
         color: (theme) =>
           theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F',
@@ -38,19 +46,37 @@ function ModeSelect() {
         }
       }}
     >
-      <MenuItem value='light'>
+      <MenuItem
+        sx={{
+          color: (theme) =>
+            theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F'
+        }}
+        value='light'
+      >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <LightModeIcon fontSize='small' />
           Light
         </Box>
       </MenuItem>
-      <MenuItem value='dark'>
+      <MenuItem
+        value='dark'
+        sx={{
+          color: (theme) =>
+            theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F'
+        }}
+      >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <DarkModeOutlinedIcon fontSize='small' />
           Dark
         </Box>
       </MenuItem>
-      <MenuItem value='system'>
+      <MenuItem
+        value='system'
+        sx={{
+          color: (theme) =>
+            theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F'
+        }}
+      >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <SettingsBrightnessIcon fontSize='small' />
           System

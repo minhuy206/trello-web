@@ -19,10 +19,23 @@ const theme = createTheme({
   },
   colorSchemes: {
     light: {
-      palette: {}
+      palette: {
+        background: {
+          default: '#fff',
+          primary: '#838c91',
+          secondary: '#636b6e'
+        },
+        text: { primary: '#172B4D' }
+      }
     },
     dark: {
-      palette: {}
+      palette: {
+        background: {
+          default: '#1e2125',
+          primary: '#5C6366',
+          secondary: '#464c4e'
+        }
+      }
     }
   },
   components: {
@@ -38,7 +51,7 @@ const theme = createTheme({
             borderRadius: '8px'
           },
           '*::-webkit-scrollbar-thumb:hover': {
-            backgroundcolor: (theme) =>
+            backgroundColor: (theme) =>
               theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F'
           }
         }
