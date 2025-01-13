@@ -342,8 +342,7 @@ function BoardContent({ board = {} }) {
           overflowX: 'auto',
           overflowY: 'hidden',
           py: 1.25,
-          bgcolor: (theme) =>
-            theme.palette.mode === 'dark' ? '#5C6366' : '#838C91',
+          bgcolor: (theme) => theme.palette.background.primary,
           height: (theme) => theme.trello.boardContentHeight
         }}
       >
@@ -366,8 +365,7 @@ function BoardContent({ board = {} }) {
         overflowX: 'auto',
         overflowY: 'hidden',
         py: 1.25,
-        bgcolor: (theme) =>
-          theme.palette.mode === 'dark' ? '#5C6366' : '#838C91',
+        bgcolor: (theme) => theme.palette.background.primary,
         height: (theme) => theme.trello.boardContentHeight
       }}
     >

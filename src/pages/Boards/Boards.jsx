@@ -10,18 +10,19 @@ import ListAltIcon from '@mui/icons-material/ListAlt'
 import HomeIcon from '@mui/icons-material/Home'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
-import CardMedia from '@mui/material/CardMedia'
+// import CardMedia from '@mui/material/CardMedia'
 import Pagination from '@mui/material/Pagination'
 import PaginationItem from '@mui/material/PaginationItem'
 import Skeleton from '@mui/material/Skeleton'
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import randomColor from 'randomcolor'
-import SidebarCreateBoardModal from './create'
 import { fetchBoardsAPI } from '~/apis'
 
 import { styled } from '@mui/material/styles'
 import { DEFAULT_ITEMS_PER_PAGE, DEFAULT_PAGE } from '~/utils/constants'
+import CreateBoardModal from '~/components/Modal/CreateBoard/CreateBoardModal'
 const SidebarItem = styled(Box)(({ theme }) => ({
   color: theme.palette.mode === 'dark' ? '#9fadbc' : '#172B4D',
   fontWeight: '500',
@@ -29,7 +30,6 @@ const SidebarItem = styled(Box)(({ theme }) => ({
   alignItems: 'center',
   gap: '8px',
   cursor: 'pointer',
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   padding: '12px 16px',
   borderRadius: '8px',
   '&:hover': {
@@ -45,6 +45,7 @@ const SidebarItem = styled(Box)(({ theme }) => ({
 function Boards() {
   const [boards, setBoards] = useState(null)
   const [totalBoards, setTotalBoards] = useState(null)
+  const [open, setOpen] = useState(false)
 
   const location = useLocation()
   const query = new URLSearchParams(location.search)
@@ -59,10 +60,6 @@ function Boards() {
   useEffect(() => {
     fetchBoardsAPI(location.search).then(updateBoardsState)
   }, [location.search])
-
-  const afterCreateNewBoard = () => {
-    fetchBoardsAPI(location.search).then(updateBoardsState)
-  }
 
   return (
     <Container
@@ -79,8 +76,7 @@ function Boards() {
           py: 4,
           display: 'flex',
           justifyContent: 'center',
-          bgcolor: (theme) =>
-            theme.palette.mode === 'dark' ? '#1e2125' : '#fff',
+          bgcolor: (theme) => theme.palette.background.default,
           height: '100%'
         }}
       >
@@ -102,9 +98,17 @@ function Boards() {
             </Stack>
             <Divider sx={{ my: 1 }} />
             <Stack direction='column' spacing={1}>
-              <SidebarCreateBoardModal
-                afterCreateNewBoard={afterCreateNewBoard}
-              />
+              <SidebarItem
+                sx={{
+                  color: (theme) =>
+                    theme.palette.mode === 'dark' ? '#9fadbc' : '#172B4D'
+                }}
+                onClick={() => setOpen(true)}
+              >
+                <LibraryAddIcon fontSize='small' />
+                Create a new board
+              </SidebarItem>
+              <CreateBoardModal open={open} setOpen={() => setOpen()} />
             </Stack>
           </Grid>
 
@@ -184,8 +188,8 @@ function Boards() {
                                 textOverflow: 'ellipsis',
                                 color: (theme) =>
                                   theme.palette.mode === 'dark'
-                                    ? '#9fadbc'
-                                    : '#44556F'
+                                    ? 'rgba(255,255,255,0.7)'
+                                    : 'rgba(0,0,0,0.7)'
                               }}
                             >
                               {board?.description}
@@ -199,7 +203,7 @@ function Boards() {
               </>
             ) : (
               <Grid container spacing={2}>
-                {[...Array(4)].map((_, index) => (
+                {[...Array(12)].map((_, index) => (
                   <Grid
                     size={{ xs: 12, sm: 4, lg: 3 }}
                     key={index}

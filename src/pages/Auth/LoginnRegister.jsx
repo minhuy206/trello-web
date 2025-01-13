@@ -28,7 +28,6 @@ import {
 } from '~/utils/validators'
 import { registerUserAPI } from '~/apis'
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
-import theme from '~/theme'
 
 function LoginnRegister() {
   const dispatch = useDispatch()

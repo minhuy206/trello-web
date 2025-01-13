@@ -108,8 +108,7 @@ function AccountSetting() {
           width: '100%',
           height: '100%',
           px: lgDown ? 2 : 4,
-          bgcolor: (theme) =>
-            theme.palette.mode === 'dark' ? '#1e2125' : '#fff',
+          bgcolor: (theme) => theme.palette.background.default,
           py: 4
         }}
       >
@@ -167,9 +166,12 @@ function AccountSetting() {
                     <Button
                       sx={{
                         color: (theme) =>
-                          theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F',
-                        backgroundColor: '#2f2f2f',
-                        border: '1px solid #3d444d'
+                          theme.palette.mode === 'dark' ? '#9fadbc' : '#182a4d',
+                        boxShadow: (theme) =>
+                          theme.palette.mode === 'dark'
+                            ? '0 0 5px 0 rgba(0, 0, 0, 0.2)'
+                            : '0 0 5px 0 rgba(255, 255, 255, 0.2)',
+                        bgcolor: (theme) => theme.palette.background.primary
                       }}
                       id='basic-button-edit-avatar'
                       size='small'
@@ -194,6 +196,7 @@ function AccountSetting() {
                       sx={{
                         '& .MuiList-root': {
                           padding: '0 !important',
+                          bgcolor: (theme) => theme.palette.background.primary,
                           '& .MuiMenuItem-root': {
                             padding: 0
                           }
@@ -208,7 +211,7 @@ function AccountSetting() {
                             color: (theme) =>
                               theme.palette.mode === 'dark'
                                 ? '#9fadbc'
-                                : '#44556F',
+                                : '#182a4d',
                             width: '100%',
                             padding: 1
                           }}
@@ -227,7 +230,7 @@ function AccountSetting() {
                             color: (theme) =>
                               theme.palette.mode === 'dark'
                                 ? '#9fadbc'
-                                : '#44556F',
+                                : '#182a4d',
                             width: '100%',
                             padding: 1
                           }}
@@ -252,9 +255,22 @@ function AccountSetting() {
                   src={displayAvatar}
                 />
               </Box>
-              <Box sx={{ textAlign: mdDown ? 'left' : 'center' }}>
+              <Box
+                sx={{
+                  textAlign: mdDown ? 'left' : 'center',
+                  color: (theme) =>
+                    theme.palette.mode === 'dark' ? '#9fadbc' : '#182a4d'
+                }}
+              >
                 <Typography variant='h6'>{currentUser?.displayName}</Typography>
-                <Typography sx={{ color: 'grey' }}>
+                <Typography
+                  sx={{
+                    color: (theme) =>
+                      theme.palette.mode === 'dark'
+                        ? 'rgba(255, 255, 255, 0.7)'
+                        : 'rgba(0, 0, 0, 0.7)'
+                  }}
+                >
                   @{currentUser?.username}
                 </Typography>
               </Box>
@@ -263,7 +279,15 @@ function AccountSetting() {
           <Grid size={{ xs: 12, md: 8 }}>
             <Box sx={{ width: mdDown ? '100%' : '80%' }}>
               <form onSubmit={handleSubmit(submitChange)}>
-                <Box sx={{ display: 'flex', gap: 4, flexDirection: 'column' }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    gap: 4,
+                    flexDirection: 'column',
+                    color: (theme) =>
+                      theme.palette.mode === 'dark' ? '#9fadbc' : '#182a4d'
+                  }}
+                >
                   <Box>
                     <Box sx={{ mb: 2 }}>
                       <Typography variant='h6'>General Information</Typography>
@@ -301,6 +325,46 @@ function AccountSetting() {
                       </Box>
                       <Box>
                         <TextField
+                          sx={{
+                            '& label': {
+                              color: (theme) =>
+                                theme.palette.mode === 'dark'
+                                  ? '#9fadbc'
+                                  : '#182a4d'
+                            },
+                            '& input': {
+                              color: (theme) =>
+                                theme.palette.mode === 'dark'
+                                  ? '#9fadbc'
+                                  : '#182a4d'
+                            },
+                            '& label.Mui-focused': {
+                              color: (theme) =>
+                                theme.palette.mode === 'dark'
+                                  ? '#9fadbc'
+                                  : '#182a4d'
+                            },
+                            '& .MuiOutlinedInput-root': {
+                              '& fieldset': {
+                                borderColor: (theme) =>
+                                  theme.palette.mode === 'dark'
+                                    ? '#9fadbc'
+                                    : '#182a4d'
+                              },
+                              '&:hover fieldset': {
+                                borderColor: (theme) =>
+                                  theme.palette.mode === 'dark'
+                                    ? '#9fadbc'
+                                    : '#182a4d'
+                              },
+                              '&.Mui-focused fieldset': {
+                                borderColor: (theme) =>
+                                  theme.palette.mode === 'dark'
+                                    ? '#9fadbc'
+                                    : '#182a4d'
+                              }
+                            }
+                          }}
                           fullWidth
                           label='Your Display Name'
                           type='text'
@@ -332,6 +396,46 @@ function AccountSetting() {
                     >
                       <Box>
                         <TextField
+                          sx={{
+                            '& label': {
+                              color: (theme) =>
+                                theme.palette.mode === 'dark'
+                                  ? '#9fadbc'
+                                  : '#182a4d'
+                            },
+                            '& input': {
+                              color: (theme) =>
+                                theme.palette.mode === 'dark'
+                                  ? '#9fadbc'
+                                  : '#182a4d'
+                            },
+                            '& label.Mui-focused': {
+                              color: (theme) =>
+                                theme.palette.mode === 'dark'
+                                  ? '#9fadbc'
+                                  : '#182a4d'
+                            },
+                            '& .MuiOutlinedInput-root': {
+                              '& fieldset': {
+                                borderColor: (theme) =>
+                                  theme.palette.mode === 'dark'
+                                    ? '#9fadbc'
+                                    : '#182a4d'
+                              },
+                              '&:hover fieldset': {
+                                borderColor: (theme) =>
+                                  theme.palette.mode === 'dark'
+                                    ? '#9fadbc'
+                                    : '#182a4d'
+                              },
+                              '&.Mui-focused fieldset': {
+                                borderColor: (theme) =>
+                                  theme.palette.mode === 'dark'
+                                    ? '#9fadbc'
+                                    : '#182a4d'
+                              }
+                            }
+                          }}
                           fullWidth
                           label='Current Password'
                           type='password'
@@ -350,6 +454,46 @@ function AccountSetting() {
                       </Box>
                       <Box>
                         <TextField
+                          sx={{
+                            '& label': {
+                              color: (theme) =>
+                                theme.palette.mode === 'dark'
+                                  ? '#9fadbc'
+                                  : '#182a4d'
+                            },
+                            '& input': {
+                              color: (theme) =>
+                                theme.palette.mode === 'dark'
+                                  ? '#9fadbc'
+                                  : '#182a4d'
+                            },
+                            '& label.Mui-focused': {
+                              color: (theme) =>
+                                theme.palette.mode === 'dark'
+                                  ? '#9fadbc'
+                                  : '#182a4d'
+                            },
+                            '& .MuiOutlinedInput-root': {
+                              '& fieldset': {
+                                borderColor: (theme) =>
+                                  theme.palette.mode === 'dark'
+                                    ? '#9fadbc'
+                                    : '#182a4d'
+                              },
+                              '&:hover fieldset': {
+                                borderColor: (theme) =>
+                                  theme.palette.mode === 'dark'
+                                    ? '#9fadbc'
+                                    : '#182a4d'
+                              },
+                              '&.Mui-focused fieldset': {
+                                borderColor: (theme) =>
+                                  theme.palette.mode === 'dark'
+                                    ? '#9fadbc'
+                                    : '#182a4d'
+                              }
+                            }
+                          }}
                           fullWidth
                           label='New Password'
                           type='password'
@@ -382,6 +526,46 @@ function AccountSetting() {
 
                       <Box>
                         <TextField
+                          sx={{
+                            '& label': {
+                              color: (theme) =>
+                                theme.palette.mode === 'dark'
+                                  ? '#9fadbc'
+                                  : '#182a4d'
+                            },
+                            '& input': {
+                              color: (theme) =>
+                                theme.palette.mode === 'dark'
+                                  ? '#9fadbc'
+                                  : '#182a4d'
+                            },
+                            '& label.Mui-focused': {
+                              color: (theme) =>
+                                theme.palette.mode === 'dark'
+                                  ? '#9fadbc'
+                                  : '#182a4d'
+                            },
+                            '& .MuiOutlinedInput-root': {
+                              '& fieldset': {
+                                borderColor: (theme) =>
+                                  theme.palette.mode === 'dark'
+                                    ? '#9fadbc'
+                                    : '#182a4d'
+                              },
+                              '&:hover fieldset': {
+                                borderColor: (theme) =>
+                                  theme.palette.mode === 'dark'
+                                    ? '#9fadbc'
+                                    : '#182a4d'
+                              },
+                              '&.Mui-focused fieldset': {
+                                borderColor: (theme) =>
+                                  theme.palette.mode === 'dark'
+                                    ? '#9fadbc'
+                                    : '#182a4d'
+                              }
+                            }
+                          }}
                           fullWidth
                           label='New Password Confirmation'
                           type='password'

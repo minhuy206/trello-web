@@ -181,7 +181,12 @@ function ActiveCard() {
             gap: 1
           }}
         >
-          <CreditCardIcon />
+          <CreditCardIcon
+            sx={{
+              color: (theme) =>
+                theme.palette.mode === 'dark' ? '#b6c3cf' : '#182a4d'
+            }}
+          />
 
           {/* Feature 01: Xử lý tiêu đề của Card */}
           <ToggleFocusInput
@@ -211,10 +216,20 @@ function ActiveCard() {
 
             <Box sx={{ mb: 3 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                <SubjectRoundedIcon />
+                <SubjectRoundedIcon
+                  sx={{
+                    color: (theme) =>
+                      theme.palette.mode === 'dark' ? '#b6c3cf' : '#182a4d'
+                  }}
+                />
                 <Typography
                   variant='span'
-                  sx={{ fontWeight: '600', fontSize: '20px' }}
+                  sx={{
+                    fontWeight: '600',
+                    fontSize: '20px',
+                    color: (theme) =>
+                      theme.palette.mode === 'dark' ? '#b6c3cf' : '#182a4d'
+                  }}
                 >
                   Description
                 </Typography>
@@ -229,10 +244,20 @@ function ActiveCard() {
 
             <Box sx={{ mb: 3 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                <DvrOutlinedIcon />
+                <DvrOutlinedIcon
+                  sx={{
+                    color: (theme) =>
+                      theme.palette.mode === 'dark' ? '#b6c3cf' : '#182a4d'
+                  }}
+                />
                 <Typography
                   variant='span'
-                  sx={{ fontWeight: '600', fontSize: '20px' }}
+                  sx={{
+                    fontWeight: '600',
+                    fontSize: '20px',
+                    color: (theme) =>
+                      theme.palette.mode === 'dark' ? '#b6c3cf' : '#182a4d'
+                  }}
                 >
                   Activity
                 </Typography>

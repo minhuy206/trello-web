@@ -108,9 +108,9 @@ function Notifications() {
           '& .MuiList-root': {
             p: 0,
             bgcolor: (theme) =>
-              theme.palette.mode === 'dark' ? '#282f32' : '#fff',
+              theme.palette.mode === 'dark' ? '#1e2125' : '#fff',
             color: (theme) =>
-              theme.palette.mode === 'dark' ? '#b6c3cf' : '#182a4d'
+              theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F'
           },
           '& .MuiDivider-root': {
             m: '0 !important'

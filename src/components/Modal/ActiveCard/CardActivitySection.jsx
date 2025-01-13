@@ -43,6 +43,45 @@ function CardActivitySection({ comments = [], handleComment }) {
           variant='outlined'
           multiline
           onKeyDown={handleAddCardComment}
+          sx={{
+            '& input': {
+              fontWeight: 'bold',
+              color: (theme) =>
+                theme.palette.mode === 'dark' ? '#b6c3cf' : '#182a4d'
+            },
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                border: (theme) =>
+                  theme.palette.mode === 'dark'
+                    ? '0.5px solid rgba(255, 255, 255, 0.3)'
+                    : '0.5px solid rgba(0, 0, 0, 0.3)'
+              }
+            },
+            '& .MuiOutlinedInput-root:hover': {
+              '& fieldset': {
+                border: (theme) =>
+                  theme.palette.mode === 'dark'
+                    ? '0.5px solid #b6c3cf !important'
+                    : '0.5px solid #182a4d !important'
+              }
+            },
+            '& .MuiOutlinedInput-root.Mui-focused': {
+              '& fieldset': {
+                border: (theme) =>
+                  theme.palette.mode === 'dark'
+                    ? '0.5px solid #b6c3cf !important'
+                    : '0.5px solid #182a4d !important'
+              }
+            },
+            '& .MuiOutlinedInput-input': {
+              px: 1,
+              overflow: 'hidden',
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+              color: (theme) =>
+                theme.palette.mode === 'dark' ? '#b6c3cf' : '#182a4d'
+            }
+          }}
         />
       </Box>
 
@@ -52,7 +91,8 @@ function CardActivitySection({ comments = [], handleComment }) {
             pl: '45px',
             fontSize: '14px',
             fontWeight: '500',
-            color: '#b1b1b1'
+            color: (theme) =>
+              theme.palette.mode === 'dark' ? '#b6c3cf' : '#182a4d'
           }}
         >
           No activity found!
@@ -71,22 +111,44 @@ function CardActivitySection({ comments = [], handleComment }) {
             />
           </Tooltip>
           <Box sx={{ width: 'inherit' }}>
-            <Typography variant='span' sx={{ fontWeight: 'bold', mr: 1 }}>
+            <Typography
+              variant='span'
+              sx={{
+                fontWeight: 'bold',
+                mr: 1,
+                color: (theme) =>
+                  theme.palette.mode === 'dark' ? '#b6c3cf' : '#182a4d'
+              }}
+            >
               {comment?.user?.displayName}
             </Typography>
 
-            <Typography variant='span' sx={{ fontSize: '12px' }}>
+            <Typography
+              variant='span'
+              sx={{
+                fontSize: '12px',
+                color: (theme) =>
+                  theme.palette.mode === 'dark'
+                    ? 'rgba(255, 255, 255, 0.7) '
+                    : 'rgba(0, 0, 0, 0.7)'
+              }}
+            >
               {moment(comment.commentedAt).format('llll')}
             </Typography>
 
             <Box
               sx={{
                 display: 'block',
-                bgcolor: (theme) =>
-                  theme.palette.mode === 'dark' ? '#33485D' : 'white',
+                color: (theme) =>
+                  theme.palette.mode === 'dark'
+                    ? 'rgba(255, 255, 255, 0.7) '
+                    : 'rgba(0, 0, 0, 0.7)',
                 p: '8px 12px',
                 mt: '4px',
-                border: '0.5px solid rgba(0, 0, 0, 0.2)',
+                border: (theme) =>
+                  theme.palette.mode === 'dark'
+                    ? '0.5px solid rgba(255, 255, 255, 0.3) '
+                    : '0.5px solid rgba(0, 0, 0, 0.3)',
                 borderRadius: '4px',
                 wordBreak: 'break-word',
                 boxShadow: '0 0 1px rgba(0, 0, 0, 0.2)'
