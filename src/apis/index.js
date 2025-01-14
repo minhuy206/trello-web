@@ -1,4 +1,3 @@
-import { toast } from 'react-toastify'
 import authorizeAxiosInstance from '~/utils/authorizeAxios'
 import { API_ROOT } from '~/utils/constants'
 
@@ -55,23 +54,24 @@ export const registerUserAPI = async (account) => {
     account
   )
 
-  toast.success(
-    'Register successfully! Please verify your email to continue.',
-    {
-      theme: 'colored'
-    }
-  )
   return res.data
 }
 
-export const verifyUserAPI = async (email, token) => {
+export const verifyUserAPI = async (email, otp) => {
   const res = await authorizeAxiosInstance.post(`${API_ROOT}/v1/users/verify`, {
     email,
-    token
+    otp
   })
-  toast.success('Account verified successfully!', {
-    theme: 'colored'
-  })
+  return res.data
+}
+
+export const resendOtpAPI = async (email) => {
+  const res = await authorizeAxiosInstance.post(
+    `${API_ROOT}/v1/users/resend-otp`,
+    {
+      email
+    }
+  )
   return res.data
 }
 

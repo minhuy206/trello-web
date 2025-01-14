@@ -7,3 +7,5 @@ export const CARD_MEMBER_ACTION = {
   ADD: 'add',
   REMOVE: 'remove'
 }
+
+export const OTP_LENGTH = 6
