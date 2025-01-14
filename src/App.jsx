@@ -2,14 +2,12 @@ import { Route, Routes, Navigate, Outlet } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { selectCurrentUser } from './redux/user/userSlice'
 
-import NotFound from './pages/404/NotFound'
-import Auth from './pages/Auth/Auth'
+import Login from './pages/Auth/Login'
 import AccountVerification from './pages/Auth/AccountVerification'
 import AccountSetting from './pages/AccountSetting/AccountSetting'
-import Board from './pages/Boards/_id'
 import Boards from './pages/Boards/Boards'
-import AppBar from './components/AppBar/AppBar'
-import { Container } from '@mui/material'
+import Board from './pages/Boards/_id'
+import NotFound from './pages/404/NotFound'
 
 const ProtectedRoute = ({ user }) => {
   if (!user) {
@@ -31,7 +29,7 @@ function App() {
         <Route path='/boards' element={<Boards />} />
       </Route>
 
-      <Route path='/login' element={<Auth />} />
+      <Route path='/login' element={<Login />} />
 
       <Route path='/account/verification' element={<AccountVerification />} />
 
