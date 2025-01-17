@@ -6,30 +6,44 @@ import Zoom from '@mui/material/Zoom'
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
 import { useForm } from 'react-hook-form'
 import {
-  EMAIL_RULE,
   FIELD_REQUIRED_MESSAGE,
-  USERNAME_RULE
+  PASSWORD_RULE,
+  PASSWORD_RULE_MESSAGE
 } from '~/utils/validators'
 import { toast } from 'react-toastify'
-import { forgotPasswordAPI } from '~/apis'
+import { resetPasswordAPI } from '~/apis'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
-function ForgotPassword() {
+function ResetPassword() {
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    watch
   } = useForm()
+  const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
 
-  const onSubmit = ({ forgotPasswordUsername: username }) => {
-    toast.promise(
-      forgotPasswordAPI({
-        [USERNAME_RULE.test(username) ? 'username' : 'email']: username
-      }),
-      {
-        pending: 'Sending reset password email...',
-        success: 'Reset password email sent successfully!'
-      }
-    )
+  const { email, token } = Object.fromEntries([...searchParams])
+
+  if (!email || !token) {
+    navigate('/login', { replace: true })
+  }
+
+  const onSubmit = ({ password }) => {
+    toast
+      .promise(resetPasswordAPI({ email, password, token }), {
+        pending: 'Resetting password...',
+        success:
+          'Password reset successfully!. You will be redirected to the login page in 3 seconds.'
+      })
+      .then((res) => {
+        if (!res) {
+          setTimeout(() => {
+            navigate('/login', { replace: true })
+          }, 3000)
+        }
+      })
   }
 
   return (
@@ -72,29 +86,42 @@ function ForgotPassword() {
               }}
               variant='body1'
             >
-              Enter your username or email to reset your password
+              Enter your new password and password confirmation to reset your
+              password.
             </Typography>
-            <Box>
+            <Box sx={{ my: 1 }}>
               <TextField
                 fullWidth
-                label='Email or Username'
-                type='text'
+                label='Password'
+                type='password'
                 variant='outlined'
-                error={errors.forgotPasswordUsername}
-                {...register('forgotPasswordUsername', {
+                error={errors.password}
+                {...register('password', {
                   required: FIELD_REQUIRED_MESSAGE,
-                  validate: {
-                    username: (value) => {
-                      if (value.match(EMAIL_RULE) || value.match(USERNAME_RULE))
-                        return true
-                      return 'Invalid username or email!'
-                    }
+                  pattern: {
+                    value: PASSWORD_RULE,
+                    message: PASSWORD_RULE_MESSAGE
+                  }
+                })}
+              />
+              <FieldErrorAlert errors={errors} fieldName='password' />
+            </Box>
+            <Box sx={{ my: 1 }}>
+              <TextField
+                fullWidth
+                label='Password confirmation'
+                type='password'
+                variant='outlined'
+                {...register('passwordConfirmation', {
+                  validate: (value) => {
+                    if (value === watch('password')) return true
+                    return 'Password confirmation does not match!'
                   }
                 })}
               />
               <FieldErrorAlert
                 errors={errors}
-                fieldName='forgotPasswordUsername'
+                fieldName='passwordConfirmation'
               />
             </Box>
             <Button
@@ -125,4 +152,4 @@ function ForgotPassword() {
   )
 }
 
-export default ForgotPassword
+export default ResetPassword
