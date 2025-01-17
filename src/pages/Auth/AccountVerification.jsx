@@ -1,36 +1,49 @@
-import { useEffect, useState } from 'react'
-import { useSearchParams, useNavigate } from 'react-router-dom'
-import { resendOtpAPI, verifyUserAPI } from '~/apis'
 import Zoom from '@mui/material/Zoom'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Tooltip from '@mui/material/Tooltip'
 
+import { useEffect, useState } from 'react'
+import { useSearchParams, useNavigate } from 'react-router-dom'
 import { OTP } from '~/components/Form/OtpInput'
 import { OTP_LENGTH } from '~/utils/constants'
 import { toast } from 'react-toastify'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  logoutAPI,
+  selectCurrentUser,
+  updateUserAPI
+} from '~/redux/user/userSlice'
+import { sendOtpAPI, verifyUserAPI } from '~/apis'
+import { useRunOnce } from '~/customHooks/useRunOnce'
+import { useCountdown } from '~/customHooks/useCountdown'
 
-const COUNTDOWN_TIME = 30
+let COUNTDOWN_TIME = 30
 
 function AccountVerification() {
   const [otp, setOtp] = useState('')
   const navigate = useNavigate()
   let [searchParams] = useSearchParams()
   const email = searchParams.get('email')
+  const dispatch = useDispatch()
+  const currentUser = useSelector(selectCurrentUser)
+  const [seconds, setSeconds] = useState(COUNTDOWN_TIME)
+  const timer = useCountdown(seconds, setSeconds)
 
-  const [countDown, setCountDown] = useState(COUNTDOWN_TIME)
+  useRunOnce({
+    fn: () => {
+      return sendOtpAPI(email)
+    },
+    sessionKey: 'sendOtp'
+  })
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (countDown > 0) {
-        setCountDown(countDown - 1)
-      } else {
-        clearInterval(interval)
+    return () => {
+      if (currentUser) {
+        dispatch(logoutAPI())
       }
-    }, 1000)
-
-    return () => clearInterval(interval)
-  }, [countDown])
+    }
+  }, [dispatch, navigate, email, currentUser])
 
   const handleSubmit = () => {
     if (!otp) {
@@ -41,8 +54,14 @@ function AccountVerification() {
       toast.error('Please enter valid OTP', { theme: 'colored' })
       return
     }
+
     verifyUserAPI(email, otp).then(() => {
-      navigate('/login')
+      if (currentUser) {
+        dispatch(updateUserAPI({ isActive: true }))
+        navigate('/boards', { replace: true })
+      } else {
+        navigate('/login', { replace: true })
+      }
     })
   }
 
@@ -98,21 +117,7 @@ function AccountVerification() {
               <strong>{email}</strong>
             </Typography>
             <Tooltip
-              slotProps={{
-                popper: {
-                  modifiers: [
-                    {
-                      name: 'offset',
-                      options: {
-                        offset: [0, -12]
-                      }
-                    }
-                  ]
-                }
-              }}
-              title={
-                countDown > 0 ? `Resend OTP in ${countDown}s` : 'Resend OTP'
-              }
+              title={timer > 0 ? `Resend OTP in ${timer}s` : 'Resend OTP'}
             >
               <Button
                 sx={{
@@ -120,21 +125,21 @@ function AccountVerification() {
                   padding: 0,
                   maxWidth: 'fit-content',
                   color:
-                    countDown > 0
+                    timer > 0
                       ? (theme) => theme.palette.text.disabled
                       : '#b99cff',
                   '&:hover': {
-                    textDecoration: countDown === 0 && 'underline',
+                    textDecoration: timer === 0 && 'underline',
                     bgcolor: 'transparent !important'
                   },
                   cursor: 'pointer'
                 }}
                 onClick={() => {
-                  if (countDown > 0) return
-                  resendOtpAPI(email).then((res) => {
+                  if (timer > 0) return
+                  sendOtpAPI(email).then((res) => {
                     if (res) {
                       toast.success('OTP sent successfully')
-                      setCountDown(COUNTDOWN_TIME)
+                      setSeconds(COUNTDOWN_TIME)
                     }
                   })
                 }}

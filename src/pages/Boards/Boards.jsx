@@ -46,10 +46,8 @@ function Boards() {
   const [boards, setBoards] = useState(null)
   const [totalBoards, setTotalBoards] = useState(null)
   const [open, setOpen] = useState(false)
-
   const location = useLocation()
   const query = new URLSearchParams(location.search)
-
   const page = parseInt(query.get('page') || '1', 10)
 
   const updateBoardsState = (newBoards) => {
@@ -62,13 +60,7 @@ function Boards() {
   }, [location.search])
 
   return (
-    <Container
-      disableGutters
-      maxWidth={false}
-      sx={{
-        height: '100vh'
-      }}
-    >
+    <Container disableGutters maxWidth={false}>
       <AppBar />
       <Box
         sx={{
@@ -143,7 +135,8 @@ function Boards() {
                           boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
                           textDecoration: 'none',
                           overflow: 'hidden',
-                          height: '12vh',
+                          maxheight: '15vh',
+                          minHeight: 'fit-content',
                           bgcolor: (theme) =>
                             theme.palette.mode === 'dark' ? '#091e420f' : '#fff'
                         }}
@@ -165,7 +158,6 @@ function Boards() {
                               display: 'flex',
                               gap: 0.75,
                               flexDirection: 'column',
-
                               '&:last-child': { p: 1.5 }
                             }}
                           >
@@ -252,9 +244,7 @@ function Boards() {
                   showFirstButton
                   showLastButton
                   count={Math.ceil(totalBoards / DEFAULT_ITEMS_PER_PAGE)}
-                  // Giá trị của page hiện tại đang đứng
                   page={page}
-                  // Render các page item và đồng thời cũng là những cái link để chúng ta click chuyển trang
                   renderItem={(item) => (
                     <PaginationItem
                       component={Link}

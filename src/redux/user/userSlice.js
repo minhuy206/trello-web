@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+
 import authorizeAxiosInstance from '~/utils/authorizeAxios'
 import { API_ROOT } from '~/utils/constants'
-
 const initialState = {
   currentUser: null
 }
@@ -33,6 +33,7 @@ export const userSlice = createSlice({
     builder.addCase(loginAPI.fulfilled, (state, action) => {
       state.currentUser = action.payload
     })
+
     builder.addCase(logoutAPI.fulfilled, (state) => {
       state.currentUser = null
     })

@@ -1,3 +1,4 @@
+import { red } from '@mui/material/colors'
 import authorizeAxiosInstance from '~/utils/authorizeAxios'
 import { API_ROOT } from '~/utils/constants'
 
@@ -58,18 +59,40 @@ export const registerUserAPI = async (account) => {
 }
 
 export const verifyUserAPI = async (email, otp) => {
-  const res = await authorizeAxiosInstance.post(`${API_ROOT}/v1/users/verify`, {
+  return await authorizeAxiosInstance.post(`${API_ROOT}/v1/users/verify`, {
     email,
     otp
-  })
-  return res.data
+  }).data
 }
 
-export const resendOtpAPI = async (email) => {
+export const sendOtpAPI = async (email) => {
   const res = await authorizeAxiosInstance.post(
     `${API_ROOT}/v1/users/resend-otp`,
     {
       email
+    }
+  )
+  return res
+}
+
+export const forgotPasswordAPI = async ({ email, username }) => {
+  const res = await authorizeAxiosInstance.post(
+    `${API_ROOT}/v1/users/forgot-password`,
+    {
+      email,
+      username
+    }
+  )
+  return res.data
+}
+
+export const resetPasswordAPI = async ({ email, password, token }) => {
+  const res = await authorizeAxiosInstance.put(
+    `${API_ROOT}/v1/users/reset-password`,
+    {
+      email,
+      password,
+      token
     }
   )
   return res.data
