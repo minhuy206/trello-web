@@ -1,48 +1,94 @@
-import { Route, Routes, Navigate, Outlet } from 'react-router-dom'
+import { Route, Routes, Navigate, Outlet, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { selectCurrentUser } from './redux/user/userSlice'
-
-import Login from './pages/Auth/Login'
-import AccountVerification from './pages/Auth/AccountVerification'
-import AccountSetting from './pages/AccountSetting/AccountSetting'
-import Boards from './pages/Boards/Boards'
-import Board from './pages/Boards/_id'
-import NotFound from './pages/404/NotFound'
-import ForgotPassword from './pages/Auth/ForgotPassword'
-import ResetPassword from './pages/Auth/ResetPassword'
-
-const ProtectedRoute = ({ user, isActive }) => {
+import Container from '@mui/material/Container'
+import AppBar from './components/AppBar/AppBar'
+import { routes } from './pages/routes'
+import { Suspense } from 'react'
+import Alert from '@mui/material/Alert'
+import { Typography } from '@mui/material'
+const ProtectedRoute = ({ user, isVerified, navigate }) => {
   if (!user) {
     return <Navigate to='/login' replace={true} />
-  } else if (user && !isActive) {
-    return <Navigate to={`/account/verification?email=${user?.email}`} />
   }
-  // Outlet của react-router-dom để điều hướng qua child route
-  return <Outlet />
+  return (
+    <Container disableGutters maxWidth={false}>
+      {!isVerified && (
+        <Alert severity='error'>
+          Your account is not verified. Please{' '}
+          <Typography
+            className='interceptor-loading'
+            sx={{
+              display: 'inline',
+              textDecoration: 'underline',
+              cursor: 'pointer',
+              '&:hover': {
+                opacity: 0.7
+              }
+            }}
+            onClick={() => {
+              navigate(`/account/verification?email=${user.email}`)
+            }}
+          >
+            verify
+          </Typography>
+          &nbsp;your email address.
+        </Alert>
+      )}
+      <AppBar />
+      <Outlet />
+    </Container>
+  )
 }
 
 function App() {
   const currentUser = useSelector(selectCurrentUser)
-
+  const navigate = useNavigate()
   return (
     <Routes>
       <Route path='/' element={<Navigate to='/boards' replace={true} />} />
+
       <Route
         element={
-          <ProtectedRoute user={currentUser} isActive={currentUser?.isActive} />
+          <ProtectedRoute
+            user={currentUser}
+            isVerified={currentUser?.isVerified}
+            navigate={navigate}
+          />
         }
       >
-        <Route path='/boards/:_id' element={<Board />} />
-        <Route path='/settings/account' element={<AccountSetting />} />
-        <Route path='/boards' element={<Boards />} />
+        {routes.map((route) => {
+          if (!route.public) {
+            return (
+              <Route
+                key={route.path}
+                path={route.path}
+                element={
+                  <Suspense>
+                    <route.element />
+                  </Suspense>
+                }
+              />
+            )
+          }
+        })}
       </Route>
 
-      <Route path='/login' element={<Login />} />
-      <Route path='/forgot-password' element={<ForgotPassword />} />
-      <Route path='/reset-password' element={<ResetPassword />} />
-      <Route path='/account/verification' element={<AccountVerification />} />
-
-      <Route path='*' element={<NotFound />} />
+      {routes.map((route) => {
+        if (route.public) {
+          return (
+            <Route
+              key={route.path}
+              path={route.path}
+              element={
+                <Suspense>
+                  <route.element />
+                </Suspense>
+              }
+            />
+          )
+        }
+      })}
     </Routes>
   )
 }

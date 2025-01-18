@@ -1,8 +1,9 @@
 import Box from '@mui/material/Box'
 import Column from './Column/Column'
 import Button from '@mui/material/Button'
-import Add from '@mui/icons-material/Add'
+import Skeleton from '@mui/material/Skeleton'
 import TextField from '@mui/material/TextField'
+import Add from '@mui/icons-material/Add'
 import CloseIcon from '@mui/icons-material/Close'
 
 import {
@@ -23,7 +24,6 @@ import { cloneDeep } from 'lodash'
 
 import { generatePlaceholderCard } from '~/utils/formatter'
 import { createNewColumnAPI } from '~/apis'
-import { Skeleton } from '@mui/material'
 
 function Columns({ columns }) {
   const [opened, setOpened] = useState(false)

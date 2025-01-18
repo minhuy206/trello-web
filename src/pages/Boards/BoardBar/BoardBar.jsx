@@ -1,15 +1,17 @@
 import Chip from '@mui/material/Chip'
 import Box from '@mui/material/Box'
 import Tooltip from '@mui/material/Tooltip'
+import Skeleton from '@mui/material/Skeleton'
+
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import VpnLockIcon from '@mui/icons-material/VpnLock'
 import AddToDriveRoundedIcon from '@mui/icons-material/AddToDriveRounded'
 import BoltRoundedIcon from '@mui/icons-material/BoltRounded'
 import FilterListRoundedIcon from '@mui/icons-material/FilterListRounded'
+
 import { capitalizeFirstLetter } from '~/utils/formatter'
 import BoardUserGroup from './BoardUserGroup'
 import InviteBoardUser from './InviteBoardUser'
-import { Skeleton } from '@mui/material'
 
 const MENU_STYLE = {
   color: '#fff',
