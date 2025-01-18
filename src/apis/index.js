@@ -67,7 +67,7 @@ export const verifyUserAPI = async (email, otp) => {
 
 export const sendOtpAPI = async (email) => {
   const res = await authorizeAxiosInstance.post(
-    `${API_ROOT}/v1/users/resend-otp`,
+    `${API_ROOT}/v1/users/send-otp`,
     {
       email
     }

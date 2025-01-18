@@ -7,6 +7,7 @@ import Divider from '@mui/material/Divider'
 import ListItemText from '@mui/material/ListItemText'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
 import ContentCut from '@mui/icons-material/ContentCut'
 import ContentCopy from '@mui/icons-material/ContentCopy'
 import ContentPaste from '@mui/icons-material/ContentPaste'
@@ -34,7 +35,6 @@ import { cloneDeep } from 'lodash'
 import { createNewCardAPI, deleteColumnAPI, updateColumnAPI } from '~/apis'
 import Cards from './Cards/Cards'
 import ToggleFocusInput from '~/components/Form/ToggleFocusInput'
-import { Typography } from '@mui/material'
 
 function Column({ column }) {
   const {

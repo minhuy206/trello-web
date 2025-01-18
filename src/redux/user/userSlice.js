@@ -13,7 +13,8 @@ export const loginAPI = createAsyncThunk('user/loginAPI', async (account) => {
 })
 
 export const logoutAPI = createAsyncThunk('user/logoutAPI', async () => {
-  return await authorizeAxiosInstance.delete(`${API_ROOT}/v1/users/logout`).data
+  return (await authorizeAxiosInstance.delete(`${API_ROOT}/v1/users/logout`))
+    .data
 })
 
 export const updateUserAPI = createAsyncThunk(
@@ -21,6 +22,18 @@ export const updateUserAPI = createAsyncThunk(
   async (account) => {
     return (
       await authorizeAxiosInstance.put(`${API_ROOT}/v1/users/update`, account)
+    ).data
+  }
+)
+
+export const verifyUserAPI = createAsyncThunk(
+  'user/verifyUserAPI',
+  async ({ email, otp }) => {
+    return (
+      await authorizeAxiosInstance.post(`${API_ROOT}/v1/users/verify`, {
+        email,
+        otp
+      })
     ).data
   }
 )
@@ -33,12 +46,18 @@ export const userSlice = createSlice({
     builder.addCase(loginAPI.fulfilled, (state, action) => {
       state.currentUser = action.payload
     })
-
     builder.addCase(logoutAPI.fulfilled, (state) => {
       state.currentUser = null
     })
     builder.addCase(updateUserAPI.fulfilled, (state, action) => {
       state.currentUser = action.payload
+    })
+    builder.addCase(verifyUserAPI.fulfilled, (state, action) => {
+      if (state.currentUser) {
+        state.currentUser = action.payload
+      } else {
+        state.currentUser = null
+      }
     })
   }
 })

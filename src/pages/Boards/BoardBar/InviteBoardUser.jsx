@@ -31,6 +31,7 @@ function InviteBoardUser({ boardId }) {
     setValue,
     formState: { errors }
   } = useForm()
+
   const submitInviteUserToBoard = ({ inviteeEmail }) => {
     inviteUserToBoardAPI(boardId, inviteeEmail).then((invitation) => {
       setValue('inviteeEmail', null)

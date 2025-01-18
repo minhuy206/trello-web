@@ -4,20 +4,16 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Tooltip from '@mui/material/Tooltip'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { OTP } from '~/components/Form/OtpInput'
 import { OTP_LENGTH } from '~/utils/constants'
 import { toast } from 'react-toastify'
-import { useDispatch, useSelector } from 'react-redux'
-import {
-  logoutAPI,
-  selectCurrentUser,
-  updateUserAPI
-} from '~/redux/user/userSlice'
-import { sendOtpAPI, verifyUserAPI } from '~/apis'
-import { useRunOnce } from '~/customHooks/useRunOnce'
+import { useDispatch } from 'react-redux'
+import { verifyUserAPI } from '~/redux/user/userSlice'
+import { sendOtpAPI } from '~/apis'
 import { useCountdown } from '~/customHooks/useCountdown'
+import { useRunOnce } from '~/customHooks/useRunOnce'
 
 let COUNTDOWN_TIME = 30
 
@@ -27,23 +23,21 @@ function AccountVerification() {
   let [searchParams] = useSearchParams()
   const email = searchParams.get('email')
   const dispatch = useDispatch()
-  const currentUser = useSelector(selectCurrentUser)
   const [seconds, setSeconds] = useState(COUNTDOWN_TIME)
   const timer = useCountdown(seconds, setSeconds)
 
   useRunOnce({
     fn: () => {
-      return sendOtpAPI(email)
-    },
-    sessionKey: 'sendOtp'
-  })
-  useEffect(() => {
-    return () => {
-      if (currentUser) {
-        dispatch(logoutAPI())
-      }
+      toast
+        .promise(sendOtpAPI(email), {
+          pending: 'Sending OTP...',
+          success: 'OTP sent successfully'
+        })
+        .catch(() => {
+          navigate('/', { replace: true })
+        })
     }
-  }, [dispatch, navigate, email, currentUser])
+  })
 
   const handleSubmit = () => {
     if (!otp) {
@@ -55,12 +49,9 @@ function AccountVerification() {
       return
     }
 
-    verifyUserAPI(email, otp).then(() => {
-      if (currentUser) {
-        dispatch(updateUserAPI({ isActive: true }))
-        navigate('/boards', { replace: true })
-      } else {
-        navigate('/login', { replace: true })
+    dispatch(verifyUserAPI({ email, otp })).then((res) => {
+      if (res.type === 'user/verifyUserAPI/fulfilled') {
+        res && navigate('/')
       }
     })
   }
@@ -119,11 +110,8 @@ function AccountVerification() {
             <Tooltip
               title={timer > 0 ? `Resend OTP in ${timer}s` : 'Resend OTP'}
             >
-              <Button
+              <Typography
                 sx={{
-                  display: 'inline',
-                  padding: 0,
-                  maxWidth: 'fit-content',
                   color:
                     timer > 0
                       ? (theme) => theme.palette.text.disabled
@@ -146,7 +134,7 @@ function AccountVerification() {
                 className='interceptor-loading'
               >
                 Resend
-              </Button>
+              </Typography>
             </Tooltip>
           </Box>
           <OTP
