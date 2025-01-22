@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import moment from 'moment'
 import Badge from '@mui/material/Badge'
 import Box from '@mui/material/Box'
@@ -26,12 +26,10 @@ import { selectCurrentUser } from '~/redux/user/userSlice'
 
 import { socket } from '~/socket'
 import { useNavigate } from 'react-router-dom'
-
-const INVITATION_STATUS = {
-  PENDING: 'pending',
-  ACCEPTED: 'accepted',
-  REJECTED: 'rejected'
-}
+import { toast } from 'react-toastify'
+import CustomToastNotification from './CustomToastNotification'
+import { INVITATION_STATUS } from '~/utils/constants'
+import { useColorScheme } from '@mui/material'
 
 function Notifications() {
   const [anchorEl, setAnchorEl] = useState(null)
@@ -42,32 +40,57 @@ function Notifications() {
   const handleClose = () => {
     setAnchorEl(null)
   }
-
-  const [newNotifications, setNewNotifications] = useState(null)
-
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const notifications = useSelector(selectCurrentNotifications)
   const currentUser = useSelector(selectCurrentUser)
+  const { mode } = useColorScheme()
 
-  const updateBoardInvitation = (invitationId, status) => {
-    dispatch(updateBoardInvitationAPI({ invitationId, status })).then((res) => {
-      if (res.payload.boardInvitation.status === INVITATION_STATUS.ACCEPTED) {
-        navigate(`/boards/${res.payload.boardInvitation.boardId}`)
+  const updateBoardInvitation = useCallback(
+    (invitationId, status) => {
+      dispatch(updateBoardInvitationAPI({ invitationId, status })).then(
+        (res) => {
+          if (
+            res.payload.boardInvitation.status === INVITATION_STATUS.ACCEPTED
+          ) {
+            navigate(`/boards/${res.payload.boardInvitation.boardId}`)
+          }
+        }
+      )
+    },
+    [dispatch, navigate]
+  )
+
+  const notify = useCallback(
+    (invitation, updateBoardInvitation) => {
+      toast(CustomToastNotification, {
+        data: { invitation, updateBoardInvitation },
+        autoClose: 5000,
+        closeButton: false,
+        pauseOnHover: true,
+        closeOnClick: true,
+        style: {
+          backgroundColor: mode === 'dark' ? '#1e2125' : '#fff',
+          padding: 0
+        }
+      })
+    },
+    [mode]
+  )
+
+  // Hàm này sẽ được gọi mỗi khi có một sự kiện realtime từ server gửi về
+  const onReceiveInvitation = useCallback(
+    (invitation) => {
+      if (invitation.inviteeId === currentUser?._id) {
+        dispatch(addNotification(invitation))
+        notify(invitation, updateBoardInvitation)
       }
-    })
-  }
+    },
+    [currentUser, dispatch, notify, updateBoardInvitation]
+  )
 
   useEffect(() => {
     dispatch(fetchInvitationAPI())
-
-    // Hàm này sẽ được gọi mỗi khi có một sự kiện realtime từ server gửi về
-    const onReceiveInvitation = (invitation) => {
-      if (invitation.inviteeId === currentUser?._id) {
-        dispatch(addNotification(invitation))
-        setNewNotifications(true)
-      }
-    }
 
     // Lắng nghe sự kiện realtime từ server gửi về có tên là BE_INVITED_USER_TO_BOARD
     socket.on('BE_INVITED_USER_TO_BOARD', onReceiveInvitation)
@@ -76,14 +99,22 @@ function Notifications() {
     return () => {
       socket.off('BE_INVITED_USER_TO_BOARD', onReceiveInvitation)
     }
-  }, [dispatch, currentUser])
+  }, [currentUser, dispatch, updateBoardInvitation, onReceiveInvitation])
 
   return (
     <Box>
       <Tooltip title='Notifications'>
         <Badge
           color='warning'
-          variant={newNotifications ? 'dot' : 'none'}
+          variant={
+            notifications?.find(
+              (notification) =>
+                notification?.boardInvitation.status ===
+                INVITATION_STATUS.PENDING
+            )
+              ? 'dot'
+              : 'none'
+          }
           sx={{ cursor: 'pointer' }}
           id='basic-button-open-notification'
           aria-controls={open ? 'basic-notification-drop-down' : undefined}
@@ -93,8 +124,12 @@ function Notifications() {
         >
           <NotificationsNoneIcon
             sx={{
-              color: newNotifications
-                ? 'yellow'
+              color: notifications?.find(
+                (notification) =>
+                  notification?.boardInvitation.status ===
+                  INVITATION_STATUS.PENDING
+              )
+                ? '#ffcc00'
                 : (theme) =>
                     theme.palette.mode === 'dark' ? '#9fadbc' : '#44556F'
             }}
@@ -155,7 +190,7 @@ function Notifications() {
                   </Box>
                   <Box>
                     <strong>{notification?.inviter?.displayName}</strong> had
-                    invited you to join the board{' '}
+                    invited you to join the board&nbsp;
                     <strong>{notification?.board?.title}</strong>
                   </Box>
                 </Box>
