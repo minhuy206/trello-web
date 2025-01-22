@@ -8,4 +8,10 @@ export const CARD_MEMBER_ACTION = {
   REMOVE: 'remove'
 }
 
+export const INVITATION_STATUS = {
+  PENDING: 'pending',
+  ACCEPTED: 'accepted',
+  REJECTED: 'rejected'
+}
+
 export const OTP_LENGTH = 6
