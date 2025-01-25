@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid2'
 import Stack from '@mui/material/Stack'
 import Divider from '@mui/material/Divider'
+import Skeleton from '@mui/material/Skeleton'
 import CreditCardIcon from '@mui/icons-material/CreditCard'
 import CancelIcon from '@mui/icons-material/Cancel'
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
@@ -31,6 +32,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   clearAndHideCurrentActiveCard,
   selectCurrentActiveCard,
+  selectIsFetching,
   selectIsShowActiveCardModal,
   setCurrentActiveCard
 } from '~/redux/activeCard/activeCardSlice'
@@ -44,7 +46,7 @@ import CardDescriptionMdEditor from './CardDescriptionMdEditor'
 import CardActivitySection from './CardActivitySection'
 
 import { singleFileValidator } from '~/utils/validators'
-import { updateCardAPI } from '~/apis'
+import { commentOnCardAPI, updateCardAPI } from '~/apis'
 import { CARD_MEMBER_ACTION } from '~/utils/constants'
 
 const SidebarItem = styled(Box)(({ theme }) => ({
@@ -72,6 +74,7 @@ function ActiveCard() {
   const dispatch = useDispatch()
   const activeCard = useSelector(selectCurrentActiveCard)
   const isShowActiveCardModal = useSelector(selectIsShowActiveCardModal)
+  const isFetching = useSelector(selectIsFetching)
   const currentUser = useSelector(selectCurrentUser)
 
   const handleCloseModal = () => {
@@ -111,8 +114,13 @@ function ActiveCard() {
     )
   }
 
-  const handleComment = async (comment) => {
-    await handleUpdateCard({ comment })
+  const handleComment = async (content) => {
+    const newComment = await commentOnCardAPI({
+      content,
+      cardId: activeCard._id,
+      userId: currentUser._id
+    })
+    return newComment
   }
 
   const handleUpdateCardMember = (updateCardMemberIdData) => {
@@ -156,19 +164,28 @@ function ActiveCard() {
           />
         </Box>
 
-        {activeCard?.cover && (
-          <Box sx={{ mb: 4 }}>
-            <img
-              style={{
-                width: '100%',
-                height: '320px',
-                borderRadius: '6px',
-                objectFit: 'cover'
-              }}
-              src={activeCard?.cover}
-              alt='card-cover'
-            />
-          </Box>
+        {!isFetching ? (
+          activeCard?.cover && (
+            <Box sx={{ mb: 4 }}>
+              <img
+                style={{
+                  width: '100%',
+                  height: '320px',
+                  borderRadius: '6px',
+                  objectFit: 'cover'
+                }}
+                src={activeCard?.cover}
+                alt='card-cover'
+              />
+            </Box>
+          )
+        ) : (
+          <Skeleton
+            variant='rectangular'
+            width='100%'
+            height='320px'
+            sx={{ mb: 4 }}
+          />
         )}
 
         <Box
@@ -210,6 +227,7 @@ function ActiveCard() {
               <CardUserGroup
                 currentUserId={currentUser._id}
                 cardMemberIds={activeCard?.memberIds}
+                isFetching={isFetching}
                 handleUpdateCardMember={handleUpdateCardMember}
               />
             </Box>
@@ -237,6 +255,7 @@ function ActiveCard() {
 
               {/* Feature 03: Xử lý mô tả của Card */}
               <CardDescriptionMdEditor
+                isFetching={isFetching}
                 cardDescriptionProp={activeCard?.description}
                 handleUpdateCardDescription={handleUpdateCardDescription}
               />
@@ -265,6 +284,7 @@ function ActiveCard() {
 
               {/* Feature 04: Xử lý các hành động, ví dụ comment vào Card */}
               <CardActivitySection
+                isFetching={isFetching}
                 comments={activeCard?.comments}
                 handleComment={handleComment}
               />

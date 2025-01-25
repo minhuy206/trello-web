@@ -12,7 +12,7 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useDispatch } from 'react-redux'
 import {
-  setCurrentActiveCard,
+  fetchCardAPI,
   showActiveCardModal
 } from '~/redux/activeCard/activeCardSlice'
 
@@ -35,7 +35,7 @@ function Card({ card }) {
   }
 
   const setActiveCard = () => {
-    dispatch(setCurrentActiveCard(card))
+    dispatch(fetchCardAPI(card?._id))
     dispatch(showActiveCardModal())
   }
 
@@ -71,7 +71,7 @@ function Card({ card }) {
         <Typography fontWeight={500}>{card?.title}</Typography>
       </CardContent>
       {(!!card?.memberIds?.length ||
-        !!card?.comments?.length ||
+        !!card?.commentIds?.length ||
         !!card?.attachments?.length) && (
         <CardActions sx={{ px: 0.5, pb: 1, pt: 0 }}>
           {!!card?.memberIds?.length && (
@@ -79,9 +79,9 @@ function Card({ card }) {
               {card?.memberIds.length}
             </Button>
           )}
-          {!!card?.comments?.length && (
+          {!!card?.commentIds?.length && (
             <Button size='small' startIcon={<CommentIcon />}>
-              {card?.comments.length}
+              {card?.commentIds?.length}
             </Button>
           )}
           {!!card?.attachments?.length && (
