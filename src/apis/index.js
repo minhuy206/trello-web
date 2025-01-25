@@ -1,4 +1,3 @@
-import { red } from '@mui/material/colors'
 import authorizeAxiosInstance from '~/utils/authorizeAxios'
 import { API_ROOT } from '~/utils/constants'
 
@@ -111,4 +110,9 @@ export const inviteUserToBoardAPI = async (boardId, inviteeEmail) => {
       { inviteeEmail }
     )
   ).data
+}
+
+export const commentOnCardAPI = async (comment) => {
+  return (await authorizeAxiosInstance.post(`${API_ROOT}/v1/comments`, comment))
+    .data
 }

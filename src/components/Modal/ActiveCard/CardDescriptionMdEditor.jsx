@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Skeleton from '@mui/material/Skeleton'
 import { useColorScheme } from '@mui/material/styles'
 import MDEditor from '@uiw/react-md-editor'
 import rehypeSanitize from 'rehype-sanitize'
@@ -7,6 +8,7 @@ import Button from '@mui/material/Button'
 import EditNoteIcon from '@mui/icons-material/EditNote'
 
 function CardDescriptionMdEditor({
+  isFetching,
   cardDescriptionProp,
   handleUpdateCardDescription
 }) {
@@ -25,7 +27,9 @@ function CardDescriptionMdEditor({
 
   return (
     <Box sx={{ mt: -4 }}>
-      {markdownEditMode ? (
+      {isFetching ? (
+        <Skeleton variant='rectangular' height={400} sx={{ mt: 5 }} />
+      ) : markdownEditMode ? (
         <Box sx={{ mt: 5, display: 'flex', flexDirection: 'column', gap: 1 }}>
           <Box data-color-mode={mode}>
             <MDEditor
