@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import authorizeAxiosInstance from '~/utils/authorizeAxios'
 import { API_ROOT } from '~/utils/constants'
+import { mapOrder } from '~/utils/sort'
 
 const initialState = {
   currentActiveCard: null,
@@ -23,6 +24,12 @@ export const activeCardSlice = createSlice({
     showActiveCardModal: (state) => {
       state.isShowActiveCardModal = true
     },
+    updateCard: (state, action) => {
+      state.currentActiveCard = {
+        ...state.currentActiveCard,
+        ...action.payload
+      }
+    },
     clearAndHideCurrentActiveCard: (state) => {
       state.currentActiveCard = null
       state.isShowActiveCardModal = false
@@ -31,7 +38,9 @@ export const activeCardSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchCardAPI.fulfilled, (state, action) => {
-      state.currentActiveCard = action.payload
+      const card = action.payload
+      card.comments = mapOrder(card.comments, card.commentIds, '_id')
+      state.currentActiveCard = card
       state.isFetching = false
     })
   }
@@ -40,7 +49,7 @@ export const activeCardSlice = createSlice({
 export const {
   showActiveCardModal,
   clearAndHideCurrentActiveCard,
-  setCurrentActiveCard
+  updateCard
 } = activeCardSlice.actions
 
 export const selectCurrentActiveCard = (state) =>
