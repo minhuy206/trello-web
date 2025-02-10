@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import TextField from '@mui/material/TextField'
-import { SignalWifiStatusbarNullOutlined } from '@mui/icons-material'
 
 function ToggleFocusInput({
   value,
-  setColumnTitle = SignalWifiStatusbarNullOutlined,
+  setColumnTitle = null,
   onChangedValue,
   inputFontSize = '16px',
   setOpenInput,
