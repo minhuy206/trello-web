@@ -28,7 +28,7 @@ export const activeBoardSlice = createSlice({
       state.currentActiveBoard = action.payload
     },
     updateBoard: (state, action) => {
-      const { updatedCard } = action.payload
+      const updatedCard = action.payload
       const column = state.currentActiveBoard.columns.find(
         (column) => column._id === updatedCard.columnId
       )

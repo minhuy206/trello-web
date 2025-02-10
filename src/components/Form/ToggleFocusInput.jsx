@@ -3,6 +3,7 @@ import TextField from '@mui/material/TextField'
 
 function ToggleFocusInput({
   value,
+  setColumnTitle = null,
   onChangedValue,
   inputFontSize = '16px',
   setOpenInput,
@@ -19,6 +20,7 @@ function ToggleFocusInput({
       return
     }
     onChangedValue(inputValue)
+    setColumnTitle && setColumnTitle(inputValue)
   }
 
   return (
@@ -30,7 +32,7 @@ function ToggleFocusInput({
       fullWidth
       variant='outlined'
       size='small'
-      value={inputValue}
+      value={inputValue ?? value}
       onChange={(event) => {
         setInputValue(event.target.value)
       }}

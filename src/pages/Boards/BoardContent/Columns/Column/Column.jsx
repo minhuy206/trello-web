@@ -59,6 +59,7 @@ function Column({ column }) {
   const open = Boolean(anchorEl)
   const [opened, setOpened] = useState(false)
   const [title, setTitle] = useState('')
+  const [columnTitle, setColumnTitle] = useState(column?.title)
 
   const confirmDeleteColumn = useConfirm()
 
@@ -178,9 +179,10 @@ function Column({ column }) {
         >
           {openInput ? (
             <ToggleFocusInput
-              value={column?.title}
+              value={columnTitle}
               onChangedValue={handleUpdateColumnTitle}
               setOpenInput={setOpenInput}
+              setColumnTitle={setColumnTitle}
               autoFocus={true}
             />
           ) : (
@@ -198,7 +200,7 @@ function Column({ column }) {
               }}
               variant='h6'
             >
-              {column?.title}
+              {columnTitle}
             </Typography>
           )}
 

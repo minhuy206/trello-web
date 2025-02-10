@@ -34,7 +34,7 @@ import {
   selectCurrentActiveCard,
   selectIsFetching,
   selectIsShowActiveCardModal,
-  setCurrentActiveCard
+  updateCard
 } from '~/redux/activeCard/activeCardSlice'
 import { selectCurrentUser } from '~/redux/user/userSlice'
 import { updateBoard } from '~/redux/activeBoard/activeBoardSlice'
@@ -84,9 +84,8 @@ function ActiveCard() {
   const handleUpdateCard = async (card) => {
     const updatedCard = await updateCardAPI(activeCard._id, card)
 
-    dispatch(setCurrentActiveCard(updatedCard))
-
-    dispatch(updateBoard({ updatedCard }))
+    dispatch(updateCard(updatedCard))
+    dispatch(updateBoard(updatedCard))
 
     return updatedCard
   }
@@ -118,9 +117,24 @@ function ActiveCard() {
     const newComment = await commentOnCardAPI({
       content,
       cardId: activeCard._id,
+      columnId: activeCard.columnId,
       userId: currentUser._id
     })
-    return newComment
+    newComment.user = currentUser
+
+    dispatch(
+      updateCard({
+        commentIds: [newComment._id, ...activeCard.commentIds],
+        comments: [newComment, ...activeCard.comments]
+      })
+    )
+
+    dispatch(
+      updateBoard({
+        ...activeCard,
+        commentIds: [newComment._id, ...activeCard.commentIds]
+      })
+    )
   }
 
   const handleUpdateCardMember = (updateCardMemberIdData) => {
