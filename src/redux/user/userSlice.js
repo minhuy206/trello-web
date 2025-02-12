@@ -26,6 +26,15 @@ export const updateUserAPI = createAsyncThunk(
   }
 )
 
+export const deleteUserAvatarAPI = createAsyncThunk(
+  'user/deleteUserAvatarAPI',
+  async () => {
+    return (
+      await authorizeAxiosInstance.delete(`${API_ROOT}/v1/users/delete-avatar`)
+    ).data
+  }
+)
+
 export const verifyUserAPI = createAsyncThunk(
   'user/verifyUserAPI',
   async ({ email, otp }) => {
@@ -49,15 +58,18 @@ export const userSlice = createSlice({
     builder.addCase(logoutAPI.fulfilled, (state) => {
       state.currentUser = null
     })
-    builder.addCase(updateUserAPI.fulfilled, (state, action) => {
-      state.currentUser = action.payload
-    })
     builder.addCase(verifyUserAPI.fulfilled, (state, action) => {
       if (state.currentUser) {
         state.currentUser = action.payload
       } else {
         state.currentUser = null
       }
+    })
+    builder.addCase(updateUserAPI.fulfilled, (state, action) => {
+      state.currentUser = action.payload
+    })
+    builder.addCase(deleteUserAvatarAPI.fulfilled, (state, action) => {
+      state.currentUser = action.payload
     })
   }
 })

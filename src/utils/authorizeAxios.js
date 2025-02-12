@@ -98,9 +98,7 @@ authorizeAxiosInstance.interceptors.response.use(
     let errorMessage = error?.response?.data?.message ?? error?.message
     // Dùng toastify để hiển thị mã lỗi lên màn hình - Ngoại trừ mã 410 - GONE phục vụ cho việc tự động refresh token
     if (error?.response?.status !== 410) {
-      toast.error(errorMessage.replace('ValidationError: ', ''), {
-        theme: 'colored'
-      })
+      toast.error(errorMessage.replace('ValidationError: ', ''))
     }
 
     return Promise.reject(error)

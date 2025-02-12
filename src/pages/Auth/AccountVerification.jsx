@@ -41,11 +41,11 @@ function AccountVerification() {
 
   const handleSubmit = () => {
     if (!otp) {
-      toast.error('Please enter OTP', { theme: 'colored' })
+      toast.error('Please enter OTP')
       return
     }
     if (otp.length < OTP_LENGTH) {
-      toast.error('Please enter valid OTP', { theme: 'colored' })
+      toast.error('Please enter valid OTP')
       return
     }
 

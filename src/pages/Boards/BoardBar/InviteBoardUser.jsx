@@ -36,7 +36,7 @@ function InviteBoardUser({ boardId }) {
     inviteUserToBoardAPI(boardId, inviteeEmail).then((invitation) => {
       setValue('inviteeEmail', null)
       setAnchorPopoverElement(null)
-      toast.success('Invitation sent!', { theme: 'colored' })
+      toast.success('Invitation sent!')
       socket.emit('FE_INVITED_USER_TO_BOARD', invitation)
     })
   }
