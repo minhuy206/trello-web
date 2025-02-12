@@ -114,10 +114,14 @@ function ActiveCard() {
   }
 
   const handleComment = async (content) => {
+    if (!activeCard.memberIds.includes(currentUser._id)) {
+      throw new Error('Please join the card to comment!')
+    }
     const newComment = await commentOnCardAPI({
       content,
-      cardId: activeCard._id,
+      boardId: activeCard.boardId,
       columnId: activeCard.columnId,
+      cardId: activeCard._id,
       userId: currentUser._id
     })
     newComment.user = currentUser

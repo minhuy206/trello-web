@@ -12,10 +12,15 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
+import RestoreIcon from '@mui/icons-material/Restore'
 
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectCurrentUser, updateUserAPI } from '~/redux/user/userSlice'
+import {
+  deleteUserAvatarAPI,
+  selectCurrentUser,
+  updateUserAPI
+} from '~/redux/user/userSlice'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
@@ -39,6 +44,16 @@ function AccountSetting() {
   const open = Boolean(anchorEl)
   const lgDown = useMediaQuery((theme) => theme.breakpoints.down('lg'))
   const mdDown = useMediaQuery((theme) => theme.breakpoints.down('md'))
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors }
+  } = useForm({
+    defaultValues: {
+      displayName: currentUser?.displayName
+    }
+  })
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget)
@@ -46,18 +61,6 @@ function AccountSetting() {
   const handleClose = () => {
     setAnchorEl(null)
   }
-
-  const initialGeneralForm = {
-    displayName: currentUser?.displayName
-  }
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors }
-  } = useForm({
-    defaultValues: initialGeneralForm
-  })
 
   const submitChange = ({ displayName, currentPassword, newPassword }) => {
     if (
@@ -69,15 +72,21 @@ function AccountSetting() {
       return
 
     const reqData = new FormData()
-    reqData.append('displayName', displayName)
-    reqData.append('currentPassword', currentPassword)
-    reqData.append('newPassword', newPassword)
-    reqData.append('avatar', avatar)
+    displayName && reqData.append('displayName', displayName)
+    currentPassword && reqData.append('currentPassword', currentPassword)
+    newPassword && reqData.append('newPassword', newPassword)
+    avatar && reqData.append('avatar', avatar)
 
-    toast.promise(dispatch(updateUserAPI(reqData)), {
-      pending: 'Updating...',
-      success: 'Updated successfully!'
-    })
+    toast
+      .promise(dispatch(updateUserAPI(reqData)), {
+        pending: 'Updating...'
+      })
+      .then((res) => {
+        if (res.payload) {
+          setDisplayAvatar(res.payload.avatar && res.payload.avatar)
+          toast.success('Updated successfully!')
+        }
+      })
   }
 
   const uploadAvatar = (e) => {
@@ -92,8 +101,15 @@ function AccountSetting() {
   }
 
   const handleDeleteAvatar = () => {
-    setAvatar('')
-    setDisplayAvatar(null)
+    toast
+      .promise(dispatch(deleteUserAvatarAPI()), {
+        pending: 'Updating...',
+        success: 'Updated successfully!'
+      })
+      .then(() => {
+        setAvatar('')
+        setDisplayAvatar(null)
+      })
   }
 
   return (
@@ -167,7 +183,7 @@ function AccountSetting() {
                         theme.palette.mode === 'dark'
                           ? '0 0 5px 0 rgba(0, 0, 0, 0.2)'
                           : '0 0 5px 0 rgba(255, 255, 255, 0.2)',
-                      bgcolor: (theme) => theme.palette.background.primary
+                      bgcolor: (theme) => theme.palette.background.default
                     }}
                     id='basic-button-edit-avatar'
                     size='small'
@@ -190,7 +206,7 @@ function AccountSetting() {
                     sx={{
                       '& .MuiList-root': {
                         padding: '0 !important',
-                        bgcolor: (theme) => theme.palette.background.primary,
+                        bgcolor: (theme) => theme.palette.background.default,
                         '& .MuiMenuItem-root': {
                           padding: 0
                         }
@@ -218,23 +234,44 @@ function AccountSetting() {
                         />
                       </Button>
                     </MenuItem>
-                    <MenuItem>
-                      <Button
-                        sx={{
-                          color: (theme) =>
-                            theme.palette.mode === 'dark'
-                              ? '#9fadbc'
-                              : '#182a4d',
-                          width: '100%',
-                          padding: 1
-                        }}
-                        size='small'
-                        startIcon={<DeleteIcon />}
-                        onClick={handleDeleteAvatar}
-                      >
-                        Delete your avatar
-                      </Button>
-                    </MenuItem>
+                    {displayAvatar !== currentUser?.avatar && displayAvatar && (
+                      <MenuItem>
+                        <Button
+                          sx={{
+                            color: (theme) =>
+                              theme.palette.mode === 'dark'
+                                ? '#9fadbc'
+                                : '#182a4d',
+                            width: '100%',
+                            padding: 1
+                          }}
+                          size='small'
+                          startIcon={<RestoreIcon />}
+                          onClick={() => setDisplayAvatar(currentUser?.avatar)}
+                        >
+                          Revert your avatar
+                        </Button>
+                      </MenuItem>
+                    )}
+                    {currentUser?.avatar && (
+                      <MenuItem>
+                        <Button
+                          sx={{
+                            color: (theme) =>
+                              theme.palette.mode === 'dark'
+                                ? '#9fadbc'
+                                : '#182a4d',
+                            width: '100%',
+                            padding: 1
+                          }}
+                          size='small'
+                          startIcon={<DeleteIcon />}
+                          onClick={handleDeleteAvatar}
+                        >
+                          Delete your avatar
+                        </Button>
+                      </MenuItem>
+                    )}
                   </Menu>
                 </Box>
               </Box>

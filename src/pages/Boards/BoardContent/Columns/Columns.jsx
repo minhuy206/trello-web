@@ -36,11 +36,7 @@ function Columns({ columns }) {
 
   const addNewColumn = async () => {
     if (!title) {
-      toast.error('Please enter a title!', {
-        position: 'top-right',
-        autoClose: 3000,
-        theme: 'colored'
-      })
+      toast.error('Please enter a title!')
       return
     }
 

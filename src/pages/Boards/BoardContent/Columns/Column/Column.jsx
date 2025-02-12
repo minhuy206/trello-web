@@ -75,11 +75,7 @@ function Column({ column }) {
 
   const addNewCard = async () => {
     if (!title) {
-      toast.error('Please enter a title!', {
-        position: 'top-right',
-        autoClose: 3000,
-        theme: 'colored'
-      })
+      toast.error('Please enter a title!')
       return
     }
 
@@ -104,7 +100,6 @@ function Column({ column }) {
     }
 
     dispatch(setCurrentActiveBoard(newBoard))
-
     toggleOpened()
     setTitle('')
   }
@@ -129,11 +124,7 @@ function Column({ column }) {
       dispatch(setCurrentActiveBoard(newBoard))
 
       deleteColumnAPI(column._id).then((res) => {
-        toast.success(res?.result, {
-          position: 'top-right',
-          autoClose: 3000,
-          theme: 'colored'
-        })
+        toast.success(res?.result)
       })
     })
   }

@@ -4,8 +4,6 @@ import CssBaseline from '@mui/material/CssBaseline'
 import { GlobalStyles } from '@mui/material'
 import { ThemeProvider } from '@mui/material/styles'
 
-import { ToastContainer } from 'react-toastify'
-
 import { ConfirmProvider } from 'material-ui-confirm'
 
 import { Provider } from 'react-redux'
@@ -40,7 +38,6 @@ createRoot(document.getElementById('root')).render(
             <GlobalStyles styles={{ a: { textDecoration: 'none' } }} />
             <CssBaseline />
             <App />
-            <ToastContainer />
           </ConfirmProvider>
         </ThemeProvider>
       </BrowserRouter>

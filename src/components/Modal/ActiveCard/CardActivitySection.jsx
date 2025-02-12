@@ -8,6 +8,7 @@ import Skeleton from '@mui/material/Skeleton'
 
 import { useSelector } from 'react-redux'
 import { selectCurrentUser } from '~/redux/user/userSlice'
+import { toast } from 'react-toastify'
 
 function CardActivitySection({ comments = [], isFetching, handleComment }) {
   const currentUser = useSelector(selectCurrentUser)
@@ -16,9 +17,13 @@ function CardActivitySection({ comments = [], isFetching, handleComment }) {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault()
       if (!event.target?.value) return
-      handleComment(event.target.value.trim()).then(() => {
-        event.target.value = ''
-      })
+      handleComment(event.target.value.trim())
+        .then(() => {
+          event.target.value = ''
+        })
+        .catch((error) => {
+          toast.error(error.message)
+        })
     }
   }
 
