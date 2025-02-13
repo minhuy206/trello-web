@@ -35,7 +35,7 @@ function AutoCompleteSearchBoard() {
       })
       .finally(() => setLoading(false))
   }
-  const debounceFetchBoards = useDebounceFn(handleInputSearchChange, 1000)
+  const debounceFetchBoards = useDebounceFn(handleInputSearchChange, 500)
 
   const handleSelectedBoard = (event, selectedBoard) => {
     if (!selectedBoard) return

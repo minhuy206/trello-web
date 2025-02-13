@@ -73,35 +73,38 @@ function Column({ column }) {
     setOpened(!opened)
   }
 
-  const addNewCard = async () => {
-    if (!title) {
-      toast.error('Please enter a title!')
-      return
-    }
-
-    const createdCard = await createNewCardAPI({
-      ...{ title, columnId: column._id },
-      boardId: board._id
-    })
-
-    const newBoard = cloneDeep(board)
-    const columnToUpdate = newBoard.columns.find(
-      (column) => column._id === createdCard.columnId
-    )
-
-    if (columnToUpdate) {
-      if (columnToUpdate.cards.some((card) => card.FE_PlaceholderCard)) {
-        columnToUpdate.cards = [createdCard]
-        columnToUpdate.cardOrderIds = [createdCard._id]
-      } else {
-        columnToUpdate.cards.push(createdCard)
-        columnToUpdate.cardOrderIds.push(createdCard._id)
+  const addNewCard = async (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault()
+      if (!title) {
+        toast.error('Please enter a title!')
+        return
       }
-    }
 
-    dispatch(setCurrentActiveBoard(newBoard))
-    toggleOpened()
-    setTitle('')
+      const createdCard = await createNewCardAPI({
+        ...{ title, columnId: column._id },
+        boardId: board._id
+      })
+
+      const newBoard = cloneDeep(board)
+      const columnToUpdate = newBoard.columns.find(
+        (column) => column._id === createdCard.columnId
+      )
+
+      if (columnToUpdate) {
+        if (columnToUpdate.cards.some((card) => card.FE_PlaceholderCard)) {
+          columnToUpdate.cards = [createdCard]
+          columnToUpdate.cardOrderIds = [createdCard._id]
+        } else {
+          columnToUpdate.cards.push(createdCard)
+          columnToUpdate.cardOrderIds.push(createdCard._id)
+        }
+      }
+
+      dispatch(setCurrentActiveBoard(newBoard))
+      toggleOpened()
+      setTitle('')
+    }
   }
 
   const handleDeleteColumn = (columnId) => {
@@ -334,6 +337,7 @@ function Column({ column }) {
                 data-no-dnd='true'
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+                onKeyDown={addNewCard}
                 sx={{
                   '& label': {
                     color: (theme) => theme.palette.primary.main

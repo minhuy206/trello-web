@@ -34,27 +34,29 @@ function Columns({ columns }) {
     setOpened(!opened)
   }
 
-  const addNewColumn = async () => {
-    if (!title) {
-      toast.error('Please enter a title!')
-      return
+  const addNewColumn = async (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault()
+      if (!title) {
+        toast.error('Please enter a title!')
+        return
+      }
+      const createdColumn = await createNewColumnAPI({
+        ...{ title },
+        boardId: board?._id
+      })
+
+      createdColumn.cards = [generatePlaceholderCard(createdColumn)]
+      createdColumn.cardOrderIds = [generatePlaceholderCard(createdColumn)._id]
+
+      const newBoard = cloneDeep(board)
+      newBoard.columns.push(createdColumn)
+      newBoard.columnOrderIds.push(createdColumn._id)
+      dispatch(setCurrentActiveBoard(newBoard))
+
+      toggleOpened()
+      setTitle('')
     }
-
-    const createdColumn = await createNewColumnAPI({
-      ...{ title },
-      boardId: board?._id
-    })
-
-    createdColumn.cards = [generatePlaceholderCard(createdColumn)]
-    createdColumn.cardOrderIds = [generatePlaceholderCard(createdColumn)._id]
-
-    const newBoard = cloneDeep(board)
-    newBoard.columns.push(createdColumn)
-    newBoard.columnOrderIds.push(createdColumn._id)
-    dispatch(setCurrentActiveBoard(newBoard))
-
-    toggleOpened()
-    setTitle('')
   }
 
   return columns ? (
@@ -93,7 +95,7 @@ function Columns({ columns }) {
               sx={{
                 color: '#fff',
                 bgcolor: '#ffffff3d',
-                width: '100%',
+                width: '270px',
                 justifyContent: 'flex-start',
                 px: 2.5,
                 py: 1,
@@ -122,8 +124,10 @@ function Columns({ columns }) {
               variant='outlined'
               autoFocus
               data-no-dnd='true'
+              size='small'
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              onKeyDown={addNewColumn}
               sx={{
                 width: '270px',
                 '& label': {
