@@ -41,7 +41,6 @@ function CreateBoardModal({ open = false, setOpen }) {
 
   const submitCreateNewBoard = (data) => {
     const { title, description, type } = data
-
     toast
       .promise(createNewBoardAPI({ title, description, type }), {
         pending: 'Creating...',

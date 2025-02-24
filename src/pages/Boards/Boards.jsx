@@ -132,7 +132,7 @@ function Boards() {
                         boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
                         textDecoration: 'none',
                         overflow: 'hidden',
-                        minHeight: '160px',
+                        height: '160px',
                         bgcolor: (theme) =>
                           theme.palette.mode === 'dark' ? '#091e420f' : '#fff'
                       }}
@@ -199,7 +199,7 @@ function Boards() {
                     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
                     textDecoration: 'none',
                     overflow: 'hidden',
-                    height: '12vh'
+                    height: '160px'
                   }}
                 >
                   <Skeleton

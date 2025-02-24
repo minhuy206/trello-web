@@ -13,7 +13,6 @@ function CustomToastNotification({
       container
       sx={{
         display: 'flex',
-        // pl: 4.5,
         justifyContent: 'flex-end',
         gap: 2,
         alignItems: 'center',
@@ -45,7 +44,7 @@ function CustomToastNotification({
         >
           You have a new invitation from
           <br />
-          {invitation?.inviter?.username}
+          <strong>{invitation?.inviter?.username}</strong>
         </Typography>
       </Grid>
       <Grid size={{ sx: 2 }} sx={{ display: 'flex', flexDirection: 'column' }}>

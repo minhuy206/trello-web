@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { Navigate, useParams } from 'react-router-dom'
 
 import {
   fetchBoardAPI,
@@ -11,12 +11,17 @@ import {
 import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 import ActiveCard from '~/components/Modal/ActiveCard/ActiveCardModal'
+const OBJECT_ID_RULE = /^[0-9a-fA-F]{24}$/
 
 function Board() {
   const dispatch = useDispatch()
   const board = useSelector(selectCurrentActiveBoard)
   const { _id } = useParams()
+  if (!OBJECT_ID_RULE.test(_id)) {
+    return <Navigate to='/404' replace={true} />
+  }
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     dispatch(fetchBoardAPI(_id))
 

@@ -79,7 +79,7 @@ function BoardBar({ board }) {
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
         <InviteBoardUser boardId={board?._id} />
-        <BoardUserGroup boardUsers={board?.owners.concat(board?.members)} />
+        <BoardUserGroup boardUsers={board?.owners?.concat(board?.members)} />
       </Box>
     </Box>
   ) : (
