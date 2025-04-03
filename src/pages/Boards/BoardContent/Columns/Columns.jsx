@@ -33,27 +33,35 @@ function Columns({ columns }) {
   const toggleOpened = () => {
     setOpened(!opened)
   }
+  const addNewColumn = async () => {
+    const createdColumn = await createNewColumnAPI({
+      ...{ title },
+      boardId: board?._id
+    })
 
-  const addNewColumn = async (event) => {
+    createdColumn.cards = [generatePlaceholderCard(createdColumn)]
+    createdColumn.cardOrderIds = [generatePlaceholderCard(createdColumn)._id]
+
+    const newBoard = cloneDeep(board)
+    newBoard.columns.push(createdColumn)
+    newBoard.columnOrderIds.push(createdColumn._id)
+    dispatch(setCurrentActiveBoard(newBoard))
+
+    toggleOpened()
+    setTitle('')
+  }
+
+  const handleAddNewColumn = (event) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault()
       if (!title) {
         toast.error('Please enter a title!')
         return
       }
-      const createdColumn = await createNewColumnAPI({
-        ...{ title },
-        boardId: board?._id
-      })
-
-      createdColumn.cards = [generatePlaceholderCard(createdColumn)]
-      createdColumn.cardOrderIds = [generatePlaceholderCard(createdColumn)._id]
-
-      const newBoard = cloneDeep(board)
-      newBoard.columns.push(createdColumn)
-      newBoard.columnOrderIds.push(createdColumn._id)
-      dispatch(setCurrentActiveBoard(newBoard))
-
+      return addNewColumn()
+    } else if (!event.key) {
+      return addNewColumn()
+    } else if (event.key === 'Escape') {
       toggleOpened()
       setTitle('')
     }
@@ -127,7 +135,7 @@ function Columns({ columns }) {
               size='small'
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              onKeyDown={addNewColumn}
+              onKeyDown={handleAddNewColumn}
               sx={{
                 width: '270px',
                 '& label': {
@@ -162,7 +170,7 @@ function Columns({ columns }) {
                   borderColor: '#fff',
                   color: '#fff'
                 }}
-                onClick={addNewColumn}
+                onClick={handleAddNewColumn}
               >
                 Add column
               </Button>
