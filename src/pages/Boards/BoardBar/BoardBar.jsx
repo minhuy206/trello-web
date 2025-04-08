@@ -10,8 +10,8 @@ import BoltRoundedIcon from '@mui/icons-material/BoltRounded'
 import FilterListRoundedIcon from '@mui/icons-material/FilterListRounded'
 
 import { capitalizeFirstLetter } from '~/utils/formatter'
-import BoardUserGroup from './BoardUserGroup'
 import InviteBoardUser from './InviteBoardUser'
+import BoardMembersGroup from './BoardUserGroup'
 
 const MENU_STYLE = {
   color: '#fff',
@@ -79,7 +79,7 @@ function BoardBar({ board }) {
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
         <InviteBoardUser boardId={board?._id} />
-        <BoardUserGroup boardUsers={board?.owners?.concat(board?.members)} />
+        <BoardMembersGroup boardMembers={board?.members} />
       </Box>
     </Box>
   ) : (

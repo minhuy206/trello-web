@@ -34,12 +34,6 @@ import { useColorScheme } from '@mui/material'
 function Notifications() {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
-  const handleClickNotificationIcon = (event) => {
-    setAnchorEl(event.currentTarget)
-  }
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const notifications = useSelector(selectCurrentNotifications)
@@ -47,16 +41,12 @@ function Notifications() {
   const { mode } = useColorScheme()
 
   const updateBoardInvitation = useCallback(
-    (invitationId, status) => {
-      dispatch(updateBoardInvitationAPI({ invitationId, status })).then(
-        (res) => {
-          if (
-            res.payload.boardInvitation.status === INVITATION_STATUS.ACCEPTED
-          ) {
-            navigate(`/boards/${res.payload.boardInvitation.boardId}`)
-          }
+    (body) => {
+      dispatch(updateBoardInvitationAPI(body)).then((res) => {
+        if (res.payload.status === INVITATION_STATUS.ACCEPTED) {
+          navigate(`/boards/${res.payload.boardId}`)
         }
-      )
+      })
     },
     [dispatch, navigate]
   )
@@ -101,6 +91,9 @@ function Notifications() {
     }
   }, [currentUser, dispatch, updateBoardInvitation, onReceiveInvitation])
 
+  if (!mode) {
+    return null
+  }
   return (
     <Box>
       <Tooltip title='Notifications'>
@@ -109,8 +102,7 @@ function Notifications() {
           variant={
             notifications?.find(
               (notification) =>
-                notification?.boardInvitation.status ===
-                INVITATION_STATUS.PENDING
+                notification?.status === INVITATION_STATUS.PENDING
             )
               ? 'dot'
               : 'none'
@@ -120,14 +112,15 @@ function Notifications() {
           aria-controls={open ? 'basic-notification-drop-down' : undefined}
           aria-haspopup='true'
           aria-expanded={open ? 'true' : undefined}
-          onClick={handleClickNotificationIcon}
+          onClick={(event) => {
+            setAnchorEl(event.currentTarget)
+          }}
         >
           <NotificationsNoneIcon
             sx={{
               color: notifications?.find(
                 (notification) =>
-                  notification?.boardInvitation.status ===
-                  INVITATION_STATUS.PENDING
+                  notification?.status === INVITATION_STATUS.PENDING
               )
                 ? '#ffcc00'
                 : (theme) =>
@@ -157,7 +150,9 @@ function Notifications() {
         id='basic-notification-drop-down'
         anchorEl={anchorEl}
         open={open}
-        onClose={handleClose}
+        onClose={() => {
+          setAnchorEl(null)
+        }}
         MenuListProps={{ 'aria-labelledby': 'basic-button-open-notification' }}
       >
         {(notifications ?? []).length === 0 && (
@@ -189,14 +184,13 @@ function Notifications() {
                     <GroupAddIcon fontSize='small' />
                   </Box>
                   <Box>
-                    <strong>{notification?.inviter?.displayName}</strong> had
+                    <strong>{notification?.createdBy?.displayName}</strong> had
                     invited you to join the board&nbsp;
                     <strong>{notification?.board?.title}</strong>
                   </Box>
                 </Box>
 
-                {notification?.boardInvitation.status ===
-                INVITATION_STATUS.PENDING ? (
+                {notification?.status === INVITATION_STATUS.PENDING ? (
                   <Box
                     sx={{
                       display: 'flex',
@@ -212,10 +206,10 @@ function Notifications() {
                       color='success'
                       size='small'
                       onClick={() =>
-                        updateBoardInvitation(
-                          notification?._id,
-                          INVITATION_STATUS.ACCEPTED
-                        )
+                        updateBoardInvitation({
+                          _id: notification?._id,
+                          status: INVITATION_STATUS.ACCEPTED
+                        })
                       }
                     >
                       Accept
@@ -227,10 +221,10 @@ function Notifications() {
                       color='secondary'
                       size='small'
                       onClick={() =>
-                        updateBoardInvitation(
-                          notification?._id,
-                          INVITATION_STATUS.REJECTED
-                        )
+                        updateBoardInvitation({
+                          _id: notification?._id,
+                          status: INVITATION_STATUS.REJECTED
+                        })
                       }
                     >
                       Reject
@@ -245,8 +239,7 @@ function Notifications() {
                       justifyContent: 'flex-end'
                     }}
                   >
-                    {notification?.boardInvitation.status ===
-                    INVITATION_STATUS.ACCEPTED ? (
+                    {notification?.status === INVITATION_STATUS.ACCEPTED ? (
                       <Chip
                         icon={<DoneIcon />}
                         label='Accepted'

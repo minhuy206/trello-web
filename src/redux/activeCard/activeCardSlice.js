@@ -39,7 +39,7 @@ export const activeCardSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchCardAPI.fulfilled, (state, action) => {
       const card = action.payload
-      card.comments = mapOrder(card.comments, card.commentIds, '_id')
+      card.comments = mapOrder(card.comments, card.commentOrderIds, '_id')
       state.currentActiveCard = card
       state.isFetching = false
     })

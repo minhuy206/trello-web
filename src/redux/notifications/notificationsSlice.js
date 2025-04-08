@@ -15,12 +15,11 @@ export const fetchInvitationAPI = createAsyncThunk(
 
 export const updateBoardInvitationAPI = createAsyncThunk(
   'notifications/updateBoardInvitationAPI',
-  async ({ invitationId, status }) => {
+  async ({ _id, status }) => {
     return (
-      await authorizeAxiosInstance.put(
-        `${API_ROOT}/v1/invitations/${invitationId}`,
-        { status }
-      )
+      await authorizeAxiosInstance.put(`${API_ROOT}/v1/invitations/${_id}`, {
+        status
+      })
     ).data
   }
 )
@@ -36,7 +35,14 @@ export const notificationsSlice = createSlice({
       state.currentNotifications = action.payload
     },
     addNotification: (state, action) => {
-      state.currentNotifications.unshift(action.payload)
+      state.currentNotifications = state.currentNotifications.map(
+        (notification) => {
+          if (notification._id === action.payload._id) {
+            return action.payload
+          }
+          return notification
+        }
+      )
     }
   },
   extraReducers: (builder) => {
@@ -51,7 +57,7 @@ export const notificationsSlice = createSlice({
         const invitation = state.currentNotifications.find(
           (invitation) => invitation._id === action.payload._id
         )
-        invitation.boardInvitation = action.payload.boardInvitation
+        invitation.status = action.payload.status
       })
   }
 })

@@ -60,14 +60,7 @@ function Column({ column }) {
   const [opened, setOpened] = useState(false)
   const [title, setTitle] = useState('')
   const [columnTitle, setColumnTitle] = useState(column?.title)
-
   const confirmDeleteColumn = useConfirm()
-
-  const handleClick = (event) => setAnchorEl(event.currentTarget)
-
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
 
   const toggleOpened = () => {
     setOpened(!opened)
@@ -89,9 +82,10 @@ function Column({ column }) {
     }
   }
 
-  const addNewCard = async (event) => {
+  const addNewCard = async () => {
     const createdCard = await createNewCardAPI({
-      ...{ title, columnId: column._id },
+      title,
+      columnId: column._id,
       boardId: board._id
     })
 
@@ -140,18 +134,6 @@ function Column({ column }) {
     })
   }
 
-  const handleUpdateColumnTitle = (newTitle) => {
-    updateColumnAPI(column._id, { title: newTitle }).then((res) => {
-      const newBoard = cloneDeep(board)
-      const columnToUpdate = newBoard.columns.find(
-        (column) => column._id === res._id
-      )
-      if (columnToUpdate) columnToUpdate.title = res.title
-
-      dispatch(setCurrentActiveBoard(newBoard))
-    })
-  }
-
   return (
     <div ref={setNodeRef} style={dndKitColumnStyles} {...attributes}>
       <Box
@@ -182,7 +164,17 @@ function Column({ column }) {
           {openInput ? (
             <ToggleFocusInput
               value={columnTitle}
-              onChangedValue={handleUpdateColumnTitle}
+              onChangedValue={(newTitle) => {
+                updateColumnAPI(column._id, { title: newTitle }).then((res) => {
+                  const newBoard = cloneDeep(board)
+                  const columnToUpdate = newBoard.columns.find(
+                    (column) => column._id === res._id
+                  )
+                  if (columnToUpdate) columnToUpdate.title = res.title
+
+                  dispatch(setCurrentActiveBoard(newBoard))
+                })
+              }}
               setOpenInput={setOpenInput}
               setColumnTitle={setColumnTitle}
               autoFocus={true}
@@ -214,7 +206,7 @@ function Column({ column }) {
                 aria-controls={open ? 'basic-menu-column-dropdown' : undefined}
                 aria-haspopup='true'
                 aria-expanded={open ? 'true' : undefined}
-                onClick={handleClick}
+                onClick={(event) => setAnchorEl(event.currentTarget)}
                 sx={{
                   color: (theme) =>
                     theme.palette.mode === 'dark' ? '#b6c3cf' : '#182a4d',
@@ -227,8 +219,12 @@ function Column({ column }) {
               id='basic-menu-column-dropdown'
               anchorEl={anchorEl}
               open={open}
-              onClose={handleClose}
-              onClick={handleClose}
+              onClose={() => {
+                setAnchorEl(null)
+              }}
+              onClick={() => {
+                setAnchorEl(null)
+              }}
               MenuListProps={{
                 'aria-labelledby': 'basic-column-dropdown'
               }}
