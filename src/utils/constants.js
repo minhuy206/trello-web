@@ -12,11 +12,6 @@ export const API_ROOT = apiRoot
 export const DEFAULT_PAGE = 1
 export const DEFAULT_ITEMS_PER_PAGE = 12
 
-export const CARD_MEMBER_ACTION = {
-  ADD: 'add',
-  REMOVE: 'remove'
-}
-
 export const INVITATION_STATUS = {
   PENDING: 'pending',
   ACCEPTED: 'accepted',

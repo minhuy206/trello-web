@@ -4,7 +4,7 @@ import Avatar from '@mui/material/Avatar'
 import Tooltip from '@mui/material/Tooltip'
 import Popover from '@mui/material/Popover'
 
-function BoardUserGroup({ boardUsers = [], limit = 4 }) {
+function BoardMembersGroup({ boardMembers = [], limit = 4 }) {
   const [anchorPopoverElement, setAnchorPopoverElement] = useState(null)
   const isOpenPopover = Boolean(anchorPopoverElement)
   const popoverId = isOpenPopover ? 'board-all-users-popover' : undefined
@@ -19,7 +19,7 @@ function BoardUserGroup({ boardUsers = [], limit = 4 }) {
         display: 'flex'
       }}
     >
-      {boardUsers.map((user, index) => {
+      {boardMembers.map((user, index) => {
         if (index < limit) {
           return (
             <Tooltip title={user.displayName} key={user._id}>
@@ -47,7 +47,7 @@ function BoardUserGroup({ boardUsers = [], limit = 4 }) {
         }
       })}
 
-      {boardUsers.length > limit && (
+      {boardMembers.length > limit && (
         <Tooltip title='Show more'>
           <Box
             aria-describedby={popoverId}
@@ -67,7 +67,7 @@ function BoardUserGroup({ boardUsers = [], limit = 4 }) {
               color: '#fff'
             }}
           >
-            +{boardUsers.length - limit}
+            +{boardMembers.length - limit}
           </Box>
         </Tooltip>
       )}
@@ -96,7 +96,7 @@ function BoardUserGroup({ boardUsers = [], limit = 4 }) {
             gap: 1
           }}
         >
-          {boardUsers.map((user, index) => (
+          {boardMembers.map((user, index) => (
             <Tooltip title={user.displayName} key={index}>
               <Avatar
                 sx={{ width: 34, height: 34, cursor: 'pointer' }}
@@ -111,4 +111,4 @@ function BoardUserGroup({ boardUsers = [], limit = 4 }) {
   )
 }
 
-export default BoardUserGroup
+export default BoardMembersGroup

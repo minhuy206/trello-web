@@ -99,16 +99,16 @@ export const resetPasswordAPI = async ({ email, password, token }) => {
 
 export const refreshTokenAPI = async () => {
   return (
-    await authorizeAxiosInstance.get(`${API_ROOT}/v1/users/refresh-token`)
+    await authorizeAxiosInstance.post(`${API_ROOT}/v1/users/refresh-token`)
   ).data
 }
 
 export const inviteUserToBoardAPI = async (boardId, inviteeEmail) => {
   return (
-    await authorizeAxiosInstance.post(
-      `${API_ROOT}/v1/invitations/boards/${boardId}`,
-      { inviteeEmail }
-    )
+    await authorizeAxiosInstance.post(`${API_ROOT}/v1/invitations`, {
+      inviteeEmail,
+      boardId
+    })
   ).data
 }
 

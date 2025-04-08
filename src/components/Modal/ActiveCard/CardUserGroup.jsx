@@ -8,15 +8,13 @@ import Typography from '@mui/material/Typography'
 import Skeleton from '@mui/material/Skeleton'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
-import { selectCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
-import { CARD_MEMBER_ACTION } from '~/utils/constants'
 
 function CardUserGroup({
   currentUserId,
+  boardMembers = [],
   cardMemberIds = [],
   isFetching,
-  handleUpdateCardMember
+  handleUpdateCard
 }) {
   const [anchorPopoverElement, setAnchorPopoverElement] = useState(null)
   const isOpenPopover = Boolean(anchorPopoverElement)
@@ -26,10 +24,10 @@ function CardUserGroup({
     else setAnchorPopoverElement(null)
   }
 
-  const board = useSelector(selectCurrentActiveBoard)
-  const members = [...board.members, ...board.owners].filter((member) =>
+  const members = boardMembers.filter((member) =>
     cardMemberIds.includes(member._id)
   )
+
   return (
     <Box sx={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
       {isFetching
@@ -95,12 +93,13 @@ function CardUserGroup({
                 gap: 1.5
               }}
             >
-              {[...board.members, ...board.owners].length === 1 ? (
+              {boardMembers.length === 1 &&
+              boardMembers[boardMembers.length - 1]._id === currentUserId ? (
                 <Typography variant='body2' color='text.secondary'>
                   No more members to add
                 </Typography>
               ) : (
-                [...board.members, ...board.owners].map((member) => {
+                boardMembers.map((member) => {
                   if (member._id !== currentUserId) {
                     return (
                       <Tooltip title={member.displayName} key={member._id}>
@@ -120,11 +119,12 @@ function CardUserGroup({
                             )
                           }
                           onClick={() =>
-                            handleUpdateCardMember({
-                              memberId: member._id,
-                              action: cardMemberIds.includes(member._id)
-                                ? CARD_MEMBER_ACTION.REMOVE
-                                : CARD_MEMBER_ACTION.ADD
+                            handleUpdateCard({
+                              memberIds: cardMemberIds.includes(member._id)
+                                ? cardMemberIds.filter(
+                                    (id) => id !== member._id
+                                  )
+                                : [...cardMemberIds, member._id]
                             })
                           }
                         >

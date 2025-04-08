@@ -37,7 +37,10 @@ import {
   updateCard
 } from '~/redux/activeCard/activeCardSlice'
 import { selectCurrentUser } from '~/redux/user/userSlice'
-import { updateBoard } from '~/redux/activeBoard/activeBoardSlice'
+import {
+  selectCurrentActiveBoard,
+  updateBoard
+} from '~/redux/activeBoard/activeBoardSlice'
 
 import ToggleFocusInput from '~/components/Form/ToggleFocusInput'
 import VisuallyHiddenInput from '~/components/Form/VisuallyHiddenInput'
@@ -47,7 +50,6 @@ import CardActivitySection from './CardActivitySection'
 
 import { singleFileValidator } from '~/utils/validators'
 import { commentOnCardAPI, updateCardAPI } from '~/apis'
-import { CARD_MEMBER_ACTION } from '~/utils/constants'
 
 const SidebarItem = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -76,10 +78,17 @@ function ActiveCard() {
   const isShowActiveCardModal = useSelector(selectIsShowActiveCardModal)
   const isFetching = useSelector(selectIsFetching)
   const currentUser = useSelector(selectCurrentUser)
+  const activeBoard = useSelector(selectCurrentActiveBoard)
 
-  const handleCloseModal = () => {
-    dispatch(clearAndHideCurrentActiveCard())
-  }
+  const comments =
+    activeCard?.comments?.map((comment) => {
+      return {
+        ...comment,
+        createdBy: activeBoard?.members.find(
+          (member) => member._id === comment.createdById
+        )
+      }
+    }) || []
 
   const handleUpdateCard = async (card) => {
     const updatedCard = await updateCardAPI(activeCard._id, card)
@@ -88,14 +97,6 @@ function ActiveCard() {
     dispatch(updateBoard(updatedCard))
 
     return updatedCard
-  }
-
-  const handleUpdateCardTitle = (title) => {
-    handleUpdateCard({ title: title.trim() })
-  }
-
-  const handleUpdateCardDescription = (description) => {
-    handleUpdateCard({ description })
   }
 
   const handleUploadCardCover = (event) => {
@@ -119,16 +120,13 @@ function ActiveCard() {
     }
     const newComment = await commentOnCardAPI({
       content,
-      boardId: activeCard.boardId,
-      columnId: activeCard.columnId,
-      cardId: activeCard._id,
-      userId: currentUser._id
+      cardId: activeCard._id
     })
     newComment.user = currentUser
 
     dispatch(
       updateCard({
-        commentIds: [newComment._id, ...activeCard.commentIds],
+        commentOrderIds: [newComment._id, ...activeCard.commentOrderIds],
         comments: [newComment, ...activeCard.comments]
       })
     )
@@ -136,20 +134,18 @@ function ActiveCard() {
     dispatch(
       updateBoard({
         ...activeCard,
-        commentIds: [newComment._id, ...activeCard.commentIds]
+        commentOrderIds: [newComment._id, ...activeCard.commentOrderIds]
       })
     )
-  }
-
-  const handleUpdateCardMember = (updateCardMemberIdData) => {
-    handleUpdateCard({ updateCardMemberIdData })
   }
 
   return (
     <Modal
       disableScrollLock
       open={isShowActiveCardModal}
-      onClose={handleCloseModal}
+      onClose={() => {
+        dispatch(clearAndHideCurrentActiveCard())
+      }}
       sx={{ overflowY: 'auto' }}
     >
       <Box
@@ -178,7 +174,9 @@ function ActiveCard() {
           <CancelIcon
             color='error'
             sx={{ '&:hover': { color: 'error.light' } }}
-            onClick={handleCloseModal}
+            onClick={() => {
+              dispatch(clearAndHideCurrentActiveCard())
+            }}
           />
         </Box>
 
@@ -227,7 +225,9 @@ function ActiveCard() {
           <ToggleFocusInput
             inputFontSize='22px'
             value={activeCard?.title}
-            onChangedValue={handleUpdateCardTitle}
+            onChangedValue={(title) => {
+              handleUpdateCard({ title: title.trim() })
+            }}
           />
         </Box>
 
@@ -243,10 +243,11 @@ function ActiveCard() {
 
               {/* Feature 02: Xử lý các thành viên của Card */}
               <CardUserGroup
-                currentUserId={currentUser._id}
+                currentUserId={currentUser?._id}
+                boardMembers={activeBoard?.members}
                 cardMemberIds={activeCard?.memberIds}
                 isFetching={isFetching}
-                handleUpdateCardMember={handleUpdateCardMember}
+                handleUpdateCard={handleUpdateCard}
               />
             </Box>
 
@@ -275,7 +276,11 @@ function ActiveCard() {
               <CardDescriptionMdEditor
                 isFetching={isFetching}
                 cardDescriptionProp={activeCard?.description}
-                handleUpdateCardDescription={handleUpdateCardDescription}
+                handleUpdateCardDescription={(description) => {
+                  handleUpdateCard({
+                    description
+                  })
+                }}
               />
             </Box>
 
@@ -303,7 +308,7 @@ function ActiveCard() {
               {/* Feature 04: Xử lý các hành động, ví dụ comment vào Card */}
               <CardActivitySection
                 isFetching={isFetching}
-                comments={activeCard?.comments}
+                comments={comments}
                 handleComment={handleComment}
               />
             </Box>
@@ -321,11 +326,12 @@ function ActiveCard() {
               <SidebarItem
                 className='active'
                 onClick={() => {
-                  handleUpdateCardMember({
-                    action: activeCard.memberIds.includes(currentUser._id)
-                      ? CARD_MEMBER_ACTION.REMOVE
-                      : CARD_MEMBER_ACTION.ADD,
-                    memberId: currentUser._id
+                  handleUpdateCard({
+                    memberIds: activeCard?.memberIds.includes(currentUser._id)
+                      ? activeCard?.memberIds.filter(
+                          (memberId) => memberId !== currentUser._id
+                        )
+                      : [...activeCard.memberIds, currentUser._id]
                   })
                 }}
               >

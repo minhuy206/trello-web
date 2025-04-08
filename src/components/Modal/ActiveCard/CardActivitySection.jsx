@@ -13,20 +13,6 @@ import { toast } from 'react-toastify'
 function CardActivitySection({ comments = [], isFetching, handleComment }) {
   const currentUser = useSelector(selectCurrentUser)
 
-  const handleAddCardComment = (event) => {
-    if (event.key === 'Enter' && !event.shiftKey) {
-      event.preventDefault()
-      if (!event.target?.value) return
-      handleComment(event.target.value.trim())
-        .then(() => {
-          event.target.value = ''
-        })
-        .catch((error) => {
-          toast.error(error.message)
-        })
-    }
-  }
-
   return (
     <Box sx={{ mt: 2 }}>
       {isFetching ? (
@@ -80,7 +66,19 @@ function CardActivitySection({ comments = [], isFetching, handleComment }) {
               type='text'
               variant='outlined'
               multiline
-              onKeyDown={handleAddCardComment}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                  event.preventDefault()
+                  if (!event.target?.value) return
+                  handleComment(event.target.value.trim())
+                    .then(() => {
+                      event.target.value = ''
+                    })
+                    .catch((error) => {
+                      toast.error(error.message)
+                    })
+                }
+              }}
               sx={{
                 '& input': {
                   fontWeight: 'bold',
@@ -143,8 +141,8 @@ function CardActivitySection({ comments = [], isFetching, handleComment }) {
               <Tooltip title=''>
                 <Avatar
                   sx={{ width: 36, height: 36, cursor: 'pointer' }}
-                  alt={comment?.user?.displayName}
-                  src={comment?.user?.avatar}
+                  alt={comment?.createdBy?.displayName}
+                  src={comment?.createdBy?.avatar}
                 />
               </Tooltip>
               <Box sx={{ width: 'inherit' }}>
@@ -157,7 +155,7 @@ function CardActivitySection({ comments = [], isFetching, handleComment }) {
                       theme.palette.mode === 'dark' ? '#b6c3cf' : '#182a4d'
                   }}
                 >
-                  {comment?.user?.displayName}
+                  {comment?.createdBy?.displayName}
                 </Typography>
                 <Typography
                   variant='span'

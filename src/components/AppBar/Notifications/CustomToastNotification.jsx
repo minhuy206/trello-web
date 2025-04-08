@@ -31,8 +31,8 @@ function CustomToastNotification({
           zIndex: 10,
           backgroundImage: 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)'
         }}
-        alt={invitation?.inviter?.username}
-        src={invitation?.inviter?.avatar}
+        alt={invitation?.createdBy?.username}
+        src={invitation?.createdBy?.avatar}
       />
       <Grid size={{ sx: 10 }}>
         <Typography
@@ -44,7 +44,7 @@ function CustomToastNotification({
         >
           You have a new invitation from
           <br />
-          <strong>{invitation?.inviter?.username}</strong>
+          <strong>{invitation?.createdBy?.username}</strong>
         </Typography>
       </Grid>
       <Grid size={{ sx: 2 }} sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -55,7 +55,10 @@ function CustomToastNotification({
             borderRadius: 0
           }}
           onClick={() => {
-            updateBoardInvitation(invitation?._id, INVITATION_STATUS.ACCEPTED)
+            updateBoardInvitation({
+              _id: invitation?._id,
+              status: INVITATION_STATUS.ACCEPTED
+            })
           }}
         >
           Accept
@@ -77,7 +80,10 @@ function CustomToastNotification({
                 : 'rgba(0, 0, 0, 0.7)'
           }}
           onClick={() => {
-            updateBoardInvitation(invitation?._id, INVITATION_STATUS.REJECTED)
+            updateBoardInvitation({
+              _id: invitation?._id,
+              status: INVITATION_STATUS.REJECTED
+            })
           }}
         >
           Reject

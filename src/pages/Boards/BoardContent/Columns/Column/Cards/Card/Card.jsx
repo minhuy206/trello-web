@@ -71,7 +71,7 @@ function Card({ card }) {
         <Typography fontWeight={500}>{card?.title}</Typography>
       </CardContent>
       {(!!card?.memberIds?.length ||
-        !!card?.commentIds?.length ||
+        !!card?.commentOrderIds?.length ||
         !!card?.attachments?.length) && (
         <CardActions sx={{ px: 0.5, pb: 1, pt: 0 }}>
           {!!card?.memberIds?.length && (
@@ -79,9 +79,9 @@ function Card({ card }) {
               {card?.memberIds.length}
             </Button>
           )}
-          {!!card?.commentIds?.length && (
+          {!!card?.commentOrderIds?.length && (
             <Button size='small' startIcon={<CommentIcon />}>
-              {card?.commentIds?.length}
+              {card?.commentOrderIds?.length}
             </Button>
           )}
           {!!card?.attachments?.length && (

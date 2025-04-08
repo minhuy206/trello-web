@@ -55,13 +55,6 @@ function AccountSetting() {
     }
   })
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget)
-  }
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
-
   const submitChange = ({ displayName, currentPassword, newPassword }) => {
     if (
       displayName === currentUser?.displayName &&
@@ -190,7 +183,9 @@ function AccountSetting() {
                     aria-controls={open ? 'basic-menu-edit-avatar' : undefined}
                     aria-haspopup='true'
                     aria-expanded={open ? 'true' : undefined}
-                    onClick={handleClick}
+                    onClick={(event) => {
+                      setAnchorEl(event.currentTarget)
+                    }}
                     startIcon={<EditIcon />}
                   >
                     Edit
@@ -199,7 +194,9 @@ function AccountSetting() {
                     id='basic-menu-edit-avatar'
                     anchorEl={anchorEl}
                     open={open}
-                    onClose={handleClose}
+                    onClose={() => {
+                      setAnchorEl(null)
+                    }}
                     MenuListProps={{
                       'aria-labelledby': 'basic-button-edit-avatar"'
                     }}

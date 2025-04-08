@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Skeleton from '@mui/material/Skeleton'
 import { useColorScheme } from '@mui/material/styles'
 import MDEditor from '@uiw/react-md-editor'
@@ -13,21 +13,15 @@ function CardDescriptionMdEditor({
   handleUpdateCardDescription
 }) {
   const { mode } = useColorScheme()
-
   const [markdownEditMode, setMarkdownEditMode] = useState(false)
-  const [cardDescription, setCardDescription] = useState(cardDescriptionProp)
-
-  const updateCardDescription = () => {
-    setMarkdownEditMode(false)
-
-    if (cardDescriptionProp !== cardDescription) {
-      handleUpdateCardDescription(cardDescription)
-    }
-  }
+  const [cardDescription, setCardDescription] = useState(null)
+  useEffect(() => {
+    setCardDescription(cardDescriptionProp)
+  }, [cardDescriptionProp])
 
   return (
     <Box sx={{ mt: -4 }}>
-      {isFetching ? (
+      {isFetching && !cardDescription ? (
         <Skeleton variant='rectangular' height={400} sx={{ mt: 5 }} />
       ) : markdownEditMode ? (
         <Box sx={{ mt: 5, display: 'flex', flexDirection: 'column', gap: 1 }}>
@@ -42,7 +36,13 @@ function CardDescriptionMdEditor({
           </Box>
           <Button
             sx={{ alignSelf: 'flex-end' }}
-            onClick={updateCardDescription}
+            onClick={() => {
+              setMarkdownEditMode(false)
+
+              if (cardDescriptionProp !== cardDescription) {
+                handleUpdateCardDescription(cardDescription)
+              }
+            }}
             className='interceptor-loading'
             type='button'
             variant='contained'
